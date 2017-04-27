@@ -1,4 +1,4 @@
-# Module: loadVertexList.py
+# Module: LoadVertexList.py
 # Description: This module allow us to import a VertexList data from an
 # .IGES and .IGS file.
 

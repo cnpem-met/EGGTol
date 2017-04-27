@@ -1,4 +1,4 @@
-# Module: loadRationalBSplineCurve.py
+# Module: LoadRationalBSplineCurve.py
 # Description: This module allow us to import a RationalBSplineCurve data
 # from an .IGES and .IGS file.
 

@@ -1,4 +1,4 @@
-# Module: loadLoop.py
+# Module: LoadLoop.py
 # Description: This module allow us to import a Loop data from an .IGES
 # and .IGS file.
 

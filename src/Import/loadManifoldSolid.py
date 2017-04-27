@@ -1,4 +1,4 @@
-# Module: loadManifoldSolid.py
+# Module: LoadManifoldSolid.py
 # Description: This module allow us to import a Manifold Solid data from
 # an .IGES and .IGS file.
 

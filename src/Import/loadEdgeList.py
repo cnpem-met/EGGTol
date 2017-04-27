@@ -1,4 +1,4 @@
-# Module: loadEdgeList.py
+# Module: LoadEdgeList.py
 # Description: This module allow us to import an EdgeList data from an .IGES
 # and .IGS file.
 

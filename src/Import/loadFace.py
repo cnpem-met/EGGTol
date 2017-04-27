@@ -1,4 +1,4 @@
-# Module: loadFace.py
+# Module: LoadFace.py
 # Description: This module allow us to import a Face data from an .IGES
 # and .IGS file.
 

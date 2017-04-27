@@ -1,4 +1,4 @@
-# Module: loadRationalBSplineSurface.py
+# Module: LoadRationalBSplineSurface.py
 # Description: This module allow us to import a RationalBSplineSurface data
 # from an .IGES and .IGS file.
 

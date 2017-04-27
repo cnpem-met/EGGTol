@@ -47,7 +47,7 @@ from PyQt5.QtCore import QCoreApplication, QDir
 from PyQt5.QtGui import QIcon
 
 # Importing PyQt5 elements:
-from Interface.discretizeMenu import discretizeMenu
+from Interface.DiscretizeMenu import discretizeMenu
 from Actions.ActionList import welcomeAction
 
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
 
         # Defining the Welcome Widget:
         welcome = QtWidgets.QTextEdit()
-        fchangelog = open('..\\src\\welcome.txt', 'r')
+        fchangelog = open('..\\src\\Interface\\welcome.txt', 'r')
         with fchangelog:
             changelog = fchangelog.read()
             welcome.setText(changelog)

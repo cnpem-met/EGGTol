@@ -1,4 +1,4 @@
-# Module: loadShell.py
+# Module: LoadShell.py
 # Description: This module allow us to import data from a Shell in an .IGES
 # and .IGS file..
 

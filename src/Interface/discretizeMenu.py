@@ -1,6 +1,9 @@
-# Module: discretizeMenu.py
+# Module: DiscretizeMenu.py
+# Description: This module contains the Discretization Side Widget Menu UI
+# for calling the discretization functions.
 
-# Author: Willian Hideak Arita da Silva
+# Author: Willian Hideak Arita da Silva.
+# Last edit: April, 27, 2017.
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel
