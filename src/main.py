@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
 
         # Defining the Welcome Widget:
         welcome = QtWidgets.QTextEdit()
-        fchangelog = open('..\\src\\changelog.txt', 'r')
+        fchangelog = open('..\\src\\welcome.txt', 'r')
         with fchangelog:
             changelog = fchangelog.read()
             welcome.setText(changelog)

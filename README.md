@@ -1,4 +1,4 @@
-cloudPointGenerator
+pointCloudGenerator
 ===================
 
 #### A simple program to discretize surfaces from simple CAD models.
