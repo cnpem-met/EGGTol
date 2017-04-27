@@ -1,0 +1,33 @@
+Bem Vindo ao Gerador de Nuvem de Pontos!
+Estamos atualmente na versão v0.30.
+
+Para iniciar, importe um arquivo .IGES através do menu ARQUIVO > IMPORTAR.
+
+Ainda há muitas funções a serem implementadas.
+Uma prévia das funções será:
+* Discretização de Faces do Modelo
+* Aplicação de Erros Artificiais
+* Exportação em Nuvem de Pontos .XYZ
+
+---------------------------------------------------------
+
+Changelog:
+v0.30:
+Modelo de UI definitivo.
+
+v0.26:
+Handler de Eventos e Extração de Informações Geométricas do Modelo CAD
+
+v0.15:
+Criado o Código Interno para Coleta de Entidades IGES
+
+v0.05:
+Adicionado Função de Importação e Exibição de Modelos .IGES (Funcional)
+
+v0.04:
+Corrigido o Crash que dava ao cancelar uma importação
+
+v0.03:
+Protótipo da Barra de Menus
+Protótipo da Barra de Status e Ferramentas
+Implementação das Ações

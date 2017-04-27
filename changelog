@@ -1,0 +1,15 @@
+Changelog:
+
+v0.16:
+Criado o Código Interno para Coleta de Entidades IGES
+
+v0.05:
+Adicionado Função de Importação e Exibição de Modelos .IGES (Funcional)
+
+v0.04:
+Corrigido o Crash que dava ao cancelar uma importação
+
+v0.03:
+Protótipo da Barra de Menus
+Protótipo da Barra de Status e Ferramentas
+Implementação das Ações
