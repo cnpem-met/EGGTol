@@ -165,7 +165,6 @@ class MainWindow(QMainWindow):
         self.dock2 = QDockWidget('Gerar Nuvem de Pontos', self)
         newWindow = discretizeMenu(self.autoDiscretization)
         self.dock2.setWidget(newWindow)
-        self.dock2.setFixedSize(201, 500)
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dock2)
     
     def resetView(self):
