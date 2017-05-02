@@ -154,15 +154,6 @@ class MainWindow(QMainWindow):
         self.dock = QDockWidget('Bem-Vindo!', self)
         self.dock.setWidget(welcome)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
-
-        # Setting the TreeView to display the current File System:
-        model = QFileSystemModel()
-        model.setRootPath(QDir.currentPath())
-        tree = QTreeView()
-        tree.setModel(model)
-        self.dock3 = QDockWidget('Arvore de Arquivos', self)
-        self.dock3.setWidget(tree)
-        self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dock3)
         
         # Defining Main Window Properties:
         self.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
