@@ -16,7 +16,7 @@ from Discretization.DiscretizeFace import *
 # Callback Imports:
 '''
 These Imports were used to implement the callback functions.
-The callback functions retuns content from de model to be displayed in the python console.
+The callback functions retuns content from the model to be displayed in the python console.
 These functionalities can be removed in a final version of the software.
 '''
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeTorus
