@@ -109,33 +109,7 @@ class MainWindow(QMainWindow):
         # Setting the Welcome Widget as a Lateral Widget:
         self.dock = QDockWidget('Bem-Vindo!', self)
         self.dock.setWidget(welcome)
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
-
-    # Defining Customized Actions:
-    def autoDiscretization(self):
-        precision, ok = QInputDialog.getText(self, 'Tamanho do Grid', 'Digite o tamanho ' +
-                                             'n para obter uma\ndiscretização quadriculada ' +
-                                             'n por n:')
-        precision = int(precision)
-        file = loadIGESFile(self.activeFile)
-        data = getRawData(file)
-        param = getRawParameters(file)
-        res = loadEntities(data, param)
-        points = discretizeModel(res, precision)
-        generatePcd(points)
-        self.bunny()
-        
-    def bunny(event=None):
-        pcd_file = open(os.path.join('', 'CloudData.pcd'), 'r').readlines()[10:]
-        # create the point_cloud
-        pc = Graphic3d_ArrayOfPoints(len(pcd_file))
-        for line in pcd_file:
-            x, y, z = map(float, line.split())
-            pc.AddVertex(x, y, z)
-        point_cloud = AIS_PointCloud()
-        point_cloud.SetPoints(pc.GetHandle())
-        ais_context = display.GetContext().GetObject()
-        ais_context.Display(point_cloud.GetHandle())
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)    
 
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':

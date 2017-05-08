@@ -3,16 +3,21 @@
 # for calling the discretization functions.
 
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 27, 2017.
+# Last edit: May, 04, 2017.
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QPushButton, QMessageBox
+                            QGridLayout, QToolButton, QMessageBox
 from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
+from OCC.Graphic3d import Graphic3d_ArrayOfPoints
+from OCC.AIS import AIS_PointCloud
 from Import.IGESImport import *
 from Discretization.DiscretizeFace import *
 
+# Class: discretizeMenu
+# Description: This class provides a side menu with 6 discretization options.
+# Each discretization option calls a function to initiate the discretization process.
 class discretizeMenu(QWidget):
     
     def __init__(self, parent):
@@ -88,15 +93,17 @@ class discretizeMenu(QWidget):
         n, ok = QInputDialog.getText(self, 'Tamanho do Grid', 'Digite um ' +
                                      'valor n para obter uma\ndiscretização ' +
                                      'quadriculada n x n:')
+        if not ok:
+            return
         try:
             n = int(n)
-            if ((n < 1) or (n > 30)):
+            if ((n < 1) or (n > 50)):
                 raise ValueError
         except ValueError:
             QMessageBox.information(parent, 'Precisão Inválida',
                                     'A precisão informada não é válida.\n' +
-                                    'Utilize uma precisão positiva entre 1 e 30 ' +
-                                    'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+                                    'Utilize uma precisão inteira positiva entre ' +
+                                    '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
         n = int(n)
         file = loadIGESFile(parent.activeFile)
@@ -105,10 +112,15 @@ class discretizeMenu(QWidget):
         entities = loadEntities(data, param)
         points = discretizeModel(entities, n)
         generatePcd(points)
-        '''
-        TODO
-        IMPLEMENT A FUNCTION TO DISPLAY THE CLOUD POINTS
-        '''
+        pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
+        pc = Graphic3d_ArrayOfPoints(len(pcd_file))
+        for line in pcd_file:
+            x, y, z = map(float, line.split())
+            pc.AddVertex(x, y, z)
+        point_cloud = AIS_PointCloud()
+        point_cloud.SetPoints(pc.GetHandle())
+        ais_context = parent.canvas._display.GetContext().GetObject()
+        ais_context.Display(point_cloud.GetHandle())
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)

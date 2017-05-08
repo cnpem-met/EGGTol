@@ -260,6 +260,6 @@ def generatePcd(cloudPoints):
             pcdText += (str(point[0]) + ' ' +
                         str(point[1]) + ' ' +
                         str(point[2]) + '\n')
-    pcdFile = open('CloudData.pcd', 'w')
+    pcdFile = open('..\\tmp\\CloudData.pcd', 'w')
     pcdFile.write(pcdText)
     pcdFile.close() 
