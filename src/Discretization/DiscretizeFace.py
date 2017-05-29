@@ -3,18 +3,12 @@
 # defined in an .IGES and .IGS files.
 
 # Author: Willian Hideak Arita da Silva
-# Last edit: April, 24, 2017.
+# Last edit: May, 28, 2017.
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber
 from numpy import array, dot
 from numpy.linalg import solve, inv
-
-'''
-Important Things:
-Normal 3-basis vectors are implemented here as a simple Python Tuple of 3
-elements. Their operations are also defined below.
-'''
 
 # Function for getting a correspondent list index using the Sequence Number,
 # as defined in an .IGES file.
@@ -69,13 +63,6 @@ def minimumEdge(vertices):
 
 # Change of basis:
 def changeBasis(vertices, newBaseVector):
-    '''
-    TODO:
-    THIS PIECE OF CODE NEED TO BE MORE EFFICIENT!
-    COMPUTING THE INVERSE OF A MATRIX IS NOT SO EFFICIENT!
-    MAYBE WE SHOULD COMPUTE THE SOLUTION OF 3 LINEAR SYSTEMS.
-    OR MAYBE THE NUMPY LIBRARY ALREADY DOES THAT!
-    '''
     # Find the transformation matrix:
     i, j, k = newBaseVector
     matrix = array([[i[0], j[0], k[0]],
@@ -141,7 +128,7 @@ def discretizeModel(objectList, precision):
         objectList[pos(myObject.SURF)].K2 == 1 and \
         objectList[pos(myObject.SURF)].M1 == 1 and \
         objectList[pos(myObject.SURF)].M2 == 1):
-            planarFacePointers.append(int(myObject.seqNumber))  
+            planarFacePointers.append(int(myObject.seqNumber))
     # Discretize each planar face:
     cloudPoints = []
     for i in planarFacePointers:
@@ -153,33 +140,28 @@ def discretizeModel(objectList, precision):
 def discretizeFace(face, objectList, precision):
     # List to storage all the tuples (x, y, z) due to discretization.
     points = []
-    
+
     # Collecting all the vertices of the planar face.
-    '''
-    THIS ALGORITHM NEED TO BE IMPROVED.
-    IT ONLY COVERS THE FIRST LOOP OF A FACE. HOLES AND OTHER ELEMENTS
-    ARE IGNORED.
-    '''
     unsortedVertices = []
     currentLoop = objectList[pos(face.LOOPList[0])]
-    
+
     for i in range(int(currentLoop.N)):
         currentEdge = int(currentLoop.EDGEList[i])
         currentEdgeIndex = int(currentLoop.NDXList[i])
-        
+
         startVertex = int(objectList[pos(currentEdge)].SVPList[currentEdgeIndex-1])
         startVertexIndex = int(objectList[pos(currentEdge)].SVList[currentEdgeIndex-1])
         endVertex = int(objectList[pos(currentEdge)].TVPList[currentEdgeIndex-1])
         endVertexIndex = int(objectList[pos(currentEdge)].TVList[currentEdgeIndex-1])
 
         unsortedVertices.append([])
-        
+
         x = objectList[pos(startVertex)].XList[startVertexIndex-1]
         y = objectList[pos(startVertex)].YList[startVertexIndex-1]
         z = objectList[pos(startVertex)].ZList[startVertexIndex-1]
         vertex = (x, y, z)
         unsortedVertices[i].append(vertex)
-    
+
         x = objectList[pos(endVertex)].XList[endVertexIndex-1]
         y = objectList[pos(endVertex)].YList[endVertexIndex-1]
         z = objectList[pos(endVertex)].ZList[endVertexIndex-1]
@@ -199,7 +181,7 @@ def discretizeFace(face, objectList, precision):
     # Checking if the vertices are part of a planar polygon:
     if (len(vertices) < 3):
         return points
-    
+
     # Estabilishing three base vectors for the plane:
     a, b, c = vertices[0], vertices[1], vertices[2]
     i = subVec(a, b)
@@ -209,7 +191,7 @@ def discretizeFace(face, objectList, precision):
 
     # Orthogonalizing the basis vector through the Gram-Schmidt process.
     newBasisVector = orthogonalizeBasis(newBasisVector)
-    
+
     # Changing the coordinates from original basis to the new one.
     newVertices = changeBasis(vertices, newBasisVector)
 
@@ -220,7 +202,7 @@ def discretizeFace(face, objectList, precision):
     # Discretizing the model with the 'precision' parameter:
     spacingX = (maxEdges[0]-minEdges[0])/precision
     spacingY = (maxEdges[1]-minEdges[1])/precision
-    
+
     # Creating additional points due to discretization:
     for i in range(1, precision):
         for j in range(1, precision):
@@ -235,7 +217,7 @@ def discretizeFace(face, objectList, precision):
         if(pointInPolygon(point[0], point[1], newVertices)):
             auxList.append(point)
     points = auxList
-    
+
     # Changing the new points to the original basis:
     newPoints = returnBasis(points, newBasisVector)
     return newPoints
@@ -262,4 +244,4 @@ def generatePcd(cloudPoints):
                         str(point[2]) + '\n')
     pcdFile = open('..\\tmp\\CloudData.pcd', 'w')
     pcdFile.write(pcdText)
-    pcdFile.close() 
+    pcdFile.close()

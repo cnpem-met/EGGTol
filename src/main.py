@@ -2,7 +2,7 @@
 # Description: This is the main file of the program. It will run the initial UI Elements.
 
 # Autor: Willian Hideak Arita da Silva.
-# Last edit: May, 05, 2017.
+# Last edit: May, 28, 2017.
 
 # System Imports:
 import sys
@@ -45,8 +45,8 @@ class MainWindow(QMainWindow):
         # Defining Main Window Properties:
         self.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        self.resize(1300, 800)
-        
+        self.resize(1300, 650)
+
         # Control Variables. Used to storage current session information.
         self.lastPath = 'C:\\Users\\' + getpass.getuser() + '\\Desktop'
         self.activeFile = None
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         cloud = cloudAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
-        
+
         # Defining the MenuBar:
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&Arquivo')
@@ -77,10 +77,10 @@ class MainWindow(QMainWindow):
         menubar.addMenu('&Exportar')
         menubar.addMenu('&Janela')
         menubar.addMenu('&Ajuda')
-        
+
         # Defining the StatusBar:
         self.statusBar()
-        
+
         # Setting the Viewer as a Widget of the Main Window:
         self.canvas = qtViewer3d(self)
         self.setCentralWidget(self.canvas)
@@ -105,11 +105,11 @@ class MainWindow(QMainWindow):
         with fchangelog:
             changelog = fchangelog.read()
             welcome.setText(changelog)
-        
+
         # Setting the Welcome Widget as a Lateral Widget:
         self.dock = QDockWidget('Bem-Vindo!', self)
         self.dock.setWidget(welcome)
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)    
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
 
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
