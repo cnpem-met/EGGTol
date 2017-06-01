@@ -40,6 +40,11 @@ def scalarVec(s, v):
     newV = [s*i for i in v]
     return (newV[0], newV[1], newV[2])
 
+# Definition of the norm of a vector.
+# Returns |v|, where v is a vector in R^3 space.
+def normVec(v):
+    return ((v[0]**2) + (v[1]**2) + (v[2]**2))**(1/2)
+
 # Definition of the minimum edge. The minimum edge is a group of minimum and maximum
 # points that lies in a square region and covers a CAD model face.
 def minimumEdge(vertices):
@@ -100,17 +105,19 @@ def returnBasis(points, newBaseVector):
 
 # Function to orthogonalize components i and j of a basis using
 # the Gram–Schmidt Process assuming k is already orthogonal to i and j:
-def orthogonalizeBasis(basisVector):
+def orthonormalizeBasis(basisVector):
     i = basisVector[0]
     j = basisVector[1]
     k = basisVector[2]
     s = ((dotProduct(i, j))/(dotProduct(j, j)))
     proj = scalarVec(s, j)
     newI = subVec(i, proj)
-    return [newI, j, k]
+    return [scalarVec((1/normVec(newI)), newI),
+            scalarVec((1/normVec(j)), j),
+            scalarVec((1/normVec(k)), k)]
 
 # Function to discretize an entire model.
-def discretizeModel(objectList, precision):
+def discretizeModel(objectList, density):
     # Get a list of planar faces in the model:
     planarFacePointers = []
     for myObject in objectList:
@@ -123,12 +130,12 @@ def discretizeModel(objectList, precision):
     # Discretize each planar face:
     cloudPoints = []
     for i in planarFacePointers:
-        points = discretizeFace(objectList[pos(i)], objectList, precision)
+        points = discretizeFace(objectList[pos(i)], objectList, density)
         cloudPoints.append(points)
     return cloudPoints
 
 # Function to discretize a single face. It returns a list of cloud points.
-def discretizeFace(face, objectList, precision):
+def discretizeFace(face, objectList, density):
     # List to storage all the tuples (x, y, z) due to discretization.
     points = []
 
@@ -203,7 +210,7 @@ def discretizeFace(face, objectList, precision):
     newBasisVector = (i, j, k)
 
     # Orthogonalizing the basis vector through the Gram-Schmidt process.
-    newBasisVector = orthogonalizeBasis(newBasisVector)
+    newBasisVector = orthonormalizeBasis(newBasisVector)
 
     # Changing the coordinates from original basis to the new one.
     newVertices = changeBasis(vertices, newBasisVector)
@@ -212,13 +219,13 @@ def discretizeFace(face, objectList, precision):
     minEdges, maxEdges = minimumEdge(newVertices)
     zCoord = minEdges[2]
 
-    # Discretizing the model with the 'precision' parameter:
-    spacingX = (maxEdges[0]-minEdges[0])/precision
-    spacingY = (maxEdges[1]-minEdges[1])/precision
+    # Discretizing the model with the 'density' parameter:
+    spacingX = (maxEdges[0]-minEdges[0])/density
+    spacingY = (maxEdges[1]-minEdges[1])/density
 
     # Creating additional points due to discretization:
-    for i in range(1, precision):
-        for j in range(1, precision):
+    for i in range(1, density):
+        for j in range(1, density):
             newX = minEdges[0] + i*spacingX
             newY = minEdges[1] + j*spacingY
             newPoint = (newX, newY, zCoord)
