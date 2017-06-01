@@ -142,6 +142,68 @@ def discretizeFace(face, objectList, density):
     # Collecting all the vertices of the planar face.
     unsortedVertices = []
     currentLoop = objectList[pos(face.LOOPList[0])]
+    vertices = discretizeLoop(currentLoop, objectList)
+
+    if (len(vertices) < 3):
+        return points
+
+    # Estabilishing three base vectors for the plane:
+    a, b, c = vertices[0], vertices[1], vertices[2]
+    i = subVec(a, b)
+    j = subVec(a, c)
+    k = crossProduct(i, j)
+    newBasisVector = (i, j, k)
+
+    # Orthogonalizing the basis vector through the Gram-Schmidt process.
+    newBasisVector = orthonormalizeBasis(newBasisVector)
+
+    # Changing the coordinates from original basis to the new one.
+    newVertices = changeBasis(vertices, newBasisVector)
+
+    # Getting the miminum and maximum edges:
+    minEdges, maxEdges = minimumEdge(newVertices)
+    zCoord = minEdges[2]
+
+    # Discretizing the model with the 'density' parameter:
+    spacingX = (maxEdges[0]-minEdges[0])/density
+    spacingY = (maxEdges[1]-minEdges[1])/density
+
+    # Creating additional points due to discretization:
+    for i in range(1, density):
+        for j in range(1, density):
+            newX = minEdges[0] + i*spacingX
+            newY = minEdges[1] + j*spacingY
+            newPoint = (newX, newY, zCoord)
+            points.append(newPoint)
+
+    # Verifying if the new points lies inside the original boundary:
+    auxList = []
+    for point in points:
+        if(pointInPolygon(point[0], point[1], newVertices)):
+            auxList.append(point)
+    points = auxList
+
+    # Verifying if the new points has some inner loops to consider;
+    for i in range(1, len(face.LOOPList)):
+        currentLoop = objectList[pos(face.LOOPList[i])]
+        vertices = discretizeLoop(currentLoop, objectList)
+
+        # Converting the 3D vertices to 2D:
+        newVertices = changeBasis(vertices, newBasisVector)
+
+        aux = 0
+        for i in range(len(points)):
+            if(pointInPolygon(points[i-aux][0], points[i-aux][1], newVertices)):
+                aux +=1
+                del points[i-aux]
+
+    # Changing the new points to the original basis:
+    newPoints = returnBasis(points, newBasisVector)
+    return newPoints
+
+# Function to discretize a single Loop. It returns a list of vertices of the loop.
+def discretizeLoop(currentLoop, objectList):
+    unsortedVertices = []
 
     for i in range(int(currentLoop.N)):
         currentEdge = int(currentLoop.EDGEList[i])
@@ -198,49 +260,7 @@ def discretizeFace(face, objectList, density):
                 vertices += list(reversed(unsortedVertices[j]))
                 del unsortedVertices[j]
                 break
-
-    if (len(vertices) < 3):
-        return points
-
-    # Estabilishing three base vectors for the plane:
-    a, b, c = vertices[0], vertices[1], vertices[2]
-    i = subVec(a, b)
-    j = subVec(a, c)
-    k = crossProduct(i, j)
-    newBasisVector = (i, j, k)
-
-    # Orthogonalizing the basis vector through the Gram-Schmidt process.
-    newBasisVector = orthonormalizeBasis(newBasisVector)
-
-    # Changing the coordinates from original basis to the new one.
-    newVertices = changeBasis(vertices, newBasisVector)
-
-    # Getting the miminum and maximum edges:
-    minEdges, maxEdges = minimumEdge(newVertices)
-    zCoord = minEdges[2]
-
-    # Discretizing the model with the 'density' parameter:
-    spacingX = (maxEdges[0]-minEdges[0])/density
-    spacingY = (maxEdges[1]-minEdges[1])/density
-
-    # Creating additional points due to discretization:
-    for i in range(1, density):
-        for j in range(1, density):
-            newX = minEdges[0] + i*spacingX
-            newY = minEdges[1] + j*spacingY
-            newPoint = (newX, newY, zCoord)
-            points.append(newPoint)
-
-    # Verifying if the new points lies inside the original boundary:
-    auxList = []
-    for point in points:
-        if(pointInPolygon(point[0], point[1], newVertices)):
-            auxList.append(point)
-    points = auxList
-
-    # Changing the new points to the original basis:
-    newPoints = returnBasis(points, newBasisVector)
-    return newPoints
+    return vertices
 
 # Function to generate a .pcd (Point Cloud Data) file:
 def generatePcd(cloudPoints):
