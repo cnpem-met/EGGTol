@@ -188,39 +188,22 @@ def discretizeFace(face, objectList, precision):
     # Sorting the vertices according to the formed polygon:
     vertices = []
 
-    #print('Aqui se inicia o processo de sorting')
-    #print('Unsorted Vertices:  ' + str(unsortedVertices))
-
     vertices += unsortedVertices[0]
     unsortedVertices = unsortedVertices[1:]
 
-    #print('Foi adicionado o primeiro vertice')
-    #print('Vertices: ' + str(vertices))
-
     for i in range(len(unsortedVertices)):
-        #print('i = ' + str(i))
         for j in range(len(unsortedVertices)):
-            #print('j = ' + str(j))
-            #print('Verificando se o primeiro ou o ultimo da lista é igual ao ultimo adicionado')
             if(unsortedVertices[j][0] == vertices[-1]):
-                #print('O primeiro é igual.')
                 del unsortedVertices[j][0]
                 vertices += unsortedVertices[j]
                 del unsortedVertices[j]
                 break
             elif(unsortedVertices[j][len(unsortedVertices[j])-1] == vertices[-1]):
-                #print('O ultimo é igual.')
                 del unsortedVertices[j][len(unsortedVertices[j])-1]
                 vertices += list(reversed(unsortedVertices[j]))
                 del unsortedVertices[j]
                 break
-            #print('Recomeçando. Vetores até aqui:')
-            #print('Unsorted Vertices:  ' + str(unsortedVertices))
-            #print('Vertices: ' + str(vertices))
 
-    #print('Vertices: ' + str(vertices))
-    #print()
-    # Checking if the vertices are part of a planar polygon:
     if (len(vertices) < 3):
         return points
 
