@@ -109,16 +109,6 @@ def orthogonalizeBasis(basisVector):
     newI = subVec(i, proj)
     return [newI, j, k]
 
-# Function to search for a complementar vertex in an edge list of tuples:
-def getOtherVertices(lastVertex, unsortedVertices):
-    for i in range(len(unsortedVertices)):
-        if (unsortedVertices[i][0] == lastVertex):
-            unsortedVertices[0], unsortedVertices[i] = unsortedVertices[i], unsortedVertices[0]
-            return unsortedVertices[1:], unsortedVertices[0]
-        elif(unsortedVertices[i][len(unsortedVertices)-1] == lastVertex):
-            unsortedVertices[0], unsortedVertices[i] = unsortedVertices[i], unsortedVertices[0]
-            return unsortedVertices[1:], list(reversed(unsortedVertices[0]))
-
 # Function to discretize an entire model.
 def discretizeModel(objectList, precision):
     # Get a list of planar faces in the model:
@@ -187,10 +177,8 @@ def discretizeFace(face, objectList, precision):
 
     # Sorting the vertices according to the formed polygon:
     vertices = []
-
     vertices += unsortedVertices[0]
     unsortedVertices = unsortedVertices[1:]
-
     for i in range(len(unsortedVertices)):
         for j in range(len(unsortedVertices)):
             if(unsortedVertices[j][0] == vertices[-1]):
