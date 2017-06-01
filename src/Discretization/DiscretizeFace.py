@@ -191,11 +191,12 @@ def discretizeFace(face, objectList, density):
         # Converting the 3D vertices to 2D:
         newVertices = changeBasis(vertices, newBasisVector)
 
-        aux = 0
-        for i in range(len(points)):
-            if(pointInPolygon(points[i-aux][0], points[i-aux][1], newVertices)):
-                aux +=1
-                del points[i-aux]
+        auxList = []
+        auxList = []
+        for point in points:
+            if(not pointInPolygon(point[0], point[1], newVertices)):
+                auxList.append(point)
+        points = auxList
 
     # Changing the new points to the original basis:
     newPoints = returnBasis(points, newBasisVector)
