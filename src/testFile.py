@@ -1,7 +1,7 @@
 # TestFile
 
 from Import.IGESImport import *
-a = loadIGESFile('..\\examples\\BoredCube.igs')
+a = loadIGESFile('..\\examples\\Cylinder.igs')
 data = getRawData(a)
 param = getRawParameters(a)
 entities = loadEntities(data, param)

@@ -7,6 +7,8 @@
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber
+from Discretization.DiscreteNurbCurve import Curve
+from Discretization.DiscreteNurbSurface import Surface
 from numpy import array, dot
 from numpy.linalg import solve, inv
 
@@ -108,15 +110,14 @@ def orthogonalizeBasis(basisVector):
     return [newI, j, k]
 
 # Function to search for a complementar vertex in an edge list of tuples:
-def getOtherVertex(lastVertex, unsortedVertices):
+def getOtherVertices(lastVertex, unsortedVertices):
     for i in range(len(unsortedVertices)):
-        for j in range(len(unsortedVertices[i])):
-            if (unsortedVertices[i][j] == lastVertex):
-                unsortedVertices[0], unsortedVertices[i] = unsortedVertices[i], unsortedVertices[0]
-                if (j % 2):
-                    return unsortedVertices[1:], unsortedVertices[0][0]
-                else:
-                    return unsortedVertices[1:], unsortedVertices[0][1]
+        if (unsortedVertices[i][0] == lastVertex):
+            unsortedVertices[0], unsortedVertices[i] = unsortedVertices[i], unsortedVertices[0]
+            return unsortedVertices[1:], unsortedVertices[0]
+        elif(unsortedVertices[i][len(unsortedVertices)-1] == lastVertex):
+            unsortedVertices[0], unsortedVertices[i] = unsortedVertices[i], unsortedVertices[0]
+            return unsortedVertices[1:], list(reversed(unsortedVertices[0]))
 
 # Function to discretize an entire model.
 def discretizeModel(objectList, precision):
@@ -156,12 +157,28 @@ def discretizeFace(face, objectList, precision):
 
         unsortedVertices.append([])
 
+        # Getting the Start Vertex tuple.
         x = objectList[pos(startVertex)].XList[startVertexIndex-1]
         y = objectList[pos(startVertex)].YList[startVertexIndex-1]
         z = objectList[pos(startVertex)].ZList[startVertexIndex-1]
         vertex = (x, y, z)
         unsortedVertices[i].append(vertex)
 
+        # Getting the intermediate vertices in case of non-straight edges:
+        spaceCurve = int(objectList[pos(currentEdge)].CURVList[currentEdgeIndex-1])
+        spaceCurve = objectList[pos(spaceCurve)]
+        if(int(spaceCurve.K) != 1):
+            newCurve = Curve()
+            newCurve.delta = 0.02
+            newCurve.degree = int(spaceCurve.M)
+            newCurve.knotvector = list(spaceCurve.TList)
+            newCurve.ctrlpts = [[spaceCurve.XList[i], spaceCurve.YList[i], spaceCurve.ZList[i]] for i in range(len(spaceCurve.WList))]
+            newCurve.weights = list(spaceCurve.WList)
+            newCurve.evaluate_rational()
+            for j in range(1, len(newCurve.curvepts)-1):
+                unsortedVertices[i].append(newCurve.curvepts[j])
+
+        # Getting the End Vertex tuple
         x = objectList[pos(endVertex)].XList[endVertexIndex-1]
         y = objectList[pos(endVertex)].YList[endVertexIndex-1]
         z = objectList[pos(endVertex)].ZList[endVertexIndex-1]
@@ -170,13 +187,20 @@ def discretizeFace(face, objectList, precision):
 
     # Sorting the vertices according to the formed polygon:
     vertices = []
-    vertices.append(unsortedVertices[0][0])
-    vertices.append(unsortedVertices[0][1])
+
+    vertices += unsortedVertices[0]
     unsortedVertices = unsortedVertices[1:]
+
     for i in range(len(unsortedVertices)):
-        unsortedVertices, vertex = getOtherVertex(vertices[-1], unsortedVertices)
-        vertices.append(vertex)
-    vertices = vertices[:-1]
+        for j in range(len(unsortedVertices)):
+            if(unsortedVertices[j][0] == vertices[-1]):
+                del unsortedVertices[j][0]
+                vertices += unsortedVertices[j]
+            elif(unsortedVertices[j][len(unsortedVertices[j])-1] == vertices[-1]):
+                del unsortedVertices[j][len(unsortedVertices[j])-1]
+                vertices += list(reversed(unsortedVertices[j]))
+            del unsortedVertices[j]
+            break
 
     # Checking if the vertices are part of a planar polygon:
     if (len(vertices) < 3):

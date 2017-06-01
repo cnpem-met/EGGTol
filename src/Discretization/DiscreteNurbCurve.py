@@ -185,7 +185,7 @@ class Curve(object):
     def ctrlptsw(self):
         """ Weighted control points
 
-        Returns and accepts a tuple containing (x*w, y*w, w) values. The setter method automatically separates
+        Returns and accepts a tuple containing (x*w, y*w, z*w, w) values. The setter method automatically separates
         the weights vector and compute the unweighted control points.
 
         :getter: Gets the weighted control points
