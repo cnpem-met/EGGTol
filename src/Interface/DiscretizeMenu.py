@@ -19,15 +19,15 @@ from Discretization.DiscretizeFace import *
 # Description: This class provides a side menu with 6 discretization options.
 # Each discretization option calls a function to initiate the discretization process.
 class discretizeMenu(QWidget):
-    
+
     def __init__(self, parent):
         super().__init__()
         self.initUI(parent)
-        
+
     def initUI(self, parent):
         grid = QGridLayout()
         self.setLayout(grid)
-        
+
         label1 = QLabel('Selecione uma opção de discretização.', self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
@@ -35,7 +35,7 @@ class discretizeMenu(QWidget):
                         'todas as superfícies planas do modelo CAD segundo\n' +
                         'uma determinada precisão.', self)
         grid.addWidget(label2, 1, 0, 1, 2)
-        
+
         btn1 = QToolButton()
         btn1.setText('Discretização\nAutomática')
         btn1.setIcon(QIcon('..\\icons\\cadIcons\\star.png'))
@@ -92,18 +92,18 @@ class discretizeMenu(QWidget):
     def autoDiscretize(self, parent):
         n, ok = QInputDialog.getText(self, 'Tamanho do Grid', 'Digite um ' +
                                      'valor n para obter uma\ndiscretização ' +
-                                     'quadriculada n x n:')
+                                     'quadriculada de n pontos/m^2:')
         if not ok:
             return
         try:
             n = int(n)
-            if ((n < 1) or (n > 50)):
+            if ((n < 1) or (n > 100)):
                 raise ValueError
         except ValueError:
-            QMessageBox.information(parent, 'Precisão Inválida',
-                                    'A precisão informada não é válida.\n' +
+            QMessageBox.information(parent, 'Densidade de Pontos Inválida',
+                                    'A densidade informada não é válida.\n' +
                                     'Utilize uma precisão inteira positiva entre ' +
-                                    '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+                                    '1 e 100 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
         n = int(n)
         file = loadIGESFile(parent.activeFile)
@@ -121,7 +121,7 @@ class discretizeMenu(QWidget):
         point_cloud.SetPoints(pc.GetHandle())
         ais_context = parent.canvas._display.GetContext().GetObject()
         ais_context.Display(point_cloud.GetHandle())
-        
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     wn = closeWindow()

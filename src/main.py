@@ -2,7 +2,7 @@
 # Description: This is the main file of the program. It will run the initial UI Elements.
 
 # Autor: Willian Hideak Arita da Silva.
-# Last edit: May, 28, 2017.
+# Last edit: June, 05, 2017.
 
 # System Imports:
 import sys
@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     window.canvas.InitDriver()
     window.canvas.qApp = app
     display = window.canvas._display

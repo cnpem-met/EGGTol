@@ -3,12 +3,13 @@
 # defined in an .IGES and .IGS files.
 
 # Author: Willian Hideak Arita da Silva
-# Last edit: May, 28, 2017.
+# Last edit: June, 05, 2017.
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber
 from Discretization.DiscreteNurbCurve import Curve
 from Discretization.DiscreteNurbSurface import Surface
+from Discretization.Utilities import knotvector_normalize
 from numpy import array, dot
 from numpy.linalg import solve, inv
 
@@ -117,9 +118,10 @@ def orthonormalizeBasis(basisVector):
             scalarVec((1/normVec(k)), k)]
 
 # Function to discretize an entire model.
-def discretizeModel(objectList, density):
+def discretizeModel(objectList, density=20):
     # Get a list of planar faces in the model:
     planarFacePointers = []
+    nonPlanarFacePointers = []
     for myObject in objectList:
         if (myObject != None and myObject.entityType == 510 and \
         objectList[pos(myObject.SURF)].K1 == 1 and \
@@ -127,10 +129,16 @@ def discretizeModel(objectList, density):
         objectList[pos(myObject.SURF)].M1 == 1 and \
         objectList[pos(myObject.SURF)].M2 == 1):
             planarFacePointers.append(int(myObject.seqNumber))
+        elif(myObject != None and myObject.entityType == 510):
+            nonPlanarFacePointers.append(int(myObject.seqNumber))
     # Discretize each planar face:
     cloudPoints = []
     for i in planarFacePointers:
         points = discretizeFace(objectList[pos(i)], objectList, density)
+        cloudPoints.append(points)
+    # Discretize each non-planar face:
+    for i in nonPlanarFacePointers:
+        points = discretizeSurface(objectList[pos(i)], objectList, density)
         cloudPoints.append(points)
     return cloudPoints
 
@@ -232,7 +240,8 @@ def discretizeLoop(currentLoop, objectList):
             newCurve.delta = 0.02
             newCurve.degree = int(spaceCurve.M)
             newCurve.knotvector = list(spaceCurve.TList)
-            newCurve.ctrlpts = [[spaceCurve.XList[i], spaceCurve.YList[i], spaceCurve.ZList[i]] for i in range(len(spaceCurve.WList))]
+            newCurve.ctrlpts = [[spaceCurve.XList[i], spaceCurve.YList[i], spaceCurve.ZList[i]] \
+                                for i in range(len(spaceCurve.WList))]
             newCurve.weights = list(spaceCurve.WList)
             newCurve.evaluate_rational()
             for j in range(1, len(newCurve.curvepts)-1):
@@ -262,6 +271,32 @@ def discretizeLoop(currentLoop, objectList):
                 del unsortedVertices[j]
                 break
     return vertices
+
+def discretizeSurface(face, objectList, density):
+    currentSurface = objectList[pos(face.SURF)]
+    newSurface = Surface()
+    newSurface.delta = 1/density
+    newSurface.degree_u = int(currentSurface.M1)
+    newSurface.degree_v = int(currentSurface.M2)
+    newSurface.knotvector_u = list(currentSurface.SList)
+    newSurface.knotvector_v = list(currentSurface.TList)
+    surfData = open('..\\tmp\\SurfaceData.txt', 'w')
+    surfText = ''
+    for j in range(len(currentSurface.XList[0])):
+        for i in range(len(currentSurface.XList)):
+            surfText += (str(currentSurface.XList[i][j] * currentSurface.WList[i][j]) + ',' +
+                         str(currentSurface.YList[i][j] * currentSurface.WList[i][j]) + ',' +
+                         str(currentSurface.ZList[i][j] * currentSurface.WList[i][j]) + ',' +
+                         str(currentSurface.WList[i][j]))
+            if i == (len(currentSurface.XList) - 1):
+                surfText += '\n'
+            else:
+                surfText += ';'
+    surfData.write(surfText)
+    surfData.close()
+    newSurface.read_ctrlptsw('..\\tmp\\SurfaceData.txt')
+    newSurface.evaluate_rational()
+    return list(newSurface.surfpts)
 
 # Function to generate a .pcd (Point Cloud Data) file:
 def generatePcd(cloudPoints):
