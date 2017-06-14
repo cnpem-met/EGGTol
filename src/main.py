@@ -117,6 +117,26 @@ class MainWindow(QMainWindow):
         self.toolbar.setToolButtonStyle(3)
         self.toolbar.setMovable(False)
 
+    # Substituting the default method for closing the application.
+    def closeEvent(self, event):
+        box = QMessageBox()
+        box.setIcon(QMessageBox.Question)
+        box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
+        box.setWindowTitle('Encerrar o Gerador de Pontos')
+        box.setText('Tem certeza que deseja encerrar? As alterações\n' +
+                    'não salvas/exportadas serão perdidas.')
+        box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        box.setDefaultButton(QMessageBox.No)
+        buttonYes = box.button(QMessageBox.Yes)
+        buttonYes.setText('Encerrar')
+        buttonNo = box.button(QMessageBox.No)
+        buttonNo.setText('Cancelar')
+        box.exec_()
+        if box.clickedButton() == buttonYes:
+            event.accept()
+        elif box.clickedButton() == buttonNo:
+            event.ignore()
+
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -126,6 +146,5 @@ if __name__ == '__main__':
     window.canvas.qApp = app
     display = window.canvas._display
     display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
-    #display.set_bg_gradient_color(0, 0, 0, 0, 0, 0)
     display.display_trihedron()
     sys.exit(app.exec_())

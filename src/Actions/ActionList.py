@@ -94,7 +94,7 @@ class importAction(QAction):
         shape = None
         if status == IFSelect_RetDone:
             Reader.TransferList(Reader.GiveList('xst-model-all'))
-            shape = Reader.Shape(1200)
+            shape = Reader.Shape(1)
         else:
             QMessageBox.information(parent, 'Erro ao Processar Arquivo',
                                     'Não foi possível abrir o arquivo especificado.\n' +
@@ -161,13 +161,37 @@ class closeAction(QAction):
         self.setIconText('Fechar')
         self.triggered.connect(lambda: self.closeActionProcedure(parent))
     def closeActionProcedure(self, parent):
-        '''
-        TODO
-        IMPLEMENT A QDIALOG ASKING FOR PERMISSION OF CLOSING AND LOSING CHANGES
-        '''
-        parent.canvas._display.EraseAll()
-        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
-        parent.activeCADFile = None
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        box = QMessageBox()
+        box.setIcon(QMessageBox.Question)
+        box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
+        box.setWindowTitle('Fechar Arquivo')
+        box.setText('Tem certeza que deseja fechar o arquivo? As alterações\n' +
+                    'não salvas/exportadas serão perdidas.')
+        box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        box.setDefaultButton(QMessageBox.No)
+        buttonYes = box.button(QMessageBox.Yes)
+        buttonYes.setText('Fechar')
+        buttonNo = box.button(QMessageBox.No)
+        buttonNo.setText('Cancelar')
+        box.exec_()
+        if box.clickedButton() == buttonYes:  
+            if parent.leftDockWidget == 'entitiesMenu':
+                parent.removeDockWidget(parent.leftDockMenu)
+                parent.leftDockMenu = None
+                parent.leftDockWidget = None
+            if parent.rightDockWidget == 'cloudMenu':
+                parent.removeDockWidget(parent.rightDockMenu)
+                parent.rightDockMenu = None
+                parent.rightDockWidget = None
+            parent.canvas._display.EraseAll()
+            parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
+            parent.activeCADFile = None
 
 # Close the application.
 class exitAction(QAction):
@@ -175,8 +199,20 @@ class exitAction(QAction):
         super().__init__(QIcon('..\\icons\\circle-cross.svg'), 'Encerrar', parent)
         self.setStatusTip('Encerra o programa')
         self.setIconText('Encerrar')
-        self.triggered.connect(qApp.quit)
-        '''
-        TODO
-        IMPLEMENT A QDIALOG ASKING FOR PERMISSION OF CLOSING AND LOSING CHANGES
-        '''
+        self.triggered.connect(lambda: self.exitActionProcedure())
+    def exitActionProcedure(self):
+        box = QMessageBox()
+        box.setIcon(QMessageBox.Question)
+        box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
+        box.setWindowTitle('Encerrar o Gerador de Pontos')
+        box.setText('Tem certeza que deseja encerrar? As alterações\n' +
+                    'não salvas/exportadas serão perdidas.')
+        box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        box.setDefaultButton(QMessageBox.No)
+        buttonYes = box.button(QMessageBox.Yes)
+        buttonYes.setText('Encerrar')
+        buttonNo = box.button(QMessageBox.No)
+        buttonNo.setText('Cancelar')
+        box.exec_()
+        if box.clickedButton() == buttonYes:
+            qApp.quit()
