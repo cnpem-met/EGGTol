@@ -5,6 +5,8 @@ Para iniciar, importe um arquivo .IGES através do menu ARQUIVO > IMPORTAR.
 
 Nota: Para um melhor funcionamento dos algoritmos de discretização e inserção de erros, é preferível que o arquivo IGES possua uma completa especificação do CAD através do padrão B-Rep (Boundary Representation).
 
+Nota: Até o momento, não há suporte para arquivos .IGES com múltiplos sólidos geométricos.
+
 ---------------------------------------------------------
 
 Changelog:

@@ -192,6 +192,7 @@ class closeAction(QAction):
             parent.canvas._display.EraseAll()
             parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
             parent.activeCADFile = None
+            parent.canvas._display.View_Iso()
 
 # Close the application.
 class exitAction(QAction):
