@@ -23,8 +23,7 @@ class EdgeList(Entity):
         self.TVPList = TVPList
         self.TVList = TVList
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
 
     def __str__(self):

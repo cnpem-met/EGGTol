@@ -21,8 +21,7 @@ class Shell(Entity):
         self.FACEList = FACEList
         self.OFList = OFList
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
 
     def __str__(self):

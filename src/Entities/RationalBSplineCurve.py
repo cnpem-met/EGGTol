@@ -35,8 +35,7 @@ class RationalBSplineCurve(Entity):
         self.YNORM = YNORM
         self.ZNORM = ZNORM
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
 
     def __str__(self):

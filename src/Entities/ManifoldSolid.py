@@ -21,11 +21,10 @@ class ManifoldSolid(Entity):
         self.N = N
         self.VOIDList = VOIDList
         self.VOFList = VOFList
-
-    def discretize(self):
-        '''TODO'''
+    
+    def description(self):
         pass
-
+    
     def __str__(self):
         out = 'Manifold Solid B-Rep Object (Type 186)\n'
         out += '* Pointer to Shell (SHELL): ' + str(self.SHELL) + '\n'

@@ -90,6 +90,7 @@ class discretizeMenu(QWidget):
         grid.setRowStretch(7, 1)
 
     def autoDiscretize(self, parent):
+        # Checking the precision/density parameter:
         n, ok = QInputDialog.getText(self, 'Tamanho do Grid', 'Digite um ' +
                                      'valor n para obter uma\ndiscretização ' +
                                      'quadriculada de n pontos/m^2:')
@@ -97,21 +98,21 @@ class discretizeMenu(QWidget):
             return
         try:
             n = int(n)
-            if ((n < 1) or (n > 100)):
+            if ((n < 1) or (n > 50)):
                 raise ValueError
         except ValueError:
             QMessageBox.information(parent, 'Densidade de Pontos Inválida',
                                     'A densidade informada não é válida.\n' +
                                     'Utilize uma precisão inteira positiva entre ' +
-                                    '1 e 100 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+                                    '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
         n = int(n)
-        file = loadIGESFile(parent.activeFile)
-        data = getRawData(file)
-        param = getRawParameters(file)
-        entities = loadEntities(data, param)
+        # Performing the autoDiscretization:
+        file = loadIGESFile(parent.activeCADFile)
+        entities = loadEntities(getRawData(file), getRawParameters(file))
         points = discretizeModel(entities, n)
         generatePcd(points)
+        # Displaying the generated points over the model:
         pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
         pc = Graphic3d_ArrayOfPoints(len(pcd_file))
         for line in pcd_file:

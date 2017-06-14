@@ -14,25 +14,6 @@ from PyQt5.QtCore import QCoreApplication, QSize, Qt
 # Description: This class provides a side menu a Tree View of each IGES entity.
 # Each entity can be selected for individual discretization / individual options.
 
-'''
-ATTENTION!
-DATA FOR TESTING PURPOSES!
-'''
-data = [
-    ("B-Rep Surface", [
-        ("Surface #001", []),
-        ("Surface #002", [
-            ("Underlying NURBS Surface", [])
-            ])
-        ]),
-    ("B-Rep Curve", [
-        ("Curve #001", [
-            ("Underlying NURBS Curve", []),
-            ("Normal Vector for Planar", [])
-            ])
-        ])
-    ]
-
 class entitiesMenu(QTreeView):
     
     def __init__(self, parent):
@@ -42,7 +23,7 @@ class entitiesMenu(QTreeView):
     def initUI(self, parent):
         self.setHeaderHidden(True)
         self.model = QStandardItemModel()
-        self.addItems(self.model, data)
+        self.addItems(self.model, parent.entitiesList)
         self.setModel(self.model)
         
     def addItems(self, parent, elements):

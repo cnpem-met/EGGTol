@@ -63,9 +63,12 @@ class MainWindow(QMainWindow):
         self.rightDockWidget = None
 
         # Information about the loaded IGES Entities.
+        self.entitiesObject = None
         self.entitiesList = []
+        self.entitiesID = []
 
         # Information about the loaded Cloud Points.
+        self.faceSequenceNumbers = []
         self.cloudPointsList = []
 
         # Defining Actions.
@@ -82,19 +85,19 @@ class MainWindow(QMainWindow):
         
         # Defining the MenuBar:
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&Arquivo')
+        fileMenu = menubar.addMenu('Arquivo')
         fileMenu.addAction(welcome)
         fileMenu.addAction(importCAD)
         fileMenu.addAction(close)
         fileMenu.addAction(exitApp)
-        panelsMenu = menubar.addMenu('&Painéis e Menus')
+        panelsMenu = menubar.addMenu('Painéis e Menus')
         panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(cloud)
         panelsMenu.addAction(entities)
-        menubar.addMenu('&Importar')
-        menubar.addMenu('&Exportar')
-        menubar.addMenu('&Janela')
-        menubar.addMenu('&Ajuda')
+        menubar.addMenu('Importar')
+        menubar.addMenu('Exportar')
+        menubar.addMenu('Janela')
+        menubar.addMenu('Ajuda')
 
         # Defining the StatusBar:
         self.statusBar()

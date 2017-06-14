@@ -1,9 +1,9 @@
 # Module: DiscretizeFace.py
-# Description: This module aims the discretization of simple CAD Faces
+# Description: This module aims the discretization of CAD Faces
 # defined in an .IGES and .IGS files.
 
 # Author: Willian Hideak Arita da Silva
-# Last edit: June, 05, 2017.
+# Last edit: June, 14, 2017.
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber

@@ -21,8 +21,7 @@ class VertexList(Entity):
         self.YList = YList
         self.ZList = ZList
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
 
     def __str__(self):

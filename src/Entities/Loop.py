@@ -26,8 +26,7 @@ class Loop(Entity):
         self.ISOPList = ISOPList
         self.CURVList = CURVList
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
 
     def __str__(self):

@@ -38,8 +38,7 @@ class RationalBSplineSurface(Entity):
         self.V0 = V0
         self.V1 = V1
 
-    def discretize(self):
-        '''TODO'''
+    def description(self):
         pass
     
     def __str__(self):

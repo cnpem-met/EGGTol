@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
+from Import.IGESImport import *
+
 # Show/hide the Welcome SideWidget.
 class welcomeAction(QAction):
     def __init__(self, parent):
@@ -83,6 +85,13 @@ class importAction(QAction):
         self.setIconText('Importar')
         self.triggered.connect(lambda: self.importActionProcedure(parent))
     def importActionProcedure(self, parent):
+        if parent.activeCADFile:
+            QMessageBox.information(parent, 'Arquivo .IGES já está aberto',
+                                    'O arquivo ' + str(parent.activeCADFile) + ' já está em excução ' +
+                                    'no momento. Conclua suas atividades e feche o arquivo para ' +
+                                    'realizar uma nova importação.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        
         from OCC.IGESControl import IGESControl_Reader
         from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
         fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
@@ -103,9 +112,13 @@ class importAction(QAction):
             return
         parent.canvas._display.DisplayShape(shape, update=True)
         parent.canvas._display.FitAll()
-        parent.activeFile = fileName[0]
-        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30' + ' - ' + fileName[0])
         parent.activeCADFile = fileName[0]
+        file = loadIGESFile(parent.activeCADFile)
+        parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
+        for entity in parent.entitiesObject:
+            if(entity != None and entity.entityType == 510):
+                parent.entitiesList.append(entity.description())
+        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30' + ' - ' + fileName[0])
 
 # Opens the exportMenu.
 class exportAction(QAction):
@@ -192,6 +205,9 @@ class closeAction(QAction):
             parent.canvas._display.EraseAll()
             parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
             parent.activeCADFile = None
+            parent.entitiesObject = None
+            parent.entitiesList = []
+            parent.entitiesID = []
             parent.canvas._display.View_Iso()
 
 # Close the application.
