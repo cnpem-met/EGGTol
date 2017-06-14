@@ -43,19 +43,30 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         # Defining Main Window Properties:
-        self.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
+        self.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
 
         # Control Variables. Used to storage current session information.
+        # Information about the current opened file.
         self.lastPath = 'C:\\Users\\' + getpass.getuser() + '\\Desktop'
-        self.activeFile = None
-        self.activeMiniToolbar = None
-        self.activeLeftWidget = None
-        self.activeRightWidget = None
-        self.activeCentralWidget = None
+        self.activeCADFile = None
         self.activeCloudFile = None
+
+        # Information about active toolbars.
+        self.activeMiniToolbar = None
+
+        # Information about active docks and windows.
+        self.leftDockMenu = None
+        self.leftDockWidget = None
+        self.rightDockMenu = None
+        self.rightDockWidget = None
+
+        # Information about the loaded IGES Entities.
         self.entitiesList = []
+
+        # Information about the loaded Cloud Points.
+        self.cloudPointsList = []
 
         # Defining Actions.
         welcome = welcomeAction(self)
@@ -66,13 +77,20 @@ class MainWindow(QMainWindow):
         close = closeAction(self)
         exitApp = exitAction(self)
 
+        # Defining the default Side Widgets:
+        welcome.welcomeActionProcedure(self)
+        
         # Defining the MenuBar:
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&Arquivo')
+        fileMenu.addAction(welcome)
         fileMenu.addAction(importCAD)
+        fileMenu.addAction(close)
         fileMenu.addAction(exitApp)
-        menubar.addMenu('&Editar')
-        menubar.addMenu('&Ferramentas')
+        panelsMenu = menubar.addMenu('&Painéis e Menus')
+        panelsMenu.addAction(exportCAD)
+        panelsMenu.addAction(cloud)
+        panelsMenu.addAction(entities)
         menubar.addMenu('&Importar')
         menubar.addMenu('&Exportar')
         menubar.addMenu('&Janela')
@@ -99,18 +117,6 @@ class MainWindow(QMainWindow):
         self.toolbar.setToolButtonStyle(3)
         self.toolbar.setMovable(False)
 
-        # Defining the Welcome Widget:
-        welcome = QtWidgets.QTextEdit()
-        fchangelog = open('..\\src\\Interface\\welcome.txt', 'r')
-        with fchangelog:
-            changelog = fchangelog.read()
-            welcome.setText(changelog)
-
-        # Setting the Welcome Widget as a Lateral Widget:
-        self.dock = QDockWidget('Bem-Vindo!', self)
-        self.dock.setWidget(welcome)
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
-
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -120,5 +126,6 @@ if __name__ == '__main__':
     window.canvas.qApp = app
     display = window.canvas._display
     display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
+    #display.set_bg_gradient_color(0, 0, 0, 0, 0, 0)
     display.display_trihedron()
     sys.exit(app.exec_())

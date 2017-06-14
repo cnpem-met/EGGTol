@@ -121,8 +121,3 @@ class discretizeMenu(QWidget):
         point_cloud.SetPoints(pc.GetHandle())
         ais_context = parent.canvas._display.GetContext().GetObject()
         ais_context.Display(point_cloud.GetHandle())
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    wn = closeWindow()
-    sys.exit(app.exec_())

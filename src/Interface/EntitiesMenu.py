@@ -6,8 +6,9 @@
 # Last edit: May, 04, 2017.
 
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QTreeView, QStandardItemModel
-from PyQt5.QtCore import QCoreApplication, QSize
+from PyQt5.QtWidgets import QWidget, QApplication, QTreeView
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtCore import QCoreApplication, QSize, Qt
 
 # Class: entitiesMenu
 # Description: This class provides a side menu a Tree View of each IGES entity.
@@ -18,41 +19,35 @@ ATTENTION!
 DATA FOR TESTING PURPOSES!
 '''
 data = [
-    ("Alice", [
-        ("Keys", []),
-        ("Purse", [
-            ("Cellphone", [])
+    ("B-Rep Surface", [
+        ("Surface #001", []),
+        ("Surface #002", [
+            ("Underlying NURBS Surface", [])
             ])
         ]),
-    ("Bob", [
-        ("Wallet", [
-            ("Credit card", []),
-            ("Money", [])
+    ("B-Rep Curve", [
+        ("Curve #001", [
+            ("Underlying NURBS Curve", []),
+            ("Normal Vector for Planar", [])
             ])
         ])
     ]
 
-class entitiesMenu(QWidget):
+class entitiesMenu(QTreeView):
     
     def __init__(self, parent):
         super().__init__()
         self.initUI(parent)
 
     def initUI(self, parent):
-        '''
-        TODO
-        A UI INTERFACE NEEDS TO BE IMPLEMENTED HERE
-        '''
-        self.treeView = QTreeView()
-        self.treeView.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.treeView.customContextMenuRequested.connect(self.openMenu)
-
+        self.setHeaderHidden(True)
         self.model = QStandardItemModel()
         self.addItems(self.model, data)
-        self.treeView.setModel(self.model)
+        self.setModel(self.model)
         
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    wn = closeWindow()
-    sys.exit(app.exec_())
+    def addItems(self, parent, elements):
+        for text, children in elements:
+            item = QStandardItem(text)
+            parent.appendRow(item)
+            if children:
+                self.addItems(item, children)

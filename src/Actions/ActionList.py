@@ -4,7 +4,7 @@
 # the main.py.
 
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 24, 2017.
+# Last edit: June, 08, 2017.
 
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget
 from PyQt5.QtGui import QIcon
@@ -13,21 +13,72 @@ from PyQt5 import QtCore
 # Show/hide the Welcome SideWidget.
 class welcomeAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), 'welcomeAction', parent)
+        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), 'Menu de Boas-Vindas', parent)
         self.setStatusTip('Exibe o menu de boas vindas, incluindo o welcome.txt')
         self.setIconText('Bem-Vindo!')
+        self.triggered.connect(lambda: self.welcomeActionProcedure(parent))
+    def welcomeActionProcedure(self, parent):
+        from Interface.WelcomeMenu import welcomeMenu
+        if parent.leftDockWidget == None:
+            widget = welcomeMenu(parent)
+            dock = QDockWidget('Bem-Vindo!', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = 'welcomeMenu'
+        elif parent.leftDockWidget == 'welcomeMenu':
+            parent.removeDockWidget(parent.leftDockMenu)
+            parent.leftDockMenu = None
+            parent.leftDockWidget = None
+        else:
+            parent.removeDockWidget(parent.leftDockMenu)
+            widget = welcomeMenu(parent)
+            dock = QDockWidget('Bem-Vindo!', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = 'welcomeMenu'
+            
 
 # Show/hide the Entities SideWidget.
 class entitiesAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\Server.svg'), 'entitiesAction', parent)
+        super().__init__(QIcon('..\\icons\\Server.svg'), 'Painel de Entidades', parent)
         self.setStatusTip('Exibe a Árvore de Entidades')
         self.setIconText('Entidades')
+        self.triggered.connect(lambda: self.entitiesActionProcedure(parent))
+    def entitiesActionProcedure(self, parent):
+        from Interface.EntitiesMenu import entitiesMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.leftDockWidget == None:
+            widget = entitiesMenu(parent)
+            dock = QDockWidget('Painel de Entidades', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = 'entitiesMenu'
+        elif parent.leftDockWidget == 'entitiesMenu':
+            parent.removeDockWidget(parent.leftDockMenu)
+            parent.leftDockMenu = None
+            parent.leftDockWidget = None
+        else:
+            parent.removeDockWidget(parent.leftDockMenu)
+            widget = entitiesMenu(parent)
+            dock = QDockWidget('Painel de Entidades', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = 'entitiesMenu'
 
 # Opens a File Dialog to open and display an .IGES File.
 class importAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\inbox.svg'), 'importAction', parent)
+        super().__init__(QIcon('..\\icons\\inbox.svg'), 'Importar Arquivo .IGES', parent)
         self.setStatusTip('Importar Um Arquivo .IGES')
         self.setIconText('Importar')
         self.triggered.connect(lambda: self.importActionProcedure(parent))
@@ -42,8 +93,8 @@ class importAction(QAction):
         status = Reader.ReadFile(fileName[0])
         shape = None
         if status == IFSelect_RetDone:
-            Reader.TransferRoots()
-            shape = Reader.Shape(1)
+            Reader.TransferList(Reader.GiveList('xst-model-all'))
+            shape = Reader.Shape(1200)
         else:
             QMessageBox.information(parent, 'Erro ao Processar Arquivo',
                                     'Não foi possível abrir o arquivo especificado.\n' +
@@ -54,11 +105,12 @@ class importAction(QAction):
         parent.canvas._display.FitAll()
         parent.activeFile = fileName[0]
         parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30' + ' - ' + fileName[0])
+        parent.activeCADFile = fileName[0]
 
 # Opens the exportMenu.
 class exportAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\outbox.svg'), 'exportAction', parent)
+        super().__init__(QIcon('..\\icons\\outbox.svg'), 'Painel de Exportação', parent)
         self.setStatusTip('Exportar Um Arquivo .IGES')
         self.setIconText('Exportar')
         '''
@@ -69,21 +121,42 @@ class exportAction(QAction):
 # Show/hide the Discretization Menu.
 class cloudAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\cloud-download.svg'), 'cloudAction', parent)
+        super().__init__(QIcon('..\\icons\\cloud-download.svg'), 'Painel de Discretização', parent)
         self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo')
         self.setIconText('Gerar Nuvem')
         self.triggered.connect(lambda: self.cloudActionProcedure(parent))
     def cloudActionProcedure(self, parent):
         from Interface.DiscretizeMenu import discretizeMenu
-        widget = discretizeMenu(parent)
-        dock = QDockWidget('Gerar Nuvem de Pontos', parent)
-        dock.setWidget(widget)
-        parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.rightDockWidget == None:
+            widget = discretizeMenu(parent)
+            dock = QDockWidget('Gerar Nuvem de Pontos', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'cloudMenu'
+        elif parent.rightDockWidget == 'cloudMenu':
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            parent.removeDockWidget(parent.rightDockMenu)
+            widget = discretizeMenu(parent)
+            dock = QDockWidget('Gerar Nuvem de Pontos', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'cloudMenu'
 
 # Close the current file.
 class closeAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\cross.svg'), 'closeAction', parent)
+        super().__init__(QIcon('..\\icons\\cross.svg'), 'Fechar Arquivo', parent)
         self.setStatusTip('Fecha o modelo CAD atual')
         self.setIconText('Fechar')
         self.triggered.connect(lambda: self.closeActionProcedure(parent))
@@ -94,11 +167,12 @@ class closeAction(QAction):
         '''
         parent.canvas._display.EraseAll()
         parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
+        parent.activeCADFile = None
 
 # Close the application.
 class exitAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\circle-cross.svg'), 'exitAction', parent)
+        super().__init__(QIcon('..\\icons\\circle-cross.svg'), 'Encerrar', parent)
         self.setStatusTip('Encerra o programa')
         self.setIconText('Encerrar')
         self.triggered.connect(qApp.quit)
