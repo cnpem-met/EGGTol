@@ -22,8 +22,14 @@ class VertexList(Entity):
         self.ZList = ZList
 
     def description(self):
-        pass
-
+        out = ('#' + str(int(self.seqNumber)//2+1) + ' Vertex List (IGES 502)', [])
+        out[1].append(('* Number of Vertex Tuples (N): ' + str(self.N), []))
+        for i in range(int(self.N)):
+            out[1].append(('* Coordinate X(' + str(i+1) + ')): ' + str(self.XList[i]), []))
+            out[1].append(('* Coordinate Y(' + str(i+1) + ')): ' + str(self.YList[i]), []))
+            out[1].append(('* Coordinate Z(' + str(i+1) + ')): ' + str(self.ZList[i]), []))
+        return out
+    
     def __str__(self):
         out = 'Vertex List (Type 502)\n'
         out += '* Number of Vertex Tuples (N): ' + str(self.N) + '\n'

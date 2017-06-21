@@ -25,11 +25,11 @@ class Face(Entity):
 
     def description(self):
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Face (IGES 510)', [])
-        out[1].append(('Underlying Surface (SURF): ' + str(self.SURF), []))
-        out[1].append(('Number of Loops (N): ' + str(self.N), []))
-        out[1].append(('Outer Loop Flag (OF): ' + str(self.OF), []))
+        out[1].append(('* Underlying Surface (SURF): ' + str(self.SURF), []))
+        out[1].append(('* Number of Loops (N): ' + str(self.N), []))
+        out[1].append(('* Outer Loop Flag (OF): ' + str(self.OF), []))
         for i in range(int(self.N)):
-            out[1].append(('Pointer to the Loops (LOOP(' + str(i+1) + ')): ' + str(self.LOOPList[i]), []))
+            out[1].append(('* Pointer to the Loops (LOOP(' + str(i+1) + ')): ' + str(self.LOOPList[i]), []))
         return out        
     
     def __str__(self):

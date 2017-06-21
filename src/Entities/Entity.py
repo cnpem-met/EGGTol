@@ -21,3 +21,6 @@ class Entity(object):
         self.PDPointer = PDPointer
         self.parCount = parCount
         self.seqNumber = seqNumber
+
+    def description(self):
+        return (('Unsupported Entity', []))

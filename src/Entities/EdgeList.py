@@ -24,7 +24,15 @@ class EdgeList(Entity):
         self.TVList = TVList
 
     def description(self):
-        pass
+        out = ('#' + str(int(self.seqNumber)//2+1) + ' Edge List (IGES 504)', [])
+        out[1].append(('* Number of Edges (N): ' + str(self.N), []))
+        for i in range(int(self.N)):
+            out[1].append(('* Space Curve (CURV(' + str(i+1) + ')): ' + str(self.CURVList[i]), []))
+            out[1].append(('* Start Vertex List Pointer (SVP(' + str(i+1) + ')): ' + str(self.SVPList[i]), []))
+            out[1].append(('* Start Vertex Index (SV(' + str(i+1) + ')): ' + str(self.SVList[i]), []))
+            out[1].append(('* Terminate Vertex List Pointer (TVP(' + str(i+1) + ')): ' + str(self.TVPList[i]), []))
+            out[1].append(('* Terminate Vertex Index (TV(' + str(i+1) + ')): ' + str(self.TVList[i]), []))
+        return out
 
     def __str__(self):
         out = 'Edge List (Type 504)\n'

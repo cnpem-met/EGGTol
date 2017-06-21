@@ -123,8 +123,10 @@ class importAction(QAction):
         file = loadIGESFile(parent.activeCADFile)
         parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
         for entity in parent.entitiesObject:
-            if(entity != None and entity.entityType == 510):
+            if(entity != None):
                 parent.entitiesList.append(entity.description())
+            else:
+                parent.entitiesList.append(('Unsupported Object', []))
         parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30' + ' - ' + fileName[0])
 
 # Opens the exportMenu.

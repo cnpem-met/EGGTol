@@ -36,7 +36,27 @@ class RationalBSplineCurve(Entity):
         self.ZNORM = ZNORM
 
     def description(self):
-        pass
+        out = ('#' + str(int(self.seqNumber)//2+1) + ' Rational B-Spline Curve (IGES 126)', [])
+        out[1].append(('* Upper Index of Sum (K): ' + str(self.K), []))
+        out[1].append(('* Degree of Basis Function (M): ' + str(self.M), []))
+        out[1].append(('* NonPlanar or Planar? (PROP1): ' + str(self.PROP1), []))
+        out[1].append(('* Open or Closed Curve? (PROP2): ' + str(self.PROP2), []))
+        out[1].append(('* Rational or Polynomial? (PROP3): ' + str(self.PROP3), []))
+        out[1].append(('* NonPeriodic or Periodic? (PROP4): ' + str(self.PROP4), []))
+        for i in range(int(self.M)+int(self.K)+2):
+            out[1].append(('* Knot Sequence (T(' + str(i-int(self.M)) + ')): ' + str(self.TList[i]), []))
+        for i in range(int(self.K)+1):
+            out[1].append(('* Weight Sequence (W(' + str(i) + ')): ' + str(self.WList[i]), []))
+        for i in range(int(self.K)+1):
+            out[1].append(('* Control Point (X(' + str(i) + ')): ' + str(self.XList[i]), []))
+            out[1].append(('* Control Point (Y(' + str(i) + ')): ' + str(self.YList[i]), []))
+            out[1].append(('* Control Point (Z(' + str(i) + ')): ' + str(self.ZList[i]), []))
+        out[1].append(('* Starting Parameter Value (V(0)): ' + str(self.V0), []))
+        out[1].append(('* Ending Parameter Value (V(1)): ' + str(self.V1), []))
+        out[1].append(('* Unit Normal X (XNORM): ' + str(self.XNORM), []))
+        out[1].append(('* Unit Normal Y (YNORM): ' + str(self.YNORM), []))
+        out[1].append(('* Unit Normal Z (ZNORM): ' + str(self.ZNORM), []))
+        return out
 
     def __str__(self):
         out = 'Rational B-Spline Curve (Type 126)\n'
