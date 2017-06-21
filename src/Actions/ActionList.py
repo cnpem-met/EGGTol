@@ -313,3 +313,25 @@ class exitAction(QAction):
         box.exec_()
         if box.clickedButton() == buttonYes:
             qApp.quit()
+
+# A toggle to set the background to a dark color.
+class darkAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\desktopIcons\\moon.png'), 'Definir Fundo Escuro', parent)
+        self.setStatusTip('Configura o fundo de tela com uma cor escura')
+        self.setIconText('Escuro')
+        self.triggered.connect(lambda: self.darkActionProcedure(parent))
+    def darkActionProcedure(self, parent):
+        parent.canvas._display.set_bg_gradient_color(10, 10, 10, 10, 10, 43)
+        parent.canvas._display.Repaint()
+
+# A toggle to set the background to a light color.
+class lightAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\desktopIcons\\sun.png'), 'Definir Fundo Claro', parent)
+        self.setStatusTip('Configura o fundo de tela com uma cor escura')
+        self.setIconText('Claro')
+        self.triggered.connect(lambda: self.lightActionProcedure(parent))
+    def lightActionProcedure(self, parent):
+        parent.canvas._display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
+        parent.canvas._display.Repaint()

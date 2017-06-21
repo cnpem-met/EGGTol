@@ -85,6 +85,8 @@ class MainWindow(QMainWindow):
         defects = defectsAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
+        light = lightAction(self)
+        dark = darkAction(self)
 
         # Defining the default Side Widgets:
         welcome.welcomeActionProcedure(self)
@@ -103,7 +105,9 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(defects)
         menubar.addMenu('Importar')
         menubar.addMenu('Exportar')
-        menubar.addMenu('Janela')
+        windowMenu = menubar.addMenu('Janela')
+        windowMenu.addAction(light)
+        windowMenu.addAction(dark)
         menubar.addMenu('Ajuda')
 
         # Defining the StatusBar:
