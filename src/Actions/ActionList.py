@@ -16,7 +16,7 @@ from Import.IGESImport import *
 # Show/hide the Welcome SideWidget.
 class welcomeAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), 'Menu de Boas-Vindas', parent)
+        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), 'Painel de Boas-Vindas', parent)
         self.setStatusTip('Exibe o menu de boas vindas, incluindo o welcome.txt')
         self.setIconText('Bem-Vindo!')
         self.triggered.connect(lambda: self.welcomeActionProcedure(parent))
@@ -24,7 +24,7 @@ class welcomeAction(QAction):
         from Interface.WelcomeMenu import welcomeMenu
         if parent.leftDockWidget == None:
             widget = welcomeMenu(parent)
-            dock = QDockWidget('Bem-Vindo!', parent)
+            dock = QDockWidget('Painel de Boas-Vindas!', parent)
             dock.setWidget(widget)
             parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
             parent.leftDockMenu = dock
@@ -36,7 +36,7 @@ class welcomeAction(QAction):
         else:
             parent.removeDockWidget(parent.leftDockMenu)
             widget = welcomeMenu(parent)
-            dock = QDockWidget('Bem-Vindo!', parent)
+            dock = QDockWidget('Painel de Boas-Vindas!', parent)
             dock.setWidget(widget)
             parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
             parent.leftDockMenu = dock
@@ -95,9 +95,8 @@ class importAction(QAction):
         
         from OCC.IGESControl import IGESControl_Reader
         from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
-        parent.loadingWindow.show()
         fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
-        parent.loadingWindow.raise_()
+        parent.loadingWindow.show()
         parent.loadingWindow.activateWindow()
         if not fileName[0]:
             parent.loadingWindow.close()
@@ -117,6 +116,7 @@ class importAction(QAction):
                                     'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             parent.loadingWindow.close()
             return
+        print(type(shape))
         parent.canvas._display.DisplayShape(shape, update=True)
         parent.canvas._display.FitAll()
         parent.activeCADFile = fileName[0]
@@ -127,18 +127,42 @@ class importAction(QAction):
                 parent.entitiesList.append(entity.description())
             else:
                 parent.entitiesList.append(('Unsupported Object', []))
-        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30' + ' - ' + fileName[0])
+        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.41' + ' - ' + fileName[0])
 
-# Opens the exportMenu.
+# Show/hide the Export Menu.
 class exportAction(QAction):
     def __init__(self, parent):
         super().__init__(QIcon('..\\icons\\outbox.svg'), 'Painel de Exportação', parent)
         self.setStatusTip('Exportar Um Arquivo .IGES')
         self.setIconText('Exportar')
-        '''
-        TODO
-        IMPLEMENT THE EXPORT MENU
-        '''
+        self.triggered.connect(lambda: self.exportActionProcedure(parent))
+    def exportActionProcedure(self, parent):
+        from Interface.ExportMenu import exportMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES ou .pcd foi aberto',
+                                    'Não há nenhum arquivo .IGS, .IGES ou .pcd ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.rightDockWidget == None:
+            widget = exportMenu(parent)
+            dock = QDockWidget('Painel de Exportação', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'exportMenu'
+        elif parent.rightDockWidget == 'exportMenu':
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            parent.removeDockWidget(parent.rightDockMenu)
+            widget = exportMenu(parent)
+            dock = QDockWidget('Painel de Exportação', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'exportMenu'
 
 # Show/hide the Discretization Menu.
 class cloudAction(QAction):
@@ -157,7 +181,7 @@ class cloudAction(QAction):
             return
         if parent.rightDockWidget == None:
             widget = discretizeMenu(parent)
-            dock = QDockWidget('Gerar Nuvem de Pontos', parent)
+            dock = QDockWidget('Painel de Discretização', parent)
             dock.setWidget(widget)
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
@@ -169,11 +193,53 @@ class cloudAction(QAction):
         else:
             parent.removeDockWidget(parent.rightDockMenu)
             widget = discretizeMenu(parent)
-            dock = QDockWidget('Gerar Nuvem de Pontos', parent)
+            dock = QDockWidget('Painel de Discretização', parent)
             dock.setWidget(widget)
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
             parent.rightDockWidget = 'cloudMenu'
+
+# Show/hide the Defects Menu.
+class defectsAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\cloud-download.svg'), 'Painel de Geração de Erros', parent)
+        self.setStatusTip('Inserir erros artificiais em nuvens de pontos.')
+        self.setIconText('Gerar Erros')
+        self.triggered.connect(lambda: self.defectsActionProcedure(parent))
+    def defectsActionProcedure(self, parent):
+        from Interface.DefectsMenu import defectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
+                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
+                                    'nuvem de pontos foi gerada no momento. Utilize ' +
+                                    'o menu de discretização ou importe uma nuvem de pontos ' +
+                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.rightDockWidget == None:
+            widget = defectsMenu(parent)
+            dock = QDockWidget('Painel de Geração de Erros', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'defectsMenu'
+        elif parent.rightDockWidget == 'defectsMenu':
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            parent.removeDockWidget(parent.rightDockMenu)
+            widget = defectsMenu(parent)
+            dock = QDockWidget('Painel de Geração de Erros', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'defectsMenu'
 
 # Close the current file.
 class closeAction(QAction):
@@ -211,9 +277,14 @@ class closeAction(QAction):
                 parent.removeDockWidget(parent.rightDockMenu)
                 parent.rightDockMenu = None
                 parent.rightDockWidget = None
+            if parent.rightDockWidget == 'defectsMenu':
+                parent.removeDockWidget(parent.rightDockMenu)
+                parent.rightDockMenu = None
+                parent.rightDockWidget = None
             parent.canvas._display.EraseAll()
-            parent.setWindowTitle('Gerador de Nuvem de Pontos v0.30')
+            parent.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
             parent.activeCADFile = None
+            parent.activeCloudFile = None
             parent.entitiesObject = None
             parent.entitiesList = []
             parent.entitiesID = []

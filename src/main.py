@@ -31,6 +31,7 @@ from PyQt5.QtGui import QIcon
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
 # Importing PyQt5 elements:
+from Interface.DefectsMenu import *
 from Interface.DiscretizeMenu import *
 from Interface.LoadingMenu import *
 from Actions.ActionList import *
@@ -81,6 +82,7 @@ class MainWindow(QMainWindow):
         importCAD = importAction(self)
         exportCAD = exportAction(self)
         cloud = cloudAction(self)
+        defects = defectsAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
 
@@ -96,8 +98,9 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(exitApp)
         panelsMenu = menubar.addMenu('Painéis e Menus')
         panelsMenu.addAction(exportCAD)
-        panelsMenu.addAction(cloud)
         panelsMenu.addAction(entities)
+        panelsMenu.addAction(cloud)
+        panelsMenu.addAction(defects)
         menubar.addMenu('Importar')
         menubar.addMenu('Exportar')
         menubar.addMenu('Janela')
@@ -117,6 +120,7 @@ class MainWindow(QMainWindow):
         self.toolbar.addAction(importCAD)
         self.toolbar.addAction(exportCAD)
         self.toolbar.addAction(cloud)
+        self.toolbar.addAction(defects)
         self.toolbar.addSeparator()
         self.toolbar.addAction(close)
         self.toolbar.addSeparator()
@@ -144,6 +148,12 @@ class MainWindow(QMainWindow):
         elif box.clickedButton() == buttonNo:
             event.ignore()
 
+# Defining a callback function to show the clicked shape ID:
+def printSelectedShape(shp, *kwargs):
+    for shape in shp:
+        print("type of selected shape: ", type(shape))
+    print(kwargs)
+
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -153,5 +163,6 @@ if __name__ == '__main__':
     window.canvas.qApp = app
     display = window.canvas._display
     display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
+    display.register_select_callback(printSelectedShape)
     display.display_trihedron()
     sys.exit(app.exec_())

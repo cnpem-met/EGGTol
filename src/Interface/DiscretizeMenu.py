@@ -107,11 +107,13 @@ class discretizeMenu(QWidget):
                                     '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
         n = int(n)
+        
         # Performing the autoDiscretization:
         file = loadIGESFile(parent.activeCADFile)
         entities = loadEntities(getRawData(file), getRawParameters(file))
         points = discretizeModel(entities, n)
         generatePcd(points)
+        
         # Displaying the generated points over the model:
         pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
         pc = Graphic3d_ArrayOfPoints(len(pcd_file))
@@ -122,3 +124,4 @@ class discretizeMenu(QWidget):
         point_cloud.SetPoints(pc.GetHandle())
         ais_context = parent.canvas._display.GetContext().GetObject()
         ais_context.Display(point_cloud.GetHandle())
+        parent.activeCloudFile = '..\\tmp\\CloudData.pcd'

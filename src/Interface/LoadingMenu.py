@@ -19,8 +19,9 @@ class loadingMenu(QDialog):
 
     def initUI(self):
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        self.setWindowTitle('Carregando')
+        self.setWindowTitle('Carregando... Por favor, aguarde.')
+        self.resize(400, 1)
         grid = QGridLayout()
-        label = QLabel('Carregando... Por favor, aguarde.')
-        grid.addWidget(label, 0, 0)
-        self.setLayout(grid)
+        #label = QLabel('-                                Concluído                                -')
+        #grid.addWidget(label, 0, 0)
+        #self.setLayout(grid)
