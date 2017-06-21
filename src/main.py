@@ -32,6 +32,7 @@ QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
 # Importing PyQt5 elements:
 from Interface.DiscretizeMenu import *
+from Interface.LoadingMenu import *
 from Actions.ActionList import *
 
 # Defining the Main Window:
@@ -46,6 +47,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
+
+        # Defining modeless windows:
+        self.loadingWindow = loadingMenu()
 
         # Control Variables. Used to storage current session information.
         # Information about the current opened file.

@@ -6,7 +6,8 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: June, 08, 2017.
 
-from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget
+from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget, \
+                            QDialog, QGridLayout, QLabel
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
@@ -94,8 +95,12 @@ class importAction(QAction):
         
         from OCC.IGESControl import IGESControl_Reader
         from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
+        parent.loadingWindow.show()
         fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
+        parent.loadingWindow.raise_()
+        parent.loadingWindow.activateWindow()
         if not fileName[0]:
+            parent.loadingWindow.close()
             return
         parent.lastPath = fileName[0]
         Reader = IGESControl_Reader()
@@ -104,11 +109,13 @@ class importAction(QAction):
         if status == IFSelect_RetDone:
             Reader.TransferList(Reader.GiveList('xst-model-all'))
             shape = Reader.Shape(1)
+            parent.loadingWindow.close()
         else:
             QMessageBox.information(parent, 'Erro ao Processar Arquivo',
                                     'Não foi possível abrir o arquivo especificado.\n' +
                                     'Verifique se o arquivo possuí a extensão .IGS ou .IGS ' +
                                     'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+            parent.loadingWindow.close()
             return
         parent.canvas._display.DisplayShape(shape, update=True)
         parent.canvas._display.FitAll()

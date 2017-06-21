@@ -6,19 +6,21 @@
 # Last edit: June, 14, 2017.
 
 import sys
-from PyQt5.QtWidgets import QWidget, QLabel
+from PyQt5.QtWidgets import QDialog, QLabel, QGridLayout
+from PyQt5.QtGui import QIcon
 
 # Class: loadingMenu
 # Description: This class represents the loading window itself.
-class loadingMenu(QWidget):
+class loadingMenu(QDialog):
 
-    def __init__(self, parent):
+    def __init__(self):
         super().__init__()
-        self.initUI(parent)
+        self.initUI()
 
-    def initUI(self, parent):
-        grid = QGridLayout()
-        self.setLayout(grid)
+    def initUI(self):
+        self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.setWindowTitle('Carregando')
+        grid = QGridLayout()
         label = QLabel('Carregando... Por favor, aguarde.')
-        grid.addWidget(label, 0, 0, 1, 1)
+        grid.addWidget(label, 0, 0)
+        self.setLayout(grid)
