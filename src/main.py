@@ -2,7 +2,7 @@
 # Description: This is the main file of the program. It will run the initial UI Elements.
 
 # Autor: Willian Hideak Arita da Silva.
-# Last edit: June, 05, 2017.
+# Last edit: June, 22, 2017.
 
 # System Imports:
 import sys
@@ -68,9 +68,8 @@ class MainWindow(QMainWindow):
         self.rightDockWidget = None
 
         # Information about the loaded IGES Entities.
-        self.entitiesObject = None
         self.entitiesList = []
-        self.entitiesID = []
+        self.shapeList = []
 
         # Information about the loaded Cloud Points.
         self.faceSequenceNumbers = []
@@ -155,7 +154,7 @@ class MainWindow(QMainWindow):
 # Defining a callback function to show the clicked shape ID:
 def printSelectedShape(shp, *kwargs):
     for shape in shp:
-        print("type of selected shape: ", type(shape))
+        print("Type: ", type(shape))
     print(kwargs)
 
 # Setting the exhibition of elements and configuring the screen:

@@ -111,8 +111,8 @@ class discretizeMenu(QWidget):
         # Performing the autoDiscretization:
         file = loadIGESFile(parent.activeCADFile)
         entities = loadEntities(getRawData(file), getRawParameters(file))
-        points = discretizeModel(entities, n)
-        generatePcd(points)
+        parent.cloudPointsList = discretizeModel(entities, n)
+        generatePcd(parent.cloudPointsList)
         
         # Displaying the generated points over the model:
         pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]

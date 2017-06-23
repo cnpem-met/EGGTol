@@ -107,6 +107,8 @@ class importAction(QAction):
         shape = None
         if status == IFSelect_RetDone:
             Reader.TransferList(Reader.GiveList('xst-model-all'))
+            for i in range(1, Reader.NbShapes()+1):
+                parent.shapeList.append(Reader.Shape(i))
             shape = Reader.Shape(1)
             parent.loadingWindow.close()
         else:
@@ -241,6 +243,47 @@ class defectsAction(QAction):
             parent.rightDockMenu = dock
             parent.rightDockWidget = 'defectsMenu'
 
+# Show/hide the Translation Defects Menu.
+class translationDefectsAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros por Translação', parent)
+        self.setStatusTip('Inserir erros artificiais devido à translação em nuvens de pontos.')
+        self.triggered.connect(lambda: self.translationDefectsActionProcedure(parent))
+    def translationDefectsActionProcedure(self, parent):
+        from Interface.TranslationDefectsMenu import translationDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
+                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
+                                    'nuvem de pontos foi gerada no momento. Utilize ' +
+                                    'o menu de discretização ou importe uma nuvem de pontos ' +
+                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.rightDockWidget == None:
+            widget = translationDefectsMenu(parent)
+            dock = QDockWidget('Painel de Geração de Erros por Translação', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'translationDefectsMenu'
+        elif parent.rightDockWidget == 'translationDefectsMenu':
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            parent.removeDockWidget(parent.rightDockMenu)
+            widget = translationDefectsMenu(parent)
+            dock = QDockWidget('Painel de Geração de Erros por Translação', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'translationDefectsMenu'
+
 # Close the current file.
 class closeAction(QAction):
     def __init__(self, parent):
@@ -317,7 +360,7 @@ class exitAction(QAction):
 # A toggle to set the background to a dark color.
 class darkAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\desktopIcons\\moon.png'), 'Definir Fundo Escuro', parent)
+        super().__init__(QIcon('..\\icons\\moon.svg'), 'Definir Fundo Escuro', parent)
         self.setStatusTip('Configura o fundo de tela com uma cor escura')
         self.setIconText('Escuro')
         self.triggered.connect(lambda: self.darkActionProcedure(parent))
@@ -328,7 +371,7 @@ class darkAction(QAction):
 # A toggle to set the background to a light color.
 class lightAction(QAction):
     def __init__(self, parent):
-        super().__init__(QIcon('..\\icons\\desktopIcons\\sun.png'), 'Definir Fundo Claro', parent)
+        super().__init__(QIcon('..\\icons\\sun.svg'), 'Definir Fundo Claro', parent)
         self.setStatusTip('Configura o fundo de tela com uma cor escura')
         self.setIconText('Claro')
         self.triggered.connect(lambda: self.lightActionProcedure(parent))

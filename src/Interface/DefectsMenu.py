@@ -9,6 +9,7 @@ import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox
 from PyQt5.QtCore import QCoreApplication, QSize
+from Actions.ActionList import *
 
 # Class: defectsMenu
 # Description: This class provides a side menu with 2 types of artificial deviation options.
@@ -34,7 +35,7 @@ class defectsMenu(QWidget):
         
         btn1 = QToolButton()
         btn1.setText('Translação de um Conj. de Pontos')
-        #btn1.clicked.connect(None)
+        btn1.clicked.connect(lambda: self.translationDefectsMenuProcedure(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(266)
         grid.addWidget(btn1, 2, 0)
@@ -53,6 +54,10 @@ class defectsMenu(QWidget):
 
         grid.setColumnStretch(0, 1)
         grid.setRowStretch(5, 1)
+
+    def translationDefectsMenuProcedure(self, parent):
+        translation = translationDefectsAction(parent)
+        translation.translationDefectsActionProcedure(parent)
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
