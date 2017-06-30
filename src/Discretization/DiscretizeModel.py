@@ -1,9 +1,9 @@
-# Module: DiscretizeFace.py
-# Description: This module aims the discretization of CAD Faces
+# Module: DiscretizeModel.py
+# Description: This module aims the discretization of CAD Models
 # defined in an .IGES and .IGS files.
 
 # Author: Willian Hideak Arita da Silva
-# Last edit: June, 14, 2017.
+# Last edit: June, 26, 2017.
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber
@@ -104,7 +104,7 @@ def returnBasis(points, newBaseVector):
         newPoints.append(newVector)
     return newPoints
 
-# Function to orthogonalize components i and j of a basis using
+# Function to orthonormalize components i and j of a basis using
 # the Gram–Schmidt Process assuming k is already orthogonal to i and j:
 def orthonormalizeBasis(basisVector):
     i = basisVector[0]
@@ -118,7 +118,7 @@ def orthonormalizeBasis(basisVector):
             scalarVec((1/normVec(k)), k)]
 
 # Function to discretize an entire model.
-def discretizeModel(objectList, density=20):
+def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametric):
     # Get a list of planar faces in the model:
     planarFacePointers = []
     nonPlanarFacePointers = []
@@ -129,28 +129,34 @@ def discretizeModel(objectList, density=20):
         objectList[pos(myObject.SURF)].M1 == 1 and \
         objectList[pos(myObject.SURF)].M2 == 1):
             planarFacePointers.append(int(myObject.seqNumber))
-        elif(myObject != None and myObject.entityType == 510):
+        elif(myObject != None and myObject.entityType == 510 and useParametric):
             nonPlanarFacePointers.append(int(myObject.seqNumber))
     # Discretize each planar face:
-    cloudPoints = []
+    faceSequenceNumbers = []
+    faceNormalVectors = []
+    cloudPointsList = []
     for i in planarFacePointers:
-        points = discretizeFace(objectList[pos(i)], objectList, density)
-        cloudPoints.append(points)
+        points, normals = discretizeFace(objectList[pos(i)], objectList, density, precision)
+        faceSequenceNumbers.append(i)
+        faceNormalVectors = normals
+        cloudPointsList.append(points)
     # Discretize each non-planar face:
     for i in nonPlanarFacePointers:
-        points = discretizeSurface(objectList[pos(i)], objectList, density)
-        cloudPoints.append(points)
-    return cloudPoints
+        points, normals = discretizeSurface(objectList[pos(i)], objectList, Uparam, Vparam)
+        faceSequenceNumbers.append(i)
+        faceNormalVectors.append(normals)
+        cloudPointsList.append(points)
+    return faceSequenceNumbers, faceNormalVectors, cloudPointsList
 
 # Function to discretize a single face. It returns a list of cloud points.
-def discretizeFace(face, objectList, density):
+def discretizeFace(face, objectList, density, precision):
     # List to storage all the tuples (x, y, z) due to discretization.
     points = []
 
     # Collecting all the vertices of the planar face.
     unsortedVertices = []
     currentLoop = objectList[pos(face.LOOPList[0])]
-    vertices = discretizeLoop(currentLoop, objectList)
+    vertices = discretizeLoop(currentLoop, objectList, precision)
 
     if (len(vertices) < 3):
         return points
@@ -173,14 +179,14 @@ def discretizeFace(face, objectList, density):
     zCoord = minEdges[2]
 
     # Discretizing the model with the 'density' parameter:
-    spacingX = (maxEdges[0]-minEdges[0])/density
-    spacingY = (maxEdges[1]-minEdges[1])/density
+    numSpacesX = (maxEdges[0]-minEdges[0])*density
+    numSpacesY = (maxEdges[1]-minEdges[1])*density
 
     # Creating additional points due to discretization:
-    for i in range(1, density):
-        for j in range(1, density):
-            newX = minEdges[0] + i*spacingX
-            newY = minEdges[1] + j*spacingY
+    for i in range(1, int(numSpacesX)):
+        for j in range(1, int(numSpacesY)):
+            newX = minEdges[0] + i*(1/density)
+            newY = minEdges[1] + j*(1/density)
             newPoint = (newX, newY, zCoord)
             points.append(newPoint)
 
@@ -194,7 +200,7 @@ def discretizeFace(face, objectList, density):
     # Verifying if the new points has some inner loops to consider;
     for i in range(1, len(face.LOOPList)):
         currentLoop = objectList[pos(face.LOOPList[i])]
-        vertices = discretizeLoop(currentLoop, objectList)
+        vertices = discretizeLoop(currentLoop, objectList, precision)
 
         # Converting the 3D vertices to 2D:
         newVertices = changeBasis(vertices, newBasisVector)
@@ -208,10 +214,15 @@ def discretizeFace(face, objectList, density):
 
     # Changing the new points to the original basis:
     newPoints = returnBasis(points, newBasisVector)
-    return newPoints
+
+    # Creating a vector of normal vectors:
+    normals = []
+    for i in range(len(newPoints)):
+        normals.append(newBasisVector)
+    return newPoints, normals
 
 # Function to discretize a single Loop. It returns a list of vertices of the loop.
-def discretizeLoop(currentLoop, objectList):
+def discretizeLoop(currentLoop, objectList, precision):
     unsortedVertices = []
 
     for i in range(int(currentLoop.N)):
@@ -237,7 +248,7 @@ def discretizeLoop(currentLoop, objectList):
         spaceCurve = objectList[pos(spaceCurve)]
         if(int(spaceCurve.K) != 1):
             newCurve = Curve()
-            newCurve.delta = 0.02
+            newCurve.delta = (1/precision)
             newCurve.degree = int(spaceCurve.M)
             newCurve.knotvector = list(spaceCurve.TList)
             newCurve.ctrlpts = [[spaceCurve.XList[i], spaceCurve.YList[i], spaceCurve.ZList[i]] \
@@ -272,10 +283,11 @@ def discretizeLoop(currentLoop, objectList):
                 break
     return vertices
 
-def discretizeSurface(face, objectList, density):
+def discretizeSurface(face, objectList, Uparam, Vparam):
     currentSurface = objectList[pos(face.SURF)]
     newSurface = Surface()
-    newSurface.delta = 1/density
+    newSurface.delta_u = 1/Uparam
+    newSurface.delta_v = 1/Vparam
     newSurface.degree_u = int(currentSurface.M1)
     newSurface.degree_v = int(currentSurface.M2)
     newSurface.knotvector_u = list(currentSurface.SList)

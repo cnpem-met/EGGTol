@@ -9,10 +9,6 @@ import sys
 import getpass
 import os
 
-# Discretize Functions Import:
-from Import.IGESImport import *
-from Discretization.DiscretizeFace import *
-
 # Importing the load_backend e get_qt_modules from pythonOCC:
 from OCC.Display.backend import get_qt_modules
 from OCC.Display.backend import load_backend
@@ -58,9 +54,6 @@ class MainWindow(QMainWindow):
         self.activeCADFile = None
         self.activeCloudFile = None
 
-        # Information about active toolbars.
-        self.activeMiniToolbar = None
-
         # Information about active docks and windows.
         self.leftDockMenu = None
         self.leftDockWidget = None
@@ -68,24 +61,35 @@ class MainWindow(QMainWindow):
         self.rightDockWidget = None
 
         # Information about the loaded IGES Entities.
+        self.entitiesObject = []
         self.entitiesList = []
         self.shapeList = []
+        self.selectedShape = None
 
         # Information about the loaded Cloud Points.
         self.faceSequenceNumbers = []
+        self.faceNormalVectors = []
         self.cloudPointsList = []
-
+        
+        # Information about selected parameters:
+        self.shapeParameter1 = None
+        self.shapeParameter2 = None
+        self.shapeParameter3 = None
+        
         # Defining Actions.
         welcome = welcomeAction(self)
         entities = entitiesAction(self)
         importCAD = importAction(self)
         exportCAD = exportAction(self)
         cloud = cloudAction(self)
+        autoDiscretize = autoDiscretizeAction(self)
         defects = defectsAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
+        translationDefects = translationDefectsAction(self)
         light = lightAction(self)
         dark = darkAction(self)
+        github = githubAction(self)
 
         # Defining the default Side Widgets:
         welcome.welcomeActionProcedure(self)
@@ -101,13 +105,16 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(entities)
         panelsMenu.addAction(cloud)
+        panelsMenu.addAction(autoDiscretize)
         panelsMenu.addAction(defects)
+        panelsMenu.addAction(translationDefects)
         menubar.addMenu('Importar')
         menubar.addMenu('Exportar')
-        windowMenu = menubar.addMenu('Janela')
-        windowMenu.addAction(light)
-        windowMenu.addAction(dark)
-        menubar.addMenu('Ajuda')
+        visualizationMenu = menubar.addMenu('Visualização')
+        visualizationMenu.addAction(light)
+        visualizationMenu.addAction(dark)
+        aboutMenu = menubar.addMenu('Sobre este Aplicativo')
+        aboutMenu.addAction(github)
 
         # Defining the StatusBar:
         self.statusBar()
@@ -151,12 +158,6 @@ class MainWindow(QMainWindow):
         elif box.clickedButton() == buttonNo:
             event.ignore()
 
-# Defining a callback function to show the clicked shape ID:
-def printSelectedShape(shp, *kwargs):
-    for shape in shp:
-        print("Type: ", type(shape))
-    print(kwargs)
-
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -166,6 +167,5 @@ if __name__ == '__main__':
     window.canvas.qApp = app
     display = window.canvas._display
     display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
-    display.register_select_callback(printSelectedShape)
     display.display_trihedron()
     sys.exit(app.exec_())

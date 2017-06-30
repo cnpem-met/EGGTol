@@ -67,7 +67,8 @@ class Surface(object):
         self._mCtrlPts_sizeU = 0  # columns
         self._mCtrlPts_sizeV = 0  # rows
         self._mWeights = []
-        self._mDelta = 0.01
+        self._mDeltaU = 0.01
+        self._mDeltaV = 0.01
         self._mSurfPts = []
 
     @property
@@ -227,7 +228,7 @@ class Surface(object):
         self._mKnotVectorV = utils.knotvector_normalize(tuple(value_float))
 
     @property
-    def delta(self):
+    def delta_u(self):
         """ Surface evaluation delta
 
         .. note:: The delta value is 0.01 by default.
@@ -236,17 +237,39 @@ class Surface(object):
         :setter: Sets the delta value
         :type: float
         """
-        return self._mDelta
+        return self._mDeltaU
 
-    @delta.setter
-    def delta(self, value):
+    @delta_u.setter
+    def delta_u(self, value):
         # Delta value for surface evaluation should be between 0 and 1
         if float(value) <= 0 or float(value) >= 1:
             raise ValueError("Surface evaluation delta should be between 0.0 and 1.0.")
         # Clean up the surface points lists, if necessary
         self._reset_surface()
         # Set a new delta value
-        self._mDelta = float(value)
+        self._mDeltaU = float(value)
+
+    @property
+    def delta_v(self):
+        """ Surface evaluation delta
+
+        .. note:: The delta value is 0.01 by default.
+
+        :getter: Gets the delta value
+        :setter: Sets the delta value
+        :type: float
+        """
+        return self._mDeltaV
+
+    @delta_v.setter
+    def delta_v(self, value):
+        # Delta value for surface evaluation should be between 0 and 1
+        if float(value) <= 0 or float(value) >= 1:
+            raise ValueError("Surface evaluation delta should be between 0.0 and 1.0.")
+        # Clean up the surface points lists, if necessary
+        self._reset_surface()
+        # Set a new delta value
+        self._mDeltaV = float(value)
 
     @property
     def ctrlptsw(self):
@@ -473,10 +496,10 @@ class Surface(object):
         self._reset_surface()
 
         # Algorithm A3.5
-        for v in utils.frange(0, 1, self._mDelta):
+        for v in utils.frange(0, 1, self._mDeltaV):
             span_v = utils.find_span(self._mDegreeV, tuple(self._mKnotVectorV), self._mCtrlPts_sizeV, v)
             basis_v = utils.basis_functions(self._mDegreeV, tuple(self._mKnotVectorV), span_v, v)
-            for u in utils.frange(0, 1, self._mDelta):
+            for u in utils.frange(0, 1, self._mDeltaU):
                 span_u = utils.find_span(self._mDegreeU, tuple(self._mKnotVectorU), self._mCtrlPts_sizeU, u)
                 basis_u = utils.basis_functions(self._mDegreeU, tuple(self._mKnotVectorU), span_u, u)
                 idx_u = span_u - self._mDegreeU
@@ -523,10 +546,10 @@ class Surface(object):
             c_u += 1
 
         # Algorithm A4.3
-        for v in utils.frange(0, 1, self._mDelta):
+        for v in utils.frange(0, 1, self._mDeltaV):
             span_v = utils.find_span(self._mDegreeV, tuple(self._mKnotVectorV), self._mCtrlPts_sizeV, v)
             basis_v = utils.basis_functions(self._mDegreeV, tuple(self._mKnotVectorV), span_v, v)
-            for u in utils.frange(0, 1, self._mDelta):
+            for u in utils.frange(0, 1, self._mDeltaU):
                 span_u = utils.find_span(self._mDegreeU, tuple(self._mKnotVectorU), self._mCtrlPts_sizeU, u)
                 basis_u = utils.basis_functions(self._mDegreeU, tuple(self._mKnotVectorU), span_u, u)
                 idx_u = span_u - self._mDegreeU

@@ -12,8 +12,7 @@ from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
 from OCC.Graphic3d import Graphic3d_ArrayOfPoints
 from OCC.AIS import AIS_PointCloud
-from Import.IGESImport import *
-from Discretization.DiscretizeFace import *
+from Actions.ActionList import *
 
 # Class: discretizeMenu
 # Description: This class provides a side menu with 6 discretization options.
@@ -90,38 +89,5 @@ class discretizeMenu(QWidget):
         grid.setRowStretch(7, 1)
 
     def autoDiscretize(self, parent):
-        # Checking the precision/density parameter:
-        n, ok = QInputDialog.getText(self, 'Tamanho do Grid', 'Digite um ' +
-                                     'valor n para obter uma\ndiscretização ' +
-                                     'quadriculada de n pontos/m^2:')
-        if not ok:
-            return
-        try:
-            n = int(n)
-            if ((n < 1) or (n > 50)):
-                raise ValueError
-        except ValueError:
-            QMessageBox.information(parent, 'Densidade de Pontos Inválida',
-                                    'A densidade informada não é válida.\n' +
-                                    'Utilize uma precisão inteira positiva entre ' +
-                                    '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
-            return
-        n = int(n)
-        
-        # Performing the autoDiscretization:
-        file = loadIGESFile(parent.activeCADFile)
-        entities = loadEntities(getRawData(file), getRawParameters(file))
-        parent.cloudPointsList = discretizeModel(entities, n)
-        generatePcd(parent.cloudPointsList)
-        
-        # Displaying the generated points over the model:
-        pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
-        pc = Graphic3d_ArrayOfPoints(len(pcd_file))
-        for line in pcd_file:
-            x, y, z = map(float, line.split())
-            pc.AddVertex(x, y, z)
-        point_cloud = AIS_PointCloud()
-        point_cloud.SetPoints(pc.GetHandle())
-        ais_context = parent.canvas._display.GetContext().GetObject()
-        ais_context.Display(point_cloud.GetHandle())
-        parent.activeCloudFile = '..\\tmp\\CloudData.pcd'
+        autoDiscretize = autoDiscretizeAction(parent)
+        autoDiscretize.autoDiscretizeActionProcedure(parent)

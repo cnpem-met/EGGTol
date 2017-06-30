@@ -201,6 +201,40 @@ class cloudAction(QAction):
             parent.rightDockMenu = dock
             parent.rightDockWidget = 'cloudMenu'
 
+# Show/hide the Auto Discretization Menu.
+class autoDiscretizeAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização Automática', parent)
+        self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo Automaticamente')
+        self.triggered.connect(lambda: self.autoDiscretizeActionProcedure(parent))
+    def autoDiscretizeActionProcedure(self, parent):
+        from Interface.AutoDiscretizeMenu import autoDiscretizeMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if parent.rightDockWidget == None:
+            widget = autoDiscretizeMenu(parent)
+            dock = QDockWidget('Painel de Discretização Automática', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'autoDiscretizeMenu'
+        elif parent.rightDockWidget == 'autoDiscretizeMenu':
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            parent.removeDockWidget(parent.rightDockMenu)
+            widget = autoDiscretizeMenu(parent)
+            dock = QDockWidget('Painel de Discretização Automática', parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = 'autoDiscretizeMenu'
+
 # Show/hide the Defects Menu.
 class defectsAction(QAction):
     def __init__(self, parent):
@@ -271,10 +305,12 @@ class translationDefectsAction(QAction):
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
             parent.rightDockWidget = 'translationDefectsMenu'
+            parent.canvas._display.SetSelectionModeFace()
         elif parent.rightDockWidget == 'translationDefectsMenu':
             parent.removeDockWidget(parent.rightDockMenu)
             parent.rightDockMenu = None
             parent.rightDockWidget = None
+            parent.canvas._display.SetSelectionModeNeutral()
         else:
             parent.removeDockWidget(parent.rightDockMenu)
             widget = translationDefectsMenu(parent)
@@ -283,6 +319,7 @@ class translationDefectsAction(QAction):
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
             parent.rightDockWidget = 'translationDefectsMenu'
+            parent.canvas._display.SetSelectionModeFace()
 
 # Close the current file.
 class closeAction(QAction):
@@ -311,26 +348,25 @@ class closeAction(QAction):
         buttonNo = box.button(QMessageBox.No)
         buttonNo.setText('Cancelar')
         box.exec_()
-        if box.clickedButton() == buttonYes:  
-            if parent.leftDockWidget == 'entitiesMenu':
+        if box.clickedButton() == buttonYes:
+            test = parent.leftDockWidget
+            if test == 'entitiesMenu':
                 parent.removeDockWidget(parent.leftDockMenu)
                 parent.leftDockMenu = None
                 parent.leftDockWidget = None
-            if parent.rightDockWidget == 'cloudMenu':
+            test = parent.rightDockWidget
+            if test == 'cloudMenu' or test == 'defectsMenu' or \
+               test == 'translationDefectsMenu' or test == 'autoDiscretizeMenu':
                 parent.removeDockWidget(parent.rightDockMenu)
                 parent.rightDockMenu = None
                 parent.rightDockWidget = None
-            if parent.rightDockWidget == 'defectsMenu':
-                parent.removeDockWidget(parent.rightDockMenu)
-                parent.rightDockMenu = None
-                parent.rightDockWidget = None
+            parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.EraseAll()
             parent.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
             parent.activeCADFile = None
             parent.activeCloudFile = None
-            parent.entitiesObject = None
             parent.entitiesList = []
-            parent.entitiesID = []
+            parent.shapeList = []
             parent.canvas._display.View_Iso()
 
 # Close the application.
@@ -378,3 +414,9 @@ class lightAction(QAction):
     def lightActionProcedure(self, parent):
         parent.canvas._display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
         parent.canvas._display.Repaint()
+
+# Show information about the github project.
+class githubAction(QAction):
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Sobre o Projeto no GitHub', parent)
+        self.setStatusTip('Exibe informações sobre esse projeto, hospedado no GitHub.com')
