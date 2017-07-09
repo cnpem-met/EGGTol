@@ -308,7 +308,7 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
     surfData.close()
     newSurface.read_ctrlptsw('..\\tmp\\SurfaceData.txt')
     newSurface.evaluate_rational()
-    return list(newSurface.surfpts)
+    return list(newSurface.surfpts), list(newSurface.normal_direct)
 
 # Function to generate a .pcd (Point Cloud Data) file:
 def generatePcd(cloudPoints):
@@ -332,4 +332,16 @@ def generatePcd(cloudPoints):
                         str(point[2]) + '\n')
     pcdFile = open('..\\tmp\\CloudData.pcd', 'w')
     pcdFile.write(pcdText)
+    pcdFile.close()
+
+# Function to generate a .txt (Text File) file with the cloud data:
+def generateTxt(cloudPoints, separator=' '):
+    txtText = ''
+    for item in cloudPoints:
+        for point in item:
+            txtText += (str(point[0]) + separator +
+                        str(point[1]) + separator +
+                        str(point[2]) + '\n')
+    pcdFile = open('..\\tmp\\TxtData.pcd', 'w')
+    pcdFile.write(txtText)
     pcdFile.close()
