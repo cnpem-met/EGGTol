@@ -11,6 +11,8 @@ in general.
 
 It is currently under development, with this repo being used as the official repo.
 
+![Alt text](img/interface.png?raw=true "interface")
+
 ### Instalation Instructions
 
 At the moment, there aren't any releases for this project.
