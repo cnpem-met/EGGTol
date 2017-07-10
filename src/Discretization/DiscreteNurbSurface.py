@@ -555,7 +555,7 @@ class Surface(object):
             span_v = utils.find_span(self._mDegreeV, tuple(self._mKnotVectorV), self._mCtrlPts_sizeV, v)
             basis_v = utils.basis_functions(self._mDegreeV, tuple(self._mKnotVectorV), span_v, v)
             for u in utils.frange(0, 1, self._mDeltaU):
-                self._mNormalDirect.append(self.normal(u, v))
+                #self._mNormalDirect.append(self.normal(u, v))
                 span_u = utils.find_span(self._mDegreeU, tuple(self._mKnotVectorU), self._mCtrlPts_sizeU, u)
                 basis_u = utils.basis_functions(self._mDegreeU, tuple(self._mKnotVectorU), span_u, u)
                 idx_u = span_u - self._mDegreeU
