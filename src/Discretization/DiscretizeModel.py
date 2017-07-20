@@ -179,14 +179,14 @@ def discretizeFace(face, objectList, density, precision):
     zCoord = minEdges[2]
 
     # Discretizing the model with the 'density' parameter:
-    spacingX = (maxEdges[0]-minEdges[0])/density
-    spacingY = (maxEdges[1]-minEdges[1])/density
+    numSpacesX = (maxEdges[0]-minEdges[0])*density
+    numSpacesY = (maxEdges[1]-minEdges[1])*density
 
     # Creating additional points due to discretization:
-    for i in range(1, int(density+1)):
+    for i in range(1, int(numSpacesX)):
         for j in range(1, int(numSpacesY)):
-            newX = minEdges[0] + i*spacingX
-            newY = minEdges[1] + j*spacingY
+            newX = minEdges[0] + i*(1/density)
+            newY = minEdges[1] + j*(1/density)
             newPoint = (newX, newY, zCoord)
             points.append(newPoint)
 

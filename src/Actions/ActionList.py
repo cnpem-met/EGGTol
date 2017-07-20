@@ -41,7 +41,7 @@ class welcomeAction(QAction):
             parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
             parent.leftDockMenu = dock
             parent.leftDockWidget = 'welcomeMenu'
-            
+
 
 # Show/hide the Entities SideWidget.
 class entitiesAction(QAction):
@@ -92,7 +92,7 @@ class importAction(QAction):
                                     'no momento. Conclua suas atividades e feche o arquivo para ' +
                                     'realizar uma nova importação.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        
+
         from OCC.IGESControl import IGESControl_Reader
         from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
         fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
@@ -118,7 +118,6 @@ class importAction(QAction):
                                     'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             parent.loadingWindow.close()
             return
-        print(type(shape))
         parent.canvas._display.DisplayShape(shape, update=True)
         parent.canvas._display.FitAll()
         parent.activeCADFile = fileName[0]
