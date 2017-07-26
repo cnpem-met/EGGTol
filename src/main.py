@@ -9,7 +9,7 @@ import sys
 import getpass
 import os
 
-# Importing the load_backend e get_qt_modules from pythonOCC:
+# Importing the load_backend and get_qt_modules from pythonOCC:
 from OCC.Display.backend import get_qt_modules
 from OCC.Display.backend import load_backend
 load_backend('qt-pyqt5')
