@@ -1,9 +1,9 @@
+"""
 # Module: AutoDiscretizeMenu.py
 # Description: This module contains the Auto Discretization Side Widget Menu UI
-# for calling the discretization functions.
-
+for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: June, 26, 2017.
+"""
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
@@ -15,16 +15,31 @@ from OCC.AIS import AIS_PointCloud
 from Import.IGESImport import *
 from Discretization.DiscretizeModel import *
 
-# Class: autoDiscretizeMenu
-# Description: This class provides a side menu with some options to configure
-# the Auto Discretization process.
 class autoDiscretizeMenu(QWidget):
+    """
+    # Class: autoDiscretizeMenu.
+    # Description: This class provides a side menu with some options to configure
+    the Auto Discretization process.
+    """
 
     def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         super().__init__()
         self.initUI(parent)
 
     def initUI(self, parent):
+        """
+        # Method: initUI.
+        # Description: This method initializes the User Interface Elements of the Auto
+        Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         grid = QGridLayout()
         self.setLayout(grid)
 
@@ -82,18 +97,28 @@ class autoDiscretizeMenu(QWidget):
         grid.setRowStretch(12, 1)
 
     def autoDiscretize(self, parent):
+        """
+        # Method: autoDiscretize.
+        # Description: Performs the discretization process of a loaded CAD Model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        # Gets the density, precision and U/V parameters from the User Interface:
         density = float(self.density.displayText())/10
         precision = float(self.precision.displayText())
         Uparam = int(self.UParameter.displayText())
         Vparam = int(self.VParameter.displayText())
         useParametric = self.UVParametric.isChecked()
+
+        # Checks if the parameters are valid:
         if(precision > 50 or precision < 1):
             QMessageBox.information(parent, 'Precisão Inválida.',
                                     'A precisão informada não é válida.\n' +
                                     'Utilize uma precisão inteira positiva entre ' +
                                     '1 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        # Performing the autoDiscretization:
+
+        # Performs the autoDiscretization using the Discretization package:
         file = loadIGESFile(parent.activeCADFile)
         entities = loadEntities(getRawData(file), getRawParameters(file))
         parent.loadingWindow.show()
@@ -102,7 +127,9 @@ class autoDiscretizeMenu(QWidget):
         parent.faceNormalVectors = normals
         parent.cloudPointsList = points
         generatePcd(parent.cloudPointsList)
-        # Displaying the generated points over the model:
+
+        # Displays the generated points over the model using the PythonOCC lib.
+        # A CloudData.pcd file is generated inside the tmp/ folder for display purposes.
         pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
         pc = Graphic3d_ArrayOfPoints(len(pcd_file))
         for line in pcd_file:

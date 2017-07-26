@@ -1,9 +1,9 @@
+"""
 # Module: DefectsMenu.py
 # Description: This module contains the Defects Side Widget Menu UI
-# for calling the defects functions.
-
+for calling the defects functions.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: June, 21, 2017.
+"""
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
@@ -11,19 +11,33 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
 from PyQt5.QtCore import QCoreApplication, QSize
 from Actions.ActionList import *
 
-# Class: defectsMenu
-# Description: This class provides a side menu with 2 types of artificial deviation options.
-# Each option calls a function to initiate the deviation insertion process.
 class defectsMenu(QWidget):
-    
+    """
+    # Class: defectsMenu.
+    # Description: This class provides a side menu with 2 types of artificial deviation options.
+    Each option calls a method to display the selected deviation insertion side widget.
+    """
+
     def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         super().__init__()
         self.initUI(parent)
-        
+
     def initUI(self, parent):
+        """
+        # Method: initUI.
+        # Description: This method initializes the User Interface Elements of the Defects Menu
+        side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         grid = QGridLayout()
         self.setLayout(grid)
-        
+
         label1 = QLabel('Selecione a transformação desejada.', self)
         grid.addWidget(label1, 0, 0, 1, 1)
 
@@ -32,7 +46,7 @@ class defectsMenu(QWidget):
                         'aplicação dos erros de forma ainda não está\n' +
                         'disponível.', self)
         grid.addWidget(label2, 1, 0, 1, 1)
-        
+
         btn1 = QToolButton()
         btn1.setText('Translação de um Conj. de Pontos')
         btn1.clicked.connect(lambda: self.translationDefectsMenuProcedure(parent))
@@ -56,10 +70,12 @@ class defectsMenu(QWidget):
         grid.setRowStretch(5, 1)
 
     def translationDefectsMenuProcedure(self, parent):
+        """
+        # Method: translationalDefectsMenuProcedure.
+        # Description: This method calls the translationalDefectsActionProcedure from the
+        Actions package for displaying the Translational Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         translation = translationDefectsAction(parent)
         translation.translationDefectsActionProcedure(parent)
-        
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    wn = closeWindow()
-    sys.exit(app.exec_())

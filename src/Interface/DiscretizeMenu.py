@@ -1,9 +1,9 @@
+"""
 # Module: DiscretizeMenu.py
 # Description: This module contains the Discretization Side Widget Menu UI
-# for calling the discretization functions.
-
+for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: May, 04, 2017.
+"""
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
@@ -14,16 +14,31 @@ from OCC.Graphic3d import Graphic3d_ArrayOfPoints
 from OCC.AIS import AIS_PointCloud
 from Actions.ActionList import *
 
-# Class: discretizeMenu
-# Description: This class provides a side menu with 6 discretization options.
-# Each discretization option calls a function to initiate the discretization process.
 class discretizeMenu(QWidget):
+    """
+    # Class: discretizeMenu.
+    # Description: This class provides a side menu with 6 discretization options.
+    Each discretization option calls a function to initiate the discretization process.
+    """
 
     def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         super().__init__()
         self.initUI(parent)
 
     def initUI(self, parent):
+        """
+        # Method: initUI.
+        # Description: This method initializes the User Interface Elements of the Discretize
+        Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         grid = QGridLayout()
         self.setLayout(grid)
 
@@ -39,7 +54,7 @@ class discretizeMenu(QWidget):
         btn1.setText('Discretização\nAutomática')
         btn1.setIcon(QIcon('..\\icons\\cadIcons\\star.png'))
         btn1.setToolButtonStyle(3)
-        btn1.clicked.connect(lambda: self.autoDiscretize(parent))
+        btn1.clicked.connect(lambda: self.autoDiscretizeMenuProcedure(parent))
         btn1.setIconSize(QSize(50, 50))
         btn1.setMinimumWidth(130)
         grid.addWidget(btn1, 2, 0)
@@ -88,6 +103,12 @@ class discretizeMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(7, 1)
 
-    def autoDiscretize(self, parent):
+    def autoDiscretizeMenuProcedure(self, parent):
+        """
+        # Method: autoDiscretizeMenuProcedure.
+        # Description: This method calls the autoDiscretizeActionProcedure from the
+        Actions package for displaying the Auto Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         autoDiscretize = autoDiscretizeAction(parent)
         autoDiscretize.autoDiscretizeActionProcedure(parent)

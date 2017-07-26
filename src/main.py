@@ -1,8 +1,9 @@
+"""
 # Module: main.py
-# Description: This is the main file of the program. It will run the initial UI Elements.
-
-# Autor: Willian Hideak Arita da Silva.
-# Last edit: June, 22, 2017.
+# Description: This is the main file of the application. It can provide a full interface written
+and inhirited from the PyQt5 QMainWindow class.
+# Author: Willian Hideak Arita da Silva.
+"""
 
 # System Imports:
 import sys
@@ -24,9 +25,10 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, qApp, QAction, \
 from PyQt5.QtCore import QCoreApplication, QDir
 from PyQt5.QtGui import QIcon
 
+# Getting the PyQt5 modules from the PythonOCC lib:
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
-# Importing PyQt5 elements:
+# Importing PyQt5 elements and menus from the Interface package:
 from Interface.DefectsMenu import *
 from Interface.DiscretizeMenu import *
 from Interface.LoadingMenu import *
@@ -34,12 +36,24 @@ from Actions.ActionList import *
 
 # Defining the Main Window:
 class MainWindow(QMainWindow):
+    """
+    # Class: MainWindow.
+    # Description: This class inherits the QMainWindow class from the PyQt5 framework and
+    prepare the main contents to be displayed using the initUI() method.4
+    """
 
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
+        """
+        # Method: initUI.
+        # Description: This method initialize everything in the main window, like its properties
+        and User Interface Elements (Buttons, Menus, ToolBars and so on). It also prepares some
+        variables for store the current information of files and CAD models.
+        """
+
         # Defining Main Window Properties:
         self.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
@@ -138,8 +152,15 @@ class MainWindow(QMainWindow):
         self.toolbar.setToolButtonStyle(3)
         self.toolbar.setMovable(False)
 
-    # Substituting the default method for closing the application.
+    # Overriding the default method for closing the application.
     def closeEvent(self, event):
+        """
+        # Method: closeEvent.
+        # Description: This method overrides the default method for closing the application.
+        It just displays a confirmation window asking permission for end the actual work.
+        # Parameters: * QCloseEvent event = The default event of the overrided method.
+        """
+        
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))

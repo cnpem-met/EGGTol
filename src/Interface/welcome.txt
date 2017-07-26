@@ -1,32 +1,32 @@
 Bem Vindo ao Gerador de Nuvem de Pontos!
-Estamos atualmente na versão v0.41.
+Estamos atualmente na versÃ£o v0.41.
 
-Para iniciar, importe um arquivo .IGES através do menu ARQUIVO > IMPORTAR.
+Para iniciar, importe um arquivo .IGES atravÃ©s do menu ARQUIVO > IMPORTAR.
 
-Nota: Para um melhor funcionamento dos algoritmos de discretização e inserção de erros, é preferível que o arquivo IGES possua uma completa especificação do CAD através do padrão B-Rep (Boundary Representation).
+Nota: Para um melhor funcionamento dos algoritmos de discretizaÃ§Ã£o e inserÃ§Ã£o de erros, Ã© preferÃ­vel que o arquivo IGES possua uma completa especificaÃ§Ã£o do CAD atravÃ©s do padrÃ£o B-Rep (Boundary Representation).
 
-Nota: Até o momento, não há suporte para arquivos .IGES com múltiplos sólidos geométricos.
+Nota: AtÃ© o momento, nÃ£o hÃ¡ suporte para arquivos .IGES com mÃºltiplos sÃ³lidos geomÃ©tricos.
 
 ---------------------------------------------------------
 
 Changelog:
 
 v0.41:
-Introduzido a discretização parametrizada de superfícies genéricas.
+Introduzido a discretizaÃ§Ã£o parametrizada de superfÃ­cies genÃ©ricas.
 
 v0.30:
 Modelo de UI definitivo.
 
 v0.26:
-Handler de Eventos e Extração de Informações Geométricas do Modelo CAD
+Handler de Eventos e ExtraÃ§Ã£o de InformaÃ§Ãµes GeomÃ©tricas do Modelo CAD
 
 v0.15:
-Criado o Código Interno para Coleta de Entidades IGES
+Criado o CÃ³digo Interno para Coleta de Entidades IGES
 
 v0.05:
-Adicionado Função de Importação e Exibição de Modelos .IGES (Funcional)
+Adicionado FunÃ§Ã£o de ImportaÃ§Ã£o e ExibiÃ§Ã£o de Modelos .IGES (Funcional)
 
 v0.03:
-Protótipo da Barra de Menus
-Protótipo da Barra de Status e Ferramentas
-Implementação das Ações
+ProtÃ³tipo da Barra de Menus
+ProtÃ³tipo da Barra de Status e Ferramentas
+ImplementaÃ§Ã£o das AÃ§Ãµes

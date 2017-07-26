@@ -1,9 +1,9 @@
+"""
 # Module: TranslationDefectsMenu.py
 # Description: This module contains the Translation Defects Side Widget Menu UI
-# for calling the discretization functions.
-
+for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: June, 22, 2017.
+"""
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
@@ -11,17 +11,32 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
 from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
 
-# Class: translationDefectsMenu
-# Description: This class provides a side menu with some options for moving some.
-# group of points in an specific direction, usually, normal to the underlying
-# surface which the group of points are.
 class translationDefectsMenu(QWidget):
+    """
+    # Class: translationDefectsMenu
+    # Description: This class provides a side menu with some options for moving some
+    group of points in an specific direction, usually, normal to the underlying surface
+    which lies the group of points.
+    """
 
     def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         super().__init__()
         self.initUI(parent)
 
     def initUI(self, parent):
+        """
+        # Method: initUI.
+        # Description: This method initializes the User Interface Elements of the Export
+        Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         grid = QGridLayout()
         self.setLayout(grid)
 
@@ -84,7 +99,7 @@ class translationDefectsMenu(QWidget):
 
         self.yDirection = QLineEdit()
         grid.addWidget(self.yDirection, 11, 0, 1, 2)
-        
+
         label6 = QLabel('Direção Z:', self)
         grid.addWidget(label6, 12, 0, 1, 1)
 
@@ -109,12 +124,36 @@ class translationDefectsMenu(QWidget):
         grid.setRowStretch(17, 1)
 
     def selectSolids(self, parent):
+        """
+        # Method: selectSolids.
+        # Description: Method for activating the Neutral Selection Mode in PythonOCC lib.
+        The Neutral Selection Mode allows the selection of whole solid CAD models.
+        # Parameters: * MainWindow parent = A reference for the main window object
+        """
+
         parent.canvas._display.SetSelectionModeNeutral()
 
     def selectSurfaces(self, parent):
+        """
+        # Method: selectSurfaces.
+        # Description: Method for activating the Face Selection Mode in the PythonOCC lib.
+        The Face Selection Mode allows the selection of each separated face of the CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         parent.canvas._display.SetSelectionModeFace()
-    
+
     def addSelection(self, parent):
+        """
+        # Method: addSelection.
+        # Description: Method for adding the current selected shape in the selectedObject
+        parameter of the main window. The current selected shape is retrieved by a specific
+        function of the PythonOCC lib and is used for comparing with a list of loaded shapes
+        of the CAD Model. With this association, it is possible to check the Sequence Number
+        associated in the IGES file.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         if parent.canvas._display.GetSelectedShapes():
             parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
         else:
@@ -125,4 +164,3 @@ class translationDefectsMenu(QWidget):
                 break
             i += 1
         self.selectedObject.setText(parent.entitiesList[i][0])
-            

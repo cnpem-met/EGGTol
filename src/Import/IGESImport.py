@@ -1,9 +1,9 @@
+"""
 # Module: IGESImport.py
 # Description: This module allow us to import data from an .IGES and .IGS
-# file, such as geometrical entities.
-
+file, such as geometrical entities.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 10, 2017.
+"""
 
 from Entities.EdgeList import EdgeList
 from Entities.Face import Face
@@ -14,8 +14,16 @@ from Entities.RationalBSplineSurface import RationalBSplineSurface
 from Entities.Shell import Shell
 from Entities.VertexList import VertexList
 
-# Function to convert an IGES parameter number to a Python string, float or int data type.
 def convertData(data):
+    """
+    # Function: convertData.
+    # Description: Function to convert an IGES parameter (as specified in IGES Specification
+    version 6) to a Python string, float or int data type. Also change the exponetial character
+    from 'D' to 'e', for conversion purposes.
+    # Parameters: * Str data = String representing the IGES parameter.
+    # Returns: * Int, Float, Str data = The same data, after the parsing.
+    """
+
     if(('.' in data) or ('D' in data)):
         data = data.replace('D', 'e')
         try:
@@ -31,13 +39,25 @@ def convertData(data):
         except ValueError:
             return data
 
-# Function to load an IGES File.
 def loadIGESFile(IGESPath):
+    """
+    # Function: loadIGESFile.
+    # Description: This function loads an .IGS or .IGES file.
+    # Parameters: * Str IGESPath = The path to the IGES file.
+    # Returns: * _io.TextIOWrapper IGESFile = The Python object for the IGES file.
+    """
+
     IGESFile = open(IGESPath, mode='r')
     return IGESFile
 
-# Function to retrieve data of the Header Section.
 def getRawHeader(IGESFile):
+    """
+    # Function: getRawHeader.
+    # Description: Function to retrieve the data of the Header Section of an IGES file.
+    # Parameters: * _io.TextIOWrapper IGESFile = The Python object for the IGES file.
+    # Returns: * Str header = A string containing the information of the Header Section.
+    """
+
     IGESFile.seek(3)
     header = []
     for line in IGESFile:
@@ -45,8 +65,14 @@ def getRawHeader(IGESFile):
             header.append(line)
     return header
 
-# Function to retrieve data of the Data Entry Section.
 def getRawData(IGESFile):
+    """
+    # Function: getRawData.
+    # Description: Function to retrieve the data of the Data Entry Section of an IGES file.
+    # Parameters: * _io.TextIOWrapper IGESFile = The Python object for the IGES file.
+    # Returns: * List data = A list of strings containing each entry of the Data Section.
+    """
+
     IGESFile.seek(3)
     data = []
     while True:
@@ -58,8 +84,15 @@ def getRawData(IGESFile):
             data.append(firstRead+secondRead)
     return data
 
-# Function to retrieve data of the Parameter Data Section.
 def getRawParameters(IGESFile):
+    """
+    # Function: getRawParameters.
+    # Description: Function to retrieve the data of the Parameter Data Section of an IGES file.
+    # Parameters: * _io.TextIOWrapper IGESFile = The Python object for the IGES file.
+    # Returns: * List parameters = A list of strings containing each entry of the Parameter
+    Section.
+    """
+
     IGESFile.seek(3)
     parameters = []
     lastSeqNumber = None
@@ -75,11 +108,20 @@ def getRawParameters(IGESFile):
                 lastSeqNumber = int(firstRead[64:72])
     return parameters
 
-# Function to load and return IGES entities into Python Objects.
 def loadEntities(RawData, RawParameters):
-    # OBS: Note that this function assumes that all the entities and their
-    # respective properties data is sorted in the same way, with a one-to-one
-    # relationship between their indexes.
+    """
+    # Function: loadEntities.
+    # Description: Function to load and transform IGES entities into Python Objects.
+    # Parameters: * Str RawData = A raw string of the Data Section.
+                  * Str RawParameters = A raw string of the Parameter Section.
+    # Returns: * List loadedEntities = A list of Entity Python objects representing each
+    IGES entity.
+    """
+
+    # Note: This  function assumes that all the entities and their respective
+    # properties data is sorted in the same way, with a one-to-one relationship
+    # between their indexes.
+
     loadedEntities = []
     if len(RawData) != len(RawParameters):
         print('Imcompatible Number of Data and Parameters!')
@@ -89,20 +131,28 @@ def loadEntities(RawData, RawParameters):
         loadedEntities.append(loadedObject)
     return loadedEntities
 
-# Function to load a single entity in an IGES file.
 def loadSingleEntity(RawDataItem, RawParameterItem):
+    """
+    # Function: loadSingleEntity.
+    # Description: Function to load a single entity from an IGES File given its Data Section
+    and Parameter Section strings.
+    # Parameters: * Str RawDataItem = A string containing the Data Section of an entity.
+                  * Str RawParameterItem = A string containing the Parameter Section of an entity.
+    # Returns: * Entity loadedObject = The Python object representing the entity.
+    """
+
     # Splitting the String RawDataItem into a RawDataList
     RawDataList = []
     RawDataList.append(RawDataItem[1:8])     # Entity Type
     RawDataList.append(RawDataItem[9:16])    # Parameter Data Pointer
     RawDataList.append(RawDataItem[105:112]) # Parameter Line Counter
     RawDataList.append(RawDataItem[73:80])   # Sequence Number
-    
+
     # Splitting the String RawParameterItem into a RawParameterList
     numLines = len(RawParameterItem)//81
     parameterString = ''
     for i in range(numLines):
-        parameterString += RawParameterItem[(0+i*81):(64+i*81)]
+        parameterString += RawParameterItem[(0 + i*81):(64 + i*81)]
     parameterString = parameterString.replace(' ', '')
     parameterString = parameterString.replace(';', '')
     RawParameterList = parameterString.split(',')
@@ -128,12 +178,16 @@ def loadSingleEntity(RawDataItem, RawParameterItem):
         loadedObject = loadVertexList(RawDataList, RawParameterList)
     elif entityType == 504:
         loadedObject = loadEdgeList(RawDataList, RawParameterList)
-        
-    # Returns the new object
     return loadedObject
 
-# Function to return a tuple of Global Parameters
 def getTupleData(RawDataList):
+    """
+    # Function: getTupleData
+    # Description: Function to return a tuple of Global Parameters.
+    # Parameters: * List RawDataList = A list of 4 parameteres from the Data Section.
+    # Returns: * Tuple = A tuple of the 4 parameters.
+    """
+
     return (RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3])
 
 # Function to load a Manifold B-Rep Object (Type 186).
@@ -150,7 +204,7 @@ def loadManifoldSolid(RawDataList, RawParameterList):
     loadedObject = ManifoldSolid(entityType, PDPointer, parCount, seqNumber, \
                                  SHELL, SOF, N, VOIDList, VOFList)
     return loadedObject
-    
+
 # Function to load a Shell (Type 514).
 def loadShell(RawDataList, RawParameterList):
     entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
@@ -176,7 +230,7 @@ def loadFace(RawDataList, RawParameterList):
     loadedObject = Face(entityType, PDPointer, parCount, seqNumber, \
                         SURF, N, OF, LOOPList)
     return loadedObject
-    
+
 # Function to load a Loop (Type 508)
 def loadLoop(RawDataList, RawParameterList):
     entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
