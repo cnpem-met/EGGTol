@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.RationalBSplineSurface import RationalBSplineSurface
+
 # Function to load a Rational B-Spline Surface (Type 128)
 def loadRationalBSplineSurface(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     K1 = RawParameterList[1]
     K2 = RawParameterList[2]
     M1 = RawParameterList[3]

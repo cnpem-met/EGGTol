@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.ManifoldSolid import ManifoldSolid
+
 # Function to load a Manifold B-Rep Object (Type 186).
 def loadManifoldSolid(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     SHELL = RawParameterList[1]
     SOF = RawParameterList[2]
     N = RawParameterList[3]

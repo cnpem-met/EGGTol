@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.VertexList import VertexList
+
 # Function to load a Vertex List (Type 502)
 def loadVertexList(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     N = RawParameterList[1]
     XList = []
     YList = []

@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.Face import Face
+
 # Function to load a Face (Type 510)
 def loadFace(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     SURF = RawParameterList[1]
     N = RawParameterList[2]
     OF = RawParameterList[3]

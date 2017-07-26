@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.Loop import Loop
+
 # Function to load a Loop (Type 508)
 def loadLoop(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     N = RawParameterList[1]
     TYPEList = []
     EDGEList = []

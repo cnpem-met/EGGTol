@@ -5,9 +5,12 @@
 # Author: Willian Hideak Arita da Silva.
 # Last edit: April, 24, 2017.
 
+from Entities.RationalBSplineCurve import RationalBSplineCurve
+
 # Function to load a Rational B-Spline Curve (Type 126)
 def loadRationalBSplineCurve(RawDataList, RawParameterList):
-    entityType, PDPointer, parCount, seqNumber = getTupleData(RawDataList)
+    entityType, PDPointer, parCount, seqNumber = \
+    RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     K = RawParameterList[1]
     M = RawParameterList[2]
     PROP1 = RawParameterList[3]
