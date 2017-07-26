@@ -70,12 +70,12 @@ class MainWindow(QMainWindow):
         self.faceSequenceNumbers = []
         self.faceNormalVectors = []
         self.cloudPointsList = []
-        
+
         # Information about selected parameters:
         self.shapeParameter1 = None
         self.shapeParameter2 = None
         self.shapeParameter3 = None
-        
+
         # Defining Actions.
         welcome = welcomeAction(self)
         entities = entitiesAction(self)
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow):
 
         # Defining the default Side Widgets:
         welcome.welcomeActionProcedure(self)
-        
+
         # Defining the MenuBar:
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Arquivo')
