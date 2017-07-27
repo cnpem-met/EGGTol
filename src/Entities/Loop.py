@@ -1,21 +1,39 @@
+"""
 # Module: Loop.py
 # Description: This module contains classes definitions for creating objects
-# to store data from IGES Entities, such as points, planes, surfaces and more.
-
+to store data from IGES Entities, such as points, planes, surfaces and more.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 10, 2017.
+"""
 
 from Entities.Entity import Entity
 
-# Class: Loop
-# Type: 508
-# Description: This class cointais data from Loop entities.
-
 class Loop(Entity):
+    """
+    # Class: Loop.
+    # Description: This class represents data from Loop entities.
+    """
 
     # Defining Properties
     def __init__(self, entityType, PDPointer, parCount, seqNumber, \
                  N, TYPEList, EDGEList, NDXList, OFList, KList, ISOPList, CURVList):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing inherited properties and defining
+        new ones.
+        # Parameters: * Str entityType = The Entity Type number.
+                      * Str PDPointer = The Parameter Data pointer.
+                      * Str parCount = The Parameter Line Count number.
+                      * Str seqNumber = The Sequence number.
+                      * Str N = Number of edge tuples.
+                      * List TYPEList = List of Edge Types (0=Edge and 1=Vertex).
+                      * List EDGEList = List of pointers to Edge of Vertex List.
+                      * List NDXList = List of indexes of the Edge or Vertex.
+                      * List OFList = List of orientation flags.
+                      * List KList = List of numbers of underlying Space Curves.
+                      * List ISOPList = List of isoparametric flags.
+                      * List CURVList = List of pointers to Space Curves.
+        """
+
         super().__init__(508, PDPointer, parCount, seqNumber)
         self.N = N
         self.TYPEList = TYPEList
@@ -27,6 +45,12 @@ class Loop(Entity):
         self.CURVList = CURVList
 
     def description(self):
+        """
+        # Method: description.
+        # Description: Provides a tuple of information for being used in a TreeView.
+        # Returns: * Tuple out = A tuple containing a string and a list of properties.
+        """
+
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Loop (IGES 508)', [])
         out[1].append(('* Number of Edge Tuples (N): ' + str(self.N), []))
         for i in range(int(self.N)):
@@ -41,6 +65,12 @@ class Loop(Entity):
         return out
 
     def __str__(self):
+        """
+        # Method: __str__.
+        # Description: Provides information for debug purposes.
+        # Returns: * Str out = A string containing the object properties.
+        """
+
         out = 'Loop (Type 508)\n'
         out += '* Number of Edge Tuples (N): ' + str(self.N) + '\n'
         out += '* -----------------------------------\n'

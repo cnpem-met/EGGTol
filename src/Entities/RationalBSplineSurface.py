@@ -1,22 +1,51 @@
+"""
 # Module: RationalBSplineSurface.py
 # Description: This module contains classes definitions for creating objects
-# to store data from IGES Entities, such as points, planes, surfaces and more.
-
+to store data from IGES Entities, such as points, planes, surfaces and more.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 10, 2017.
+"""
 
 from Entities.Entity import Entity
 
-# Class: RationalBSplineSurface
-# Type: 128
-# Description: This class contains data from Rational B-Spline Surfaces.
-
 class RationalBSplineSurface(Entity):
+    """
+    # Class: RationalBSplineSurface
+    # Description: This class contains data from Rational B-Spline Surfaces.
+    """
 
     # Defining Prpoerties
     def __init__(self, entityType, PDPointer, parCount, seqNumber, \
                  K1, K2, M1, M2, PROP1, PROP2, PROP3, PROP4, PROP5, \
                  SList, TList, WList, XList, YList, ZList, U0, U1, V0, V1):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing inherited properties and defining
+        new ones.
+        # Parameters: * Str entityType = The Entity Type number.
+                      * Str PDPointer = The Parameter Data pointer.
+                      * Str parCount = The Parameter Line Count number.
+                      * Str seqNumber = The Sequence number.
+                      * Str K1 = Upper index of first sum.
+                      * Str K2 = Upper index of second sum.
+                      * Str M1 = Degree of first basis functions.
+                      * Str M2 = Degree of second basis functions.
+                      * Str PROP1 = Flag for checking if the surface is closed in U direction.
+                      * Str PROP2 = Flag for checking if the surface is closed in V direction.
+                      * Str PROP3 = Flag for checking if it is Rational or Polynomial.
+                      * Str PROP4 = Flag for checking if it is periodic in U direction.
+                      * Str PROP5 = Flag for checking if it is periodic in V direction.
+                      * List SList = List of the first Knot Sequence.
+                      * List TList = List of the second Knot Sequence.
+                      * List WList = List of weights.
+                      * List XList = List control points (coordinate X).
+                      * List YList = List control points (coordinate Y).
+                      * List ZList = List control points (coordinate Z).
+                      * Str U0 = Starting parameter value in U direction.
+                      * Str U1 = Ending parameter value in U direction.
+                      * Str V0 = Starting parameter value in V direction.
+                      * Str V1 = Ending parameter value in V direction.
+        """
+
         super().__init__(128, PDPointer, parCount, seqNumber)
         self.K1 = K1
         self.K2 = K2
@@ -66,7 +95,7 @@ class RationalBSplineSurface(Entity):
         out[1].append(('* Starting Parameter Value (V(0)): ' + str(self.V0), []))
         out[1].append(('* Ending Parameter Value (V(1)): ' + str(self.V1), []))
         return out
-    
+
     def __str__(self):
         out = 'Rational B-Spline Surface (Type 128)\n'
         out += '* Upper Index of First Sum (K1): ' + str(self.K1) + '\n'

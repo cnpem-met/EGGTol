@@ -1,9 +1,9 @@
+"""
 # Module: RationalBSplineCurve.py
 # Description: This module contains classes definitions for creating objects
-# to store data from IGES Entities, such as points, planes, surfaces and more.
-
+to store data from IGES Entities, such as points, planes, surfaces and more.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 10, 2017.
+"""
 
 from Entities.Entity import Entity
 
@@ -12,11 +12,41 @@ from Entities.Entity import Entity
 # Description: This class contains data from Rational B-Spline Curves.
 
 class RationalBSplineCurve(Entity):
+    """
+    # Class: RationalBSplineCurve.
+    # Description: This class contains data from Rational B-Spline Curves.
+    """
 
     # Defining Properties
     def __init__ (self, entityType, PDPointer, parCount, seqNumber, \
                   K, M, PROP1, PROP2, PROP3, PROP4, TList, WList, XList, YList, ZList, \
                   V0, V1, XNORM, YNORM, ZNORM):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing inherited properties and defining
+        new ones.
+        # Parameters: * Str entityType = The Entity Type number.
+                      * Str PDPointer = The Parameter Data pointer.
+                      * Str parCount = The Parameter Line Count number.
+                      * Str seqNumber = The Sequence number.
+                      * Str K = Upper index of the sum.
+                      * Str M = Degree of basis function.
+                      * Str PROP1 = Flag for checking if the curve is planar.
+                      * Str PROP2 = Flag for checking if the curve is closed.
+                      * Str PROP3 = Flag for checking if it is Rational or Polynomial.
+                      * Str PROP4 = Flag for checking if it is periodic.
+                      * List TList = List of the Knot Sequence.
+                      * List WList = List of weights.
+                      * List XList = List control points (coordinate X).
+                      * List YList = List control points (coordinate Y).
+                      * List ZList = List control points (coordinate Z).
+                      * Str V0 = Starting parameter value.
+                      * Str V1 = Ending parameter value.
+                      * Str XNORM = Unit normal (coordinate X).
+                      * Str YNORM = Unit normal (coordinate Y).
+                      * Str ZNORM = Unit normal (coordinate Z).
+        """
+
         super().__init__(126, PDPointer, parCount, seqNumber)
         self.K = K
         self.M = M
@@ -36,6 +66,12 @@ class RationalBSplineCurve(Entity):
         self.ZNORM = ZNORM
 
     def description(self):
+        """
+        # Method: description.
+        # Description: Provides a tuple of information for being used in a TreeView.
+        # Returns: * Tuple out = A tuple containing a string and a list of properties.
+        """
+
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Rational B-Spline Curve (IGES 126)', [])
         out[1].append(('* Upper Index of Sum (K): ' + str(self.K), []))
         out[1].append(('* Degree of Basis Function (M): ' + str(self.M), []))
@@ -59,6 +95,12 @@ class RationalBSplineCurve(Entity):
         return out
 
     def __str__(self):
+        """
+        # Method: __str__.
+        # Description: Provides information for debug purposes.
+        # Returns: * Str out = A string containing the object properties.
+        """
+
         out = 'Rational B-Spline Curve (Type 126)\n'
         out += '* Upper Index of Sum (K): ' + str(self.K) + '\n'
         out += '* Degree of Basis Function (M): ' + str(self.M) + '\n'

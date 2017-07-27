@@ -1,14 +1,23 @@
+"""
 # Module: LoadFace.py
-# Description: This module allow us to import a Face data from an .IGES
-# and .IGS file.
-
+# Description: This module allow us to import a Face data from .IGES or .IGS file.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 24, 2017.
+"""
 
 from Entities.Face import Face
 
 # Function to load a Face (Type 510)
 def loadFace(RawDataList, RawParameterList):
+    """
+    # Function: loadFace.
+    # Description: Creates a Face Entity object given a RawDataList and a RawParameterList.
+    # Parameters: * List RawDataList = A list of strings, each string being an entry in the
+                  Data Section of the IGES file.
+                  * List RawParameterList = A list of strings, each string being an entry in the
+                  Parameter Section of the IGES file.
+    # Returns: * Entity loadedObject = The corresponding Entity object.
+    """
+
     entityType, PDPointer, parCount, seqNumber = \
     RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     SURF = RawParameterList[1]

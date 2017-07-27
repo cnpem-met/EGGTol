@@ -1,14 +1,24 @@
+"""
 # Module: LoadRationalBSplineSurface.py
-# Description: This module allow us to import a RationalBSplineSurface data
-# from an .IGES and .IGS file.
-
+# Description: This module allow us to import a RationalBSplineSurface data from .IGES or .IGS file.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 24, 2017.
+"""
 
 from Entities.RationalBSplineSurface import RationalBSplineSurface
 
 # Function to load a Rational B-Spline Surface (Type 128)
 def loadRationalBSplineSurface(RawDataList, RawParameterList):
+    """
+    # Function: loadRationalBSplineSurface.
+    # Description: Creates a RationalBSplineSurface Entity object given a RawDataList and a
+    RawParameterList.
+    # Parameters: * List RawDataList = A list of strings, each string being an entry in the
+                  Data Section of the IGES file.
+                  * List RawParameterList = A list of strings, each string being an entry in the
+                  Parameter Section of the IGES file.
+    # Returns: * Entity loadedObject = The corresponding Entity object.
+    """
+    
     entityType, PDPointer, parCount, seqNumber = \
     RawDataList[0], RawDataList[1], RawDataList[2], RawDataList[3]
     K1 = RawParameterList[1]
