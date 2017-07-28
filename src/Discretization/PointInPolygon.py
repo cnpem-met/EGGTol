@@ -1,11 +1,20 @@
+"""
 # Module: PointInPolygon.py
-# Description: This module implements the Even-Odd Rule algorithm to check
-# if a given point (x, y) lies inside a polygon with a tuple of vertices 'poly'.
-
+Description: This module implements the Even-Odd Rule algorithm to check
+if a given point (x, y) lies inside a polygon with a tuple of vertices 'poly'.
 # Author: Willian Hideak Arita da Silva.
-# Last edit: April, 24, 2017.
+"""
 
 def pointInPolygon(x, y, poly):
+    """
+    # Function: pointInPolygon.
+    # Description: This function determines if a point is inside a polygon.
+    # Parameters: * Float x = The X coordinate of the point.
+                  * Float y = The Y coordinate of the point.
+                  * List poly = A list of tuples, each tuple being a polygon vertex.
+    # Returns: * Boolean result = True if the point lies inside, and False otherwise.
+    """
+
         num = len(poly)
         i = 0
         j = num - 1

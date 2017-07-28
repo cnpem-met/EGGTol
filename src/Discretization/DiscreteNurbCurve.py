@@ -1,10 +1,8 @@
+"""
 # Module: DiscretizeNurbCurve.py
 # Description: This module evaluates a NURB Curve.
-
 # Author: Onur Rauf Bingol.
-# Last edit: May, 15, 2017.
 
-"""
 .. module:: Curve
     :platform: Unix, Windows
     :synopsis: A data storage and evaluation class for B-spline and NURBS curves

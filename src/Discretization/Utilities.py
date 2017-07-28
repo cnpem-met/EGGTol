@@ -1,11 +1,8 @@
-# Module: Utilities.py
-# Description: This module contains several functions to help the
-# NURBS Curve / Surface evaluation process. 
-
-# Author: Onur Rauf Bingol.
-# Last edit: May, 15, 2017.
-
 """
+# Module: Utilities.py
+# Description: This module contains several functions to help the NURBS evaluation process.
+# Author: Onur Rauf Bingol.
+
 .. module:: utilities
     :platform: Unix, Windows
     :synopsis: A helper module for Curve and Surface classes

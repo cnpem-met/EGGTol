@@ -1,10 +1,8 @@
-# Module: DiscreteNurbSurface.py
-# Description: This module evaluates a NURB Surface. 
-
-# Author: Onur Rauf Bingol.
-# Last edit: May, 15, 2017.
-
 """
+# Module: DiscreteNurbSurface.py
+# Description: This module evaluates a NURB Surface.
+# Author: Onur Rauf Bingol.
+
 .. module:: Surface
     :platform: Unix, Windows
     :synopsis: A data storage and evaluation class for B-spline and NURBS surfaces

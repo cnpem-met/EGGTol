@@ -1,9 +1,9 @@
+"""
 # Module: DiscretizeModel.py
 # Description: This module aims the discretization of CAD Models
-# defined in an .IGES and .IGS files.
-
+defined in an .IGES and .IGS files.
 # Author: Willian Hideak Arita da Silva
-# Last edit: June, 26, 2017.
+"""
 
 from Discretization.PointInPolygon import pointInPolygon
 from Discretization.WindingNumber import windingNumber
@@ -13,42 +13,83 @@ from Discretization.Utilities import knotvector_normalize
 from numpy import array, dot
 from numpy.linalg import solve, inv
 
-# Function for getting a correspondent list index using the Sequence Number,
-# as defined in an .IGES file.
 def pos(i):
+    """
+    # Function: pos.
+    # Description: Function for getting a correspondent list index using the Sequence Number,
+    as definied in an .IGES file.
+    # Parameters: * Int i = an index according to the IGES Sequence Number.
+    # Returns: * Int = an index according to the Python Lists implementation.
+    """
+
     return ((int(i)-1)//2)
 
-# Definition of the dot product between two vectors.
-# Returns (u * v), u and v are vectors.
 def dotProduct(u, v):
+    """
+    # Function: dotProduct.
+    # Description: Definition of the dot product between two vectors.
+    # Parameters: * Tuple u = A tuple of 3 coordinates (x, y, z) representing a vector.
+                  * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
+    # Returns: * Float dot = The dot product of the two vectors.
+    """
+
     dot = (u[0]*v[0] + u[1]*v[1] + u[2]*v[2])
     return dot
 
-# Definition of the cross product between two vectors.
-# Returns (u x v), u and v are vectors.
 def crossProduct(u, v):
+    """
+    # Function: crossProduct.
+    # Description: Definition of the cross product between two vectors.
+    # Parameters: * Tuple u = A tuple of 3 coordinates (x, y, z) representing a vector.
+                  * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
+    # Returns: * Tuple = The cross product of the two vectors.
+    """
+
     x, y, z = (u[1]*v[2]-u[2]*v[1]), (u[2]*v[0]-u[0]*v[2]), (u[0]*v[1]-u[1]*v[0])
     return (x, y, z)
 
-# Definition of subtraction of vectors.
-# Returns (u - v), u and v are vectors.
 def subVec(u, v):
+    """
+    # Function: subVec.
+    # Description: Definition of subtraction of vectors.
+    # Parameters: * Tuple u = A tuple of 3 coordinates (x, y, z) representing a vector.
+                  * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
+    # Returns: * Tuple = The subtraction (u - v) where u and v are vectors.
+    """
+
     return ((u[0]-v[0]), (u[1]-v[1]), (u[2]-v[2]))
 
-# Definition of multiplication of a vector by a scalar.
-# Returns s*v, where s is a scalar and v is a vector.
 def scalarVec(s, v):
+    """
+    # Function: scalarVec.
+    # Description: Definition of multiplication of a vector by a scalar.
+    # Parameters: * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
+    # Returns: * Tuple = The product s*v where s is a scalar and v is a vector.
+    """
+
     newV = [s*i for i in v]
     return (newV[0], newV[1], newV[2])
 
-# Definition of the norm of a vector.
-# Returns |v|, where v is a vector in R^3 space.
 def normVec(v):
+    """
+    # Function: normVec.
+    # Description: Definition of the norm of a vector.
+    # Parameters: * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
+    # Returns: * Float = The norm |v|, where v is a vector.
+    """
+
     return ((v[0]**2) + (v[1]**2) + (v[2]**2))**(1/2)
 
-# Definition of the minimum edge. The minimum edge is a group of minimum and maximum
-# points that lies in a square region and covers a CAD model face.
 def minimumEdge(vertices):
+    """
+    # Function: minimumEdge.
+    # Description: Definition of the minimum edge. The minimum edge is a group of minimum and
+    maximum coordinate of points that lies in a square region and covers a cad model face.
+    # Parameters: * List vertices = A list of vertices of a polygon.
+    # Returns: * List = A list of two vectors (tuples), each representing the minimum coordinates
+                        and the maximum coordinates occupied by the vertices of the polygon.
+    """
+
     minX = maxX = vertices[0][0]
     minY = maxY = vertices[0][1]
     minZ = maxZ = vertices[0][2]
@@ -69,8 +110,15 @@ def minimumEdge(vertices):
     maxValues = (maxX, maxY, maxZ)
     return [minValues, maxValues]
 
-# Change of basis:
 def changeBasis(vertices, newBaseVector):
+    """
+    # Function: changeBasis.
+    # Description: Performs a basis change of a list of vectors given three new basis vectors.
+    # Parameters: * List vertices = A list of points (tuples) that need to change basis.
+                  * Tuple newBaseVector = A tuple of three linear independent vectors.
+    # Returns: * List newVertices = A list of points (tuples) after the transformation.
+    """
+
     # Find the transformation matrix:
     i, j, k = newBaseVector
     matrix = array([[i[0], j[0], k[0]],
@@ -87,8 +135,15 @@ def changeBasis(vertices, newBaseVector):
         newVertices.append(newVector)
     return newVertices
 
-# Re-change of basis:
 def returnBasis(points, newBaseVector):
+    """
+    # Function: returnBasis.
+    # Description: Returns a list of vectors to the canonical base.
+    # Parameters: * List points = A list of points (tuples) that need to return basis.
+                  * Tuple newBaseVector = A tuple of three linear independent vectors.
+    # Return: * List newPoints = A list of points (tuples) after returning the basis.
+    """
+
     # Find the reverse transformation matrix:
     i, j, k = newBaseVector
     matrix = array([[i[0], j[0], k[0]],
@@ -104,9 +159,15 @@ def returnBasis(points, newBaseVector):
         newPoints.append(newVector)
     return newPoints
 
-# Function to orthonormalize components i and j of a basis using
-# the Gram–Schmidt Process assuming k is already orthogonal to i and j:
 def orthonormalizeBasis(basisVector):
+    """
+    # Function: orthonormalizeBasis.
+    # Description: Function to orthonormalize components i and j of a basis using
+    the Gram-Schmidt Process assuming k is already orthogonal to i and j.
+    # Parameters: * Tuple basisVector = A tuple of three linear independent vectors.
+    # Returns: * Tuple = A tuple of three linear independent orthonormalized vectors.
+    """
+
     i = basisVector[0]
     j = basisVector[1]
     k = basisVector[2]
@@ -117,8 +178,25 @@ def orthonormalizeBasis(basisVector):
             scalarVec((1/normVec(j)), j),
             scalarVec((1/normVec(k)), k)]
 
-# Function to discretize an entire model.
 def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametric):
+    """
+    # Function: discretizeModel.
+    # Description: This function receives an objectList
+    # Parameters: * List objectList = A list of Entity objects obtained with the IGESImport module.
+                  * Float density = Number of points/cm desired in the discretization.
+                  * Float precision = The number of discrete intervals desired for discretization of
+                  the loop that surrounds the surface. This is necessary for using the PointInPolygon
+                  module.
+                  * Int Uparam = The number of discrete intervals desired for the discretization
+                  in the parametric U direction of the surface.
+                  * Int Vparam = The number of discrete intervals desired for the discretization
+                  in the parametric V direction of the surface.
+                  * Boolean useParametric = Determines if the parametric discretization will be used.
+    # Returns: * Tuple = A list containing the sequence numbers of the IGES file, a list containing
+               the normal vector of each point related to the suface and a list containing the
+               discretized points.
+    """
+
     # Get a list of planar faces in the model:
     planarFacePointers = []
     nonPlanarFacePointers = []
@@ -148,8 +226,21 @@ def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametri
         cloudPointsList.append(points)
     return faceSequenceNumbers, faceNormalVectors, cloudPointsList
 
-# Function to discretize a single face. It returns a list of cloud points.
 def discretizeFace(face, objectList, density, precision):
+    """
+    # Function: discretizeFace.
+    # Description: This function generates a list of cloud points based on a specific face.
+    A face is a surface surrounded by a loop.
+    # Parameters: * Entity face = The Python object representing the face for discretization.
+                  * List objectList = A list of Entity objects obtained with the IGESImport module.
+                  * Float density = Number of points/cm desired in the discretization.
+                  * Float precision = The number of discrete intervals desired for discretization of
+                  the loop that surrounds the surface. This is necessary for using the PointInPolygon
+                  module.
+    # Returns: * List newPoints = A list of discretized vertices.
+               * List normals = A list of normal vectors of to each point related to the surface.
+    """
+
     # List to storage all the tuples (x, y, z) due to discretization.
     points = []
 
@@ -221,8 +312,17 @@ def discretizeFace(face, objectList, density, precision):
         normals.append(newBasisVector)
     return newPoints, normals
 
-# Function to discretize a single Loop. It returns a list of vertices of the loop.
 def discretizeLoop(currentLoop, objectList, precision):
+    """
+    # Function: discretizeLoop.
+    # Description: This function generates a list of points that lies in a specific loop using
+    the NURBS parametric discretization provided by the DiscreteNurbCurve module.
+    # Parameters: * Entity currentLoop = The Python object representing the loop for discretization.
+                  * List objectList = A list of Entity objects obtained with the IGESImport module.
+                  * Float precision = The number of discrete intervals desired for discretization.
+    # Returns: * List vertices = A list of discretized vertices.
+    """
+
     unsortedVertices = []
 
     for i in range(int(currentLoop.N)):
@@ -284,6 +384,20 @@ def discretizeLoop(currentLoop, objectList, precision):
     return vertices
 
 def discretizeSurface(face, objectList, Uparam, Vparam):
+    """
+    # Function: discretizeSurface.
+    # Description: This function generates a list of cloud points based on a specific surface.
+    # Parameters: * Entity face = The Python object representing the face that contains the
+                  surface for discretization.
+                  * List objectList = A list of Entity objects obtained with the IGESImport module.
+                  * Int Uparam = The number of discrete intervals desired for the discretization
+                  in the parametric U direction of the surface.
+                  * Int Vparam = The number of discrete intervals desired for the discretization
+                  in the parametric V direction of the surface.
+    # Returns: * Tuple = A list containing the points and a list containig the normal vector of
+               each point related to the surface.
+    """
+
     currentSurface = objectList[pos(face.SURF)]
     newSurface = Surface()
     newSurface.delta_u = 1/Uparam
@@ -310,8 +424,14 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
     newSurface.evaluate_rational()
     return list(newSurface.surfpts), list(newSurface.normal_direct)
 
-# Function to generate a .pcd (Point Cloud Data) file:
 def generatePcd(cloudPoints):
+    """
+    # Function: generatePcd.
+    # Description: This function generates a file CloudData.pcd containing all the
+    cloud points specified in the cloudPoints list.
+    # Parameters: * List cloudPoints = The list of desired points.
+    """
+
     numberOfPoints = 0
     for item in cloudPoints:
         numberOfPoints += len(item)
@@ -334,14 +454,22 @@ def generatePcd(cloudPoints):
     pcdFile.write(pcdText)
     pcdFile.close()
 
-# Function to generate a .txt (Text File) file with the cloud data:
 def generateTxt(cloudPoints, separator=' '):
+    """
+    # Function: generateTxt.
+    # Description: This function generates a file TxtData.txt containing all the
+    cloud points specified in the cloudPoints list.
+    # Parameters: * List cloudPoints = The list of desired points.
+                  * String separator = A string for separating the components x, y
+                  and z of a point.
+    """
+
     txtText = ''
     for item in cloudPoints:
         for point in item:
             txtText += (str(point[0]) + separator +
                         str(point[1]) + separator +
                         str(point[2]) + '\n')
-    pcdFile = open('..\\tmp\\TxtData.pcd', 'w')
+    pcdFile = open('..\\tmp\\TxtData.txt', 'w')
     pcdFile.write(txtText)
     pcdFile.close()
