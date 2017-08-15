@@ -6,7 +6,6 @@ defined in an .IGES and .IGS files.
 """
 
 from Discretization.PointInPolygon import pointInPolygon
-from Discretization.WindingNumber import windingNumber
 from Discretization.DiscreteNurbCurve import Curve
 from Discretization.DiscreteNurbSurface import Surface
 from Discretization.Utilities import knotvector_normalize
