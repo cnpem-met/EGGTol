@@ -160,7 +160,7 @@ class MainWindow(QMainWindow):
         It just displays a confirmation window asking permission for end the actual work.
         # Parameters: * QCloseEvent event = The default event of the overrided method.
         """
-        
+
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
