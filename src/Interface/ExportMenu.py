@@ -47,17 +47,49 @@ class exportMenu(QWidget):
         grid.addWidget(label2, 1, 0, 1, 1)
 
         btn1 = QToolButton()
-        btn1.setText('Exportar Nuvem de Pontos')
-        #btn1.clicked.connect(None)
+        btn1.setText('Exportar Nuvem de Pontos em .pcd')
+        btn1.clicked.connect(lambda: self.exportPcd(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(266)
         grid.addWidget(btn1, 2, 0)
 
         btn2 = QToolButton()
-        btn2.setText('Exportar uma Captura de Tela')
+        btn2.setText('Exportar Nuvem de Pontos em .txt')
+        btn2.clicked.connect(lambda: self.exportTxt(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(266)
         grid.addWidget(btn2, 3, 0)
 
+        btn3 = QToolButton()
+        btn3.setText('Exportar uma Captura de Tela')
+        btn3.clicked.connect(lambda: self.exportScreenshot(parent))
+        btn3.setMinimumHeight(50)
+        btn3.setMinimumWidth(266)
+        grid.addWidget(btn3, 4, 0)
+
         grid.setColumnStretch(0, 1)
-        grid.setRowStretch(4, 1)
+        grid.setRowStretch(5, 1)
+
+    def exportPcd(self, parent):
+        """
+        # Method: exportPcd
+        # Description: This method exports the actual point cloud data into a .pcd file.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        pass
+
+    def exportTxt(self, parent):
+        """
+        # Method: exportTxt
+        # Description: This method exports the actual point cloud data into a .txt file.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        pass
+
+    def exportScreenshot(self, parent):
+        """
+        # Method: exportScreenshot
+        # Description: This method exports the actual visualization into a screenshot.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        pass
