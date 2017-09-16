@@ -4,6 +4,7 @@
 in the program. These actions has internal functions that can be called by the main.py.
 # Author: Willian Hideak Arita da Silva.
 """
+
 import webbrowser
 
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget, \
@@ -12,6 +13,66 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
 from Import.IGESImport import *
+
+def switchLeftPanels(widget, name, prettyName, parent):
+    """
+    # Function: switchLeftPanels.
+    # Description: This function opens/hide the side dock widget according to the dock informed
+    in the 'widget' argument.
+    # Parameters: * QDockWidget widget = The widget to be displayed in the side dock.
+                  * Str name = The name which will be saved into the leftDockWidget attribute
+                  of the main.py file for identification purposes.
+                  * Str prettyName = String that will be displayed at the top of the dock widget.
+                  * MainWindow parent = A reference for the main window object.
+    """
+
+    if parent.leftDockWidget == None:
+        dock = QDockWidget(prettyName, parent)
+        dock.setWidget(widget)
+        parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+        parent.leftDockMenu = dock
+        parent.leftDockWidget = name
+    else:
+        parent.removeDockWidget(parent.leftDockMenu)
+        if parent.leftDockWidget == name:
+            parent.leftDockMenu = None
+            parent.leftDockWidget = None
+        else:
+            dock = QDockWidget(prettyName, parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = name
+
+def switchRightPanels(widget, name, prettyName, parent):
+    """
+    # Function: switchRightPanels.
+    # Description: This function opens/hide the side dock widget according to the dock informed
+    in the 'widget' argument.
+    # Parameters: * QDockWidget widget = The widget to be displayed in the side dock.
+                  * Str name = The name which will be saved into the rightDockWidget attribute
+                  of the main.py file for identification purposes.
+                  * Str prettyName = String that will be displayed at the top of the dock widget.
+                  * MainWindow parent = A reference for the main window object.
+    """
+
+    if parent.rightDockWidget == None:
+        dock = QDockWidget(prettyName, parent)
+        dock.setWidget(widget)
+        parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+        parent.rightDockMenu = dock
+        parent.rightDockWidget = name
+    else:
+        parent.removeDockWidget(parent.rightDockMenu)
+        if parent.rightDockWidget == name:
+            parent.rightDockMenu = None
+            parent.rightDockWidget = None
+        else:
+            dock = QDockWidget(prettyName, parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+            parent.rightDockMenu = dock
+            parent.rightDockWidget = name
 
 class welcomeAction(QAction):
     """
@@ -39,26 +100,8 @@ class welcomeAction(QAction):
         """
 
         from Interface.WelcomeMenu import welcomeMenu
-        if parent.leftDockWidget == None:
-            widget = welcomeMenu(parent)
-            dock = QDockWidget('Painel de Boas-Vindas!', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-            parent.leftDockMenu = dock
-            parent.leftDockWidget = 'welcomeMenu'
-        elif parent.leftDockWidget == 'welcomeMenu':
-            parent.removeDockWidget(parent.leftDockMenu)
-            parent.leftDockMenu = None
-            parent.leftDockWidget = None
-        else:
-            parent.removeDockWidget(parent.leftDockMenu)
-            widget = welcomeMenu(parent)
-            dock = QDockWidget('Painel de Boas-Vindas!', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-            parent.leftDockMenu = dock
-            parent.leftDockWidget = 'welcomeMenu'
-
+        widget = welcomeMenu(parent)
+        switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
 
 class entitiesAction(QAction):
     """
@@ -92,25 +135,8 @@ class entitiesAction(QAction):
                                     'momento. Utilize o menu Arquivo > Importar para\n' +
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.leftDockWidget == None:
-            widget = entitiesMenu(parent)
-            dock = QDockWidget('Painel de Entidades', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-            parent.leftDockMenu = dock
-            parent.leftDockWidget = 'entitiesMenu'
-        elif parent.leftDockWidget == 'entitiesMenu':
-            parent.removeDockWidget(parent.leftDockMenu)
-            parent.leftDockMenu = None
-            parent.leftDockWidget = None
-        else:
-            parent.removeDockWidget(parent.leftDockMenu)
-            widget = entitiesMenu(parent)
-            dock = QDockWidget('Painel de Entidades', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-            parent.leftDockMenu = dock
-            parent.leftDockWidget = 'entitiesMenu'
+        widget = entitiesMenu(parent)
+        switchLeftPanels(widget, 'entitiesMenu', 'Painel de Entidades', parent)
 
 class importAction(QAction):
     """
@@ -179,7 +205,7 @@ class importAction(QAction):
                 parent.entitiesList.append(entity.description())
             else:
                 parent.entitiesList.append(('Unsupported Object', []))
-        parent.setWindowTitle(parent.windowTitle + ' - ' + fileName[0])
+        parent.setWindowTitle(parent.title + ' - ' + fileName[0])
 
 class exportAction(QAction):
     """
@@ -213,25 +239,8 @@ class exportAction(QAction):
                                     'momento. Utilize o menu Arquivo > Importar para\n' +
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.rightDockWidget == None:
-            widget = exportMenu(parent)
-            dock = QDockWidget('Painel de Exportação', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'exportMenu'
-        elif parent.rightDockWidget == 'exportMenu':
-            parent.removeDockWidget(parent.rightDockMenu)
-            parent.rightDockMenu = None
-            parent.rightDockWidget = None
-        else:
-            parent.removeDockWidget(parent.rightDockMenu)
-            widget = exportMenu(parent)
-            dock = QDockWidget('Painel de Exportação', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'exportMenu'
+        widget = exportMenu(parent)
+        switchRightPanels(widget, 'exportMenu', 'Painel de Exportação', parent)
 
 class cloudAction(QAction):
     """
@@ -265,25 +274,8 @@ class cloudAction(QAction):
                                     'momento. Utilize o menu Arquivo > Importar para\n' +
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.rightDockWidget == None:
-            widget = discretizeMenu(parent)
-            dock = QDockWidget('Painel de Discretização', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'cloudMenu'
-        elif parent.rightDockWidget == 'cloudMenu':
-            parent.removeDockWidget(parent.rightDockMenu)
-            parent.rightDockMenu = None
-            parent.rightDockWidget = None
-        else:
-            parent.removeDockWidget(parent.rightDockMenu)
-            widget = discretizeMenu(parent)
-            dock = QDockWidget('Painel de Discretização', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'cloudMenu'
+        widget = discretizeMenu(parent)
+        switchRightPanels(widget, 'cloudMenu', 'Painel de Discretização', parent)
 
 class autoDiscretizeAction(QAction):
     """
@@ -316,25 +308,8 @@ class autoDiscretizeAction(QAction):
                                     'momento. Utilize o menu Arquivo > Importar para\n' +
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.rightDockWidget == None:
-            widget = autoDiscretizeMenu(parent)
-            dock = QDockWidget('Painel de Discretização Automática', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'autoDiscretizeMenu'
-        elif parent.rightDockWidget == 'autoDiscretizeMenu':
-            parent.removeDockWidget(parent.rightDockMenu)
-            parent.rightDockMenu = None
-            parent.rightDockWidget = None
-        else:
-            parent.removeDockWidget(parent.rightDockMenu)
-            widget = autoDiscretizeMenu(parent)
-            dock = QDockWidget('Painel de Discretização Automática', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'autoDiscretizeMenu'
+        widget = autoDiscretizeMenu(parent)
+        switchRightPanels(widget, 'autoDiscretizeMenu', 'Painel de Discretização Automática', parent)
 
 class defectsAction(QAction):
     """
@@ -375,25 +350,8 @@ class defectsAction(QAction):
                                     'o menu de discretização ou importe uma nuvem de pontos ' +
                                     'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.rightDockWidget == None:
-            widget = defectsMenu(parent)
-            dock = QDockWidget('Painel de Geração de Erros', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'defectsMenu'
-        elif parent.rightDockWidget == 'defectsMenu':
-            parent.removeDockWidget(parent.rightDockMenu)
-            parent.rightDockMenu = None
-            parent.rightDockWidget = None
-        else:
-            parent.removeDockWidget(parent.rightDockMenu)
-            widget = defectsMenu(parent)
-            dock = QDockWidget('Painel de Geração de Erros', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'defectsMenu'
+        widget = defectsMenu(parent)
+        switchRightPanels(widget, 'defectsMenu', 'Painel de Geração de Erros', parent)
 
 class translationDefectsAction(QAction):
     """
@@ -433,28 +391,13 @@ class translationDefectsAction(QAction):
                                     'o menu de discretização ou importe uma nuvem de pontos ' +
                                     'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
             return
-        if parent.rightDockWidget == None:
-            widget = translationDefectsMenu(parent)
-            dock = QDockWidget('Painel de Geração de Erros por Translação', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'translationDefectsMenu'
+        widget = translationDefectsMenu(parent)
+        switchRightPanels(widget, 'translationDefectsMenu', 'Painel de Geração de Erros por ' +
+                          'Translação', parent)
+        if parent.rightDockWidget == 'translationDefectsMenu':
             parent.canvas._display.SetSelectionModeFace()
-        elif parent.rightDockWidget == 'translationDefectsMenu':
-            parent.removeDockWidget(parent.rightDockMenu)
-            parent.rightDockMenu = None
-            parent.rightDockWidget = None
+        elif parent.rightDockWidget == None:
             parent.canvas._display.SetSelectionModeNeutral()
-        else:
-            parent.removeDockWidget(parent.rightDockMenu)
-            widget = translationDefectsMenu(parent)
-            dock = QDockWidget('Painel de Geração de Erros por Translação', parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
-            parent.rightDockMenu = dock
-            parent.rightDockWidget = 'translationDefectsMenu'
-            parent.canvas._display.SetSelectionModeFace()
 
 class closeAction(QAction):
     """
@@ -501,20 +444,15 @@ class closeAction(QAction):
         buttonNo.setText('Cancelar')
         box.exec_()
         if box.clickedButton() == buttonYes:
-            test = parent.leftDockWidget
-            if test == 'entitiesMenu':
-                parent.removeDockWidget(parent.leftDockMenu)
-                parent.leftDockMenu = None
-                parent.leftDockWidget = None
-            test = parent.rightDockWidget
-            if test == 'cloudMenu' or test == 'defectsMenu' or \
-               test == 'translationDefectsMenu' or test == 'autoDiscretizeMenu':
-                parent.removeDockWidget(parent.rightDockMenu)
-                parent.rightDockMenu = None
-                parent.rightDockWidget = None
+            parent.removeDockWidget(parent.leftDockMenu)
+            parent.removeDockWidget(parent.rightDockMenu)
+            parent.leftDockMenu = parent.leftDockWidget = None
+            parent.rightDockMenu = parent.rightDockWidget = None
+            widget = welcomeMenu(parent)
+            switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
             parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.EraseAll()
-            parent.setWindowTitle(parent.windowTitle)
+            parent.setWindowTitle(parent.title)
             parent.activeCADFile = None
             parent.activeCloudFile = None
             parent.entitiesList = []
