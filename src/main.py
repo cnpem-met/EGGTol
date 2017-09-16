@@ -55,7 +55,8 @@ class MainWindow(QMainWindow):
         """
 
         # Defining Main Window Properties:
-        self.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
+        windowTitle = 'Gerador de Nuvem de Pontos v0.71'
+        self.setWindowTitle(windowTitle)
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
 

@@ -31,7 +31,7 @@ class welcomeMenu(QTextEdit):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        welcomeTextFile = open('..\\src\\Interface\\welcome.txt', 'r')
+        welcomeTextFile = open('..\\src\\Interface\\welcome.txt', encoding='utf-8', mode='r')
         with welcomeTextFile:
             text = welcomeTextFile.read()
             self.setText(text)

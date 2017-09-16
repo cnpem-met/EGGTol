@@ -1,32 +1,27 @@
-Bem Vindo ao Gerador de Nuvem de Pontos!
-Estamos atualmente na versão v0.41.
+Bem-vindo ao Gerador de Nuvem de Pontos!
+Versão v0.71 alpha.
 
-Para iniciar, importe um arquivo .IGES através do menu ARQUIVO > IMPORTAR.
+Funcionalidade Básica
+--------------------------
 
-Nota: Para um melhor funcionamento dos algoritmos de discretização e inserção de erros, é preferível que o arquivo IGES possua uma completa especificação do CAD através do padrão B-Rep (Boundary Representation).
+* Para iniciar, importe um arquivo .IGES através do menu ARQUIVO > Importar Arquivo .IGES.
 
-Nota: Até o momento, não há suporte para arquivos .IGES com múltiplos sólidos geométricos.
+* Para discretizar um modelo, utilize o painel lateral GERAR NUVEM.
 
----------------------------------------------------------
+* Para aplicar erros de translação, utilize o painel lateral GERAR ERROS.
 
-Changelog:
+* Para exportar a nuvem de pontos gerada em um arquivo .pcd (Point Cloud Data) ou em um arquivo de texto plano (.txt), utilize o menu EXPORTAR.
 
-v0.41:
-Introduzido a discretização parametrizada de superfícies genéricas.
+* Para exibir as entidades presentes em um arquivo aberto, utilize o menu ENTIDADES.
 
-v0.30:
-Modelo de UI definitivo.
+Nota Importante
+--------------------
 
-v0.26:
-Handler de Eventos e Extração de Informações Geométricas do Modelo CAD
+O Gerador de Nuvem de Pontos funciona somente para modelos CAD representados através da entidade 186 da especificação IGES (Manifold Solid). Arquivos IGES especificados através de outra forma não serão lidos pelo aplicativo.
 
-v0.15:
-Criado o Código Interno para Coleta de Entidades IGES
+Projeto no GitHub.com
+---------------------------
 
-v0.05:
-Adicionado Função de Importação e Exibição de Modelos .IGES (Funcional)
+Todo o código fonte pode ser encontrado através do link: github.com/hideak/pointCloudGenerator.
 
-v0.03:
-Protótipo da Barra de Menus
-Protótipo da Barra de Status e Ferramentas
-Implementação das Ações
+O código está sob licença de software livre do GNU, e pode ser modificado e distribuído.
