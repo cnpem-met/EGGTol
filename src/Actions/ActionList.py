@@ -4,6 +4,7 @@
 in the program. These actions has internal functions that can be called by the main.py.
 # Author: Willian Hideak Arita da Silva.
 """
+import webbrowser
 
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget, \
                             QDialog, QGridLayout, QLabel
@@ -29,6 +30,7 @@ class welcomeAction(QAction):
         self.setStatusTip('Exibe o menu de boas vindas, incluindo o welcome.txt')
         self.setIconText('Bem-Vindo!')
         self.triggered.connect(lambda: self.welcomeActionProcedure(parent))
+
     def welcomeActionProcedure(self, parent):
         """
         # Method: welcomeActionProcedure.
@@ -75,6 +77,7 @@ class entitiesAction(QAction):
         self.setStatusTip('Exibe a Árvore de Entidades')
         self.setIconText('Entidades')
         self.triggered.connect(lambda: self.entitiesActionProcedure(parent))
+
     def entitiesActionProcedure(self, parent):
         """
         # Method: entitiesActionProcedure
@@ -126,6 +129,7 @@ class importAction(QAction):
         self.setStatusTip('Importar Um Arquivo .IGES')
         self.setIconText('Importar')
         self.triggered.connect(lambda: self.importActionProcedure(parent))
+
     def importActionProcedure(self, parent):
         """
         # Method: importActionProcedure
@@ -175,7 +179,7 @@ class importAction(QAction):
                 parent.entitiesList.append(entity.description())
             else:
                 parent.entitiesList.append(('Unsupported Object', []))
-        parent.setWindowTitle('Gerador de Nuvem de Pontos v0.41' + ' - ' + fileName[0])
+        parent.setWindowTitle(parent.windowTitle + ' - ' + fileName[0])
 
 class exportAction(QAction):
     """
@@ -194,6 +198,7 @@ class exportAction(QAction):
         self.setStatusTip('Exportar Um Arquivo .IGES')
         self.setIconText('Exportar')
         self.triggered.connect(lambda: self.exportActionProcedure(parent))
+
     def exportActionProcedure(self, parent):
         """
         # Method: exportActionProcedure.
@@ -245,6 +250,7 @@ class cloudAction(QAction):
         self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo')
         self.setIconText('Gerar Nuvem')
         self.triggered.connect(lambda: self.cloudActionProcedure(parent))
+
     def cloudActionProcedure(self, parent):
         """
         # Method: cloudActionProcedure.
@@ -295,6 +301,7 @@ class autoDiscretizeAction(QAction):
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização Automática', parent)
         self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo Automaticamente')
         self.triggered.connect(lambda: self.autoDiscretizeActionProcedure(parent))
+
     def autoDiscretizeActionProcedure(self, parent):
         """
         # Method: autoDiscretizeActionProcedure.
@@ -346,6 +353,7 @@ class defectsAction(QAction):
         self.setStatusTip('Inserir erros artificiais em nuvens de pontos.')
         self.setIconText('Gerar Erros')
         self.triggered.connect(lambda: self.defectsActionProcedure(parent))
+
     def defectsActionProcedure(self, parent):
         """
         # Method: defectsActionProcedure.
@@ -403,6 +411,7 @@ class translationDefectsAction(QAction):
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros por Translação', parent)
         self.setStatusTip('Inserir erros artificiais devido à translação em nuvens de pontos.')
         self.triggered.connect(lambda: self.translationDefectsActionProcedure(parent))
+
     def translationDefectsActionProcedure(self, parent):
         """
         # Method: translationDefectsActionProcedure.
@@ -464,6 +473,7 @@ class closeAction(QAction):
         self.setStatusTip('Fecha o modelo CAD atual')
         self.setIconText('Fechar')
         self.triggered.connect(lambda: self.closeActionProcedure(parent))
+
     def closeActionProcedure(self, parent):
         """
         # Method: closeActionProcedure.
@@ -504,7 +514,7 @@ class closeAction(QAction):
                 parent.rightDockWidget = None
             parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.EraseAll()
-            parent.setWindowTitle('Gerador de Nuvem de Pontos v0.41')
+            parent.setWindowTitle(parent.windowTitle)
             parent.activeCADFile = None
             parent.activeCloudFile = None
             parent.entitiesList = []
@@ -528,6 +538,7 @@ class exitAction(QAction):
         self.setStatusTip('Encerra o programa')
         self.setIconText('Encerrar')
         self.triggered.connect(lambda: self.exitActionProcedure())
+
     def exitActionProcedure(self):
         """
         # Method: exitActionProcedure.
@@ -567,6 +578,7 @@ class darkAction(QAction):
         self.setStatusTip('Configura o fundo de tela com uma cor escura')
         self.setIconText('Escuro')
         self.triggered.connect(lambda: self.darkActionProcedure(parent))
+
     def darkActionProcedure(self, parent):
         """
         # Method: darkActionProcedure.
@@ -608,8 +620,8 @@ class lightAction(QAction):
 class githubAction(QAction):
     """
     # Class: githubAction.
-    # Description: A PyQt5 action that opens a window showing the gitHub information of the
-    project.
+    # Description: A PyQt5 action that opens the project website showing the gitHub
+    information of the project.
     """
 
     def __init__(self, parent):
@@ -619,5 +631,7 @@ class githubAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Sobre o Projeto no GitHub', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir Projeto no GitHub', parent)
         self.setStatusTip('Exibe informações sobre esse projeto, hospedado no GitHub.com')
+        self.setIconText('Github')
+        self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))
