@@ -906,7 +906,6 @@ class developerPageAction(QAction):
         self.setIconText('Página do Desenvolvedor')
         self.triggered.connect(lambda: webbrowser.open('https://hideak.github.io'))
 
-
 class emailAction(QAction):
     """
     # Class: emailAction.
