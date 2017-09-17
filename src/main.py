@@ -111,23 +111,34 @@ class MainWindow(QMainWindow):
 
         # Defining the MenuBar:
         menubar = self.menuBar()
+
         fileMenu = menubar.addMenu('Arquivo')
         fileMenu.addAction(welcome)
+        fileMenu.addSeparator()
         fileMenu.addAction(importCAD)
+        fileMenu.addAction(exportCAD)
+        fileMenu.addSeparator()
         fileMenu.addAction(close)
         fileMenu.addAction(exitApp)
+
         panelsMenu = menubar.addMenu('Painéis e Menus')
         panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(entities)
         panelsMenu.addAction(cloud)
         panelsMenu.addAction(defects)
+        panelsMenu.addSeparator()
         panelsMenu.addAction(autoDiscretize)
         panelsMenu.addAction(translationDefects)
-        menubar.addMenu('Importar')
-        menubar.addMenu('Exportar')
+
+        importMenu = menubar.addMenu('Importar')
+
+        exportMenu = menubar.addMenu('Exportar')
+
         visualizationMenu = menubar.addMenu('Visualização')
         visualizationMenu.addAction(light)
         visualizationMenu.addAction(dark)
+        visualizationMenu.addSeparator()
+
         aboutMenu = menubar.addMenu('Sobre este Aplicativo')
         aboutMenu.addAction(github)
 

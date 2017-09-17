@@ -424,6 +424,7 @@ class closeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        from Interface.WelcomeMenu import welcomeMenu
         if not parent.activeCADFile:
             QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
                                     'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
@@ -452,6 +453,7 @@ class closeAction(QAction):
             switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
             parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.EraseAll()
+            parent.canvas._display.Repaint()
             parent.setWindowTitle(parent.title)
             parent.activeCADFile = None
             parent.activeCloudFile = None
@@ -525,6 +527,7 @@ class darkAction(QAction):
         """
 
         parent.canvas._display.set_bg_gradient_color(10, 10, 10, 10, 10, 43)
+        parent.canvas._display.display_trihedron_white()
         parent.canvas._display.Repaint()
 
 class lightAction(QAction):
@@ -551,8 +554,8 @@ class lightAction(QAction):
         # Description: The procedure for setting a light background.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
+        parent.canvas._display.display_trihedron()
         parent.canvas._display.Repaint()
 
 class githubAction(QAction):
