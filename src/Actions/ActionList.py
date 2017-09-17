@@ -757,6 +757,118 @@ class viewIsoAction(QAction):
         parent.canvas._display.View_Iso()
         parent.canvas._display.Repaint()
 
+class setWireframeAction(QAction):
+    """
+    # Class: setWireframeAction.
+    # Description: A PyQt5 action that displays a model in wireframe visualization.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Exibir Modelo Wireframe', parent)
+        self.setStatusTip('Exibe um modelo Wireframe do CAD atual')
+        self.setIconText('Modelo Wireframe')
+        self.triggered.connect(lambda: self.setWireframeActionProcedure(parent))
+
+    def setWireframeActionProcedure(self, parent):
+        """
+        # Method: setWireframeActionProcedure.
+        # Description: The procedure for displaying a model in wireframe visualization.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.SetModeWireFrame()
+        parent.canvas._display.Repaint()
+
+class setShadedAction(QAction):
+    """
+    # Class: setShadedAction.
+    # Description: A PyQt5 action that displays a shaded (solid) model visualization.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Exibir Modelo Sólido', parent)
+        self.setStatusTip('Exibe um modelo sólido do CAD atual')
+        self.setIconText('Modelo Sólido')
+        self.triggered.connect(lambda: self.setShadedActionProcedure(parent))
+
+    def setShadedActionProcedure(self, parent):
+        """
+        # Method: setShadedActionProcedure.
+        # Description: The procedure for displaying a model in shaded (solid) visualization.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.SetModeShaded()
+        parent.canvas._display.Repaint()
+
+class fitAllAction(QAction):
+    """
+    # Class: fitAllAction.
+    # Description: A PyQt5 action that adjusts all elements to fit on the screen.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Ajustar Elementos à Tela', parent)
+        self.setStatusTip('Ajusta o zoom para que todos os elementos fiquem no visualizador')
+        self.setIconText('Ajustar Elementos')
+        self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
+
+    def setShadedActionProcedure(self, parent):
+        """
+        # Method: fitAllActionProcedure.
+        # Description: The procedure for adjusting all elements to fit on the screen.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.FitAll()
+        parent.canvas._display.Repaint()
+
+class fitAllAction(QAction):
+    """
+    # Class: fitAllAction.
+    # Description: A PyQt5 action that adjusts all elements to fit on the screen.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Ajustar Elementos à Tela', parent)
+        self.setStatusTip('Ajusta o zoom para que todos os elementos fiquem no visualizador')
+        self.setIconText('Ajustar Elementos')
+        self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
+
+    def setShadedActionProcedure(self, parent):
+        """
+        # Method: fitAllActionProcedure.
+        # Description: The procedure for adjusting all elements to fit on the screen.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.FitAll()
+        parent.canvas._display.Repaint()
+
 class githubAction(QAction):
     """
     # Class: githubAction.
@@ -775,3 +887,21 @@ class githubAction(QAction):
         self.setStatusTip('Exibe informações sobre esse projeto, hospedado no GitHub.com')
         self.setIconText('GitHub')
         self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))
+
+class emailAction(QAction):
+    """
+    # Class: emailAction.
+    # Description: A PyQt5 action that opens an email prompt for reporting bugs.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Enviar Email ao Desenvolvedor', parent)
+        self.setStatusTip('Abre uma janela para envio de email ao desenvolvedor')
+        self.setIconText('Email')
+        self.triggered.connect(lambda: webbrowser.open('mailto:willianhideak@hotmail.com'))

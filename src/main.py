@@ -112,6 +112,10 @@ class MainWindow(QMainWindow):
         viewFront = viewFrontAction(self)
         viewRear = viewRearAction(self)
         viewIso = viewIsoAction(self)
+        setWireframe = setWireframeAction(self)
+        setShaded = setShadedAction(self)
+        fitAll = fitAllAction(self)
+        email = emailAction(self)
 
         github = githubAction(self)
 
@@ -125,6 +129,7 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(welcome)
         fileMenu.addSeparator()
         fileMenu.addAction(importCAD)
+        fileMenu.addSeparator()
         fileMenu.addAction(exportCAD)
         fileMenu.addSeparator()
         fileMenu.addAction(close)
@@ -142,6 +147,7 @@ class MainWindow(QMainWindow):
         importMenu = menubar.addMenu('Importar')
 
         exportMenu = menubar.addMenu('Exportar')
+        exportMenu.addAction(exportCAD)
 
         visualizationMenu = menubar.addMenu('Visualização')
         visualizationMenu.addAction(light)
@@ -155,9 +161,18 @@ class MainWindow(QMainWindow):
         visualizationMenu.addAction(viewRear)
         visualizationMenu.addSeparator()
         visualizationMenu.addAction(viewIso)
+        visualizationMenu.addSeparator()
+        visualizationMenu.addAction(setWireframe)
+        visualizationMenu.addAction(setShaded)
+        visualizationMenu.addSeparator()
+        visualizationMenu.addAction(fitAll)
+
+        selectionMenu = menubar.addMenu('Métodos de Seleção')
 
         aboutMenu = menubar.addMenu('Sobre este Aplicativo')
         aboutMenu.addAction(github)
+        aboutMenu.addSeparator()
+        aboutMenu.addAction(email)
 
         # Defining the StatusBar:
         self.statusBar()
