@@ -561,6 +561,202 @@ class lightAction(QAction):
         parent.canvas._display.display_trihedron()
         parent.canvas._display.Repaint()
 
+class viewTopAction(QAction):
+    """
+    # Class: viewTopAction.
+    # Description: A PyQt5 action that generates the top view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Superior', parent)
+        self.setStatusTip('Exibe a vista superior do modelo CAD atual')
+        self.setIconText('Vista Superior')
+        self.triggered.connect(lambda: self.viewTopActionProcedure(parent))
+
+    def viewTopActionProcedure(self, parent):
+        """
+        # Method: viewTopActionProcedure.
+        # Description: The procedure for setting the top view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Top()
+        parent.canvas._display.Repaint()
+
+class viewBottomAction(QAction):
+    """
+    # Class: viewBottomAction.
+    # Description: A PyQt5 action that generates the bottom view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Inferior', parent)
+        self.setStatusTip('Exibe a vista inferior do modelo CAD atual')
+        self.setIconText('Vista Inferior')
+        self.triggered.connect(lambda: self.viewBottomActionProcedure(parent))
+
+    def viewBottomActionProcedure(self, parent):
+        """
+        # Method: viewBottomActionProcedure.
+        # Description: The procedure for setting the bottom view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Bottom()
+        parent.canvas._display.Repaint()
+
+class viewLeftAction(QAction):
+    """
+    # Class: viewLeftAction.
+    # Description: A PyQt5 action that generates the left view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Lateral Esquerda', parent)
+        self.setStatusTip('Exibe a vista lateral esquerda do modelo CAD atual')
+        self.setIconText('Vista Lateral Esquerda')
+        self.triggered.connect(lambda: self.viewLeftActionProcedure(parent))
+
+    def viewLeftActionProcedure(self, parent):
+        """
+        # Method: viewLeftActionProcedure.
+        # Description: The procedure for setting the left view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Left()
+        parent.canvas._display.Repaint()
+
+class viewRightAction(QAction):
+    """
+    # Class: viewRightAction.
+    # Description: A PyQt5 action that generates the right view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Lateral Direita', parent)
+        self.setStatusTip('Exibe a vista lateral direita do modelo CAD atual')
+        self.setIconText('Vista Lateral Direita')
+        self.triggered.connect(lambda: self.viewRightActionProcedure(parent))
+
+    def viewRightActionProcedure(self, parent):
+        """
+        # Method: viewRightActionProcedure.
+        # Description: The procedure for setting the right view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Right()
+        parent.canvas._display.Repaint()
+
+class viewFrontAction(QAction):
+    """
+    # Class: viewFrontAction.
+    # Description: A PyQt5 action that generates the front view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Frontal', parent)
+        self.setStatusTip('Exibe a vista frontal do modelo CAD atual')
+        self.setIconText('Vista Frontal')
+        self.triggered.connect(lambda: self.viewFrontActionProcedure(parent))
+
+    def viewFrontActionProcedure(self, parent):
+        """
+        # Method: viewFrontActionProcedure.
+        # Description: The procedure for setting the front view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Front()
+        parent.canvas._display.Repaint()
+
+class viewRearAction(QAction):
+    """
+    # Class: viewRearAction.
+    # Description: A PyQt5 action that generates the rear view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Posterior', parent)
+        self.setStatusTip('Exibe a vista posterior do modelo CAD atual')
+        self.setIconText('Vista Posterior')
+        self.triggered.connect(lambda: self.viewRearActionProcedure(parent))
+
+    def viewRearActionProcedure(self, parent):
+        """
+        # Method: viewRearActionProcedure.
+        # Description: The procedure for setting the rear view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Rear()
+        parent.canvas._display.Repaint()
+
+class viewIsoAction(QAction):
+    """
+    # Class: viewIsoAction.
+    # Description: A PyQt5 action that generates the isometric view of a CAD model.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Isométrica', parent)
+        self.setStatusTip('Exibe a vista isométrica do modelo CAD atual')
+        self.setIconText('Vista Isométrica')
+        self.triggered.connect(lambda: self.viewIsoActionProcedure(parent))
+
+    def viewIsoActionProcedure(self, parent):
+        """
+        # Method: viewIsoActionProcedure.
+        # Description: The procedure for setting the isometric view of a CAD model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        parent.canvas._display.View_Iso()
+        parent.canvas._display.Repaint()
+
 class githubAction(QAction):
     """
     # Class: githubAction.
@@ -577,5 +773,5 @@ class githubAction(QAction):
 
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir Projeto no GitHub', parent)
         self.setStatusTip('Exibe informações sobre esse projeto, hospedado no GitHub.com')
-        self.setIconText('Github')
+        self.setIconText('GitHub')
         self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))

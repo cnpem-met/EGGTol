@@ -105,6 +105,14 @@ class MainWindow(QMainWindow):
         translationDefects = translationDefectsAction(self)
         light = lightAction(self)
         dark = darkAction(self)
+        viewTop = viewTopAction(self)
+        viewBottom = viewBottomAction(self)
+        viewLeft = viewLeftAction(self)
+        viewRight = viewRightAction(self)
+        viewFront = viewFrontAction(self)
+        viewRear = viewRearAction(self)
+        viewIso = viewIsoAction(self)
+
         github = githubAction(self)
 
         # Defining the default Side Widgets:
@@ -139,6 +147,14 @@ class MainWindow(QMainWindow):
         visualizationMenu.addAction(light)
         visualizationMenu.addAction(dark)
         visualizationMenu.addSeparator()
+        visualizationMenu.addAction(viewTop)
+        visualizationMenu.addAction(viewBottom)
+        visualizationMenu.addAction(viewLeft)
+        visualizationMenu.addAction(viewRight)
+        visualizationMenu.addAction(viewFront)
+        visualizationMenu.addAction(viewRear)
+        visualizationMenu.addSeparator()
+        visualizationMenu.addAction(viewIso)
 
         aboutMenu = menubar.addMenu('Sobre este Aplicativo')
         aboutMenu.addAction(github)
