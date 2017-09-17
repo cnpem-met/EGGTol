@@ -901,7 +901,7 @@ class emailAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Enviar Email ao Desenvolvedor', parent)
+        super().__init__(QIcon('..\\icons\\mail.svg'), 'Enviar Email ao Desenvolvedor', parent)
         self.setStatusTip('Abre uma janela para envio de email ao desenvolvedor')
         self.setIconText('Email')
         self.triggered.connect(lambda: webbrowser.open('mailto:willianhideak@hotmail.com'))
