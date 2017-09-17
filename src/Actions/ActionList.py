@@ -859,7 +859,7 @@ class fitAllAction(QAction):
         self.setIconText('Ajustar Elementos')
         self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
 
-    def setShadedActionProcedure(self, parent):
+    def fitAllActionProcedure(self, parent):
         """
         # Method: fitAllActionProcedure.
         # Description: The procedure for adjusting all elements to fit on the screen.
