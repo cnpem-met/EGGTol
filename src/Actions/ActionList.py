@@ -904,7 +904,7 @@ class developerPageAction(QAction):
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir hideak.github.io', parent)
         self.setStatusTip('Exibe o site do desenvolvedor, incluindo projetos em progresso')
         self.setIconText('Página do Desenvolvedor')
-        self.triggered.connect(lambda: webbrowser.open('https://hideak.gitub.io'))
+        self.triggered.connect(lambda: webbrowser.open('https://hideak.github.io'))
 
 
 class emailAction(QAction):
