@@ -888,6 +888,25 @@ class githubAction(QAction):
         self.setIconText('GitHub')
         self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))
 
+class developerPageAction(QAction):
+    """
+    # Class: projectPageAction.
+    # Description: A PyQt5 action that opens the developer's personal webpage.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir hideak.github.io', parent)
+        self.setStatusTip('Exibe o site do desenvolvedor, incluindo projetos em progresso')
+        self.setIconText('Página do Desenvolvedor')
+        self.triggered.connect(lambda: webbrowser.open('https://hideak.gitub.io'))
+
+
 class emailAction(QAction):
     """
     # Class: emailAction.
