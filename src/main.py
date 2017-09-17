@@ -115,8 +115,8 @@ class MainWindow(QMainWindow):
         setWireframe = setWireframeAction(self)
         setShaded = setShadedAction(self)
         fitAll = fitAllAction(self)
+        devPage = developerPageAction(self)
         email = emailAction(self)
-
         github = githubAction(self)
 
         # Defining the default Side Widgets:
@@ -171,6 +171,7 @@ class MainWindow(QMainWindow):
 
         aboutMenu = menubar.addMenu('Sobre este Aplicativo')
         aboutMenu.addAction(github)
+        aboutMenu.addAction(devPage)
         aboutMenu.addSeparator()
         aboutMenu.addAction(email)
 
