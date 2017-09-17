@@ -526,6 +526,7 @@ class darkAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        parent.light = False
         parent.canvas._display.set_bg_gradient_color(10, 10, 10, 10, 10, 43)
         parent.canvas._display.display_trihedron_white()
         parent.canvas._display.Repaint()
@@ -554,6 +555,8 @@ class lightAction(QAction):
         # Description: The procedure for setting a light background.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
+        parent.light = True
         parent.canvas._display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
         parent.canvas._display.display_trihedron()
         parent.canvas._display.Repaint()
