@@ -901,7 +901,7 @@ class developerPageAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir hideak.github.io', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir https://hideak.github.io', parent)
         self.setStatusTip('Exibe o site do desenvolvedor, incluindo projetos em progresso')
         self.setIconText('Página do Desenvolvedor')
         self.triggered.connect(lambda: webbrowser.open('https://hideak.github.io'))
