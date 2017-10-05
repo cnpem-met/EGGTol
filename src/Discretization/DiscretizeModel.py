@@ -423,7 +423,7 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
     newSurface.evaluate_rational()
     return list(newSurface.surfpts), list(newSurface.normal_direct)
 
-def generatePcd(cloudPoints):
+def generatePcd(cloudPoints, filePath):
     """
     # Function: generatePcd.
     # Description: This function generates a file CloudData.pcd containing all the
@@ -449,7 +449,7 @@ def generatePcd(cloudPoints):
             pcdText += (str(point[0]) + ' ' +
                         str(point[1]) + ' ' +
                         str(point[2]) + '\n')
-    pcdFile = open('..\\tmp\\CloudData.pcd', 'w')
+    pcdFile = open(filePath, 'w')
     pcdFile.write(pcdText)
     pcdFile.close()
 

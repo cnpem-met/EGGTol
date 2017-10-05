@@ -7,7 +7,7 @@ files such as .pcd or screenshots.
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox
+                            QGridLayout, QToolButton, QMessageBox, QFileDialog
 from PyQt5.QtCore import QCoreApplication
 
 class exportMenu(QWidget):
@@ -76,7 +76,13 @@ class exportMenu(QWidget):
         # Description: This method exports the actual point cloud data into a .pcd file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+
+        from Discretization.DiscretizeModel import generatePcd
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', parent.lastPath)
+        if not fileName[0]:
+            return
+        print(fileName[0])
+        generatePcd(parent.cloudPointsList, fileName[0])
 
     def exportTxt(self, parent):
         """

@@ -126,7 +126,7 @@ class autoDiscretizeMenu(QWidget):
         parent.faceSequenceNumbers = sequence
         parent.faceNormalVectors = normals
         parent.cloudPointsList = points
-        generatePcd(parent.cloudPointsList)
+        generatePcd(parent.cloudPointsList, '..\\tmp\\CloudData.pcd')
 
         # Displays the generated points over the model using the PythonOCC lib.
         # A CloudData.pcd file is generated inside the tmp/ folder for display purposes.

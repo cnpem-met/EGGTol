@@ -173,11 +173,11 @@ class importAction(QAction):
         from OCC.IGESControl import IGESControl_Reader
         from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
         fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
-        parent.loadingWindow.show()
-        parent.loadingWindow.activateWindow()
         if not fileName[0]:
             parent.loadingWindow.close()
             return
+        parent.loadingWindow.show()
+        parent.loadingWindow.activateWindow()
         parent.lastPath = fileName[0]
         Reader = IGESControl_Reader()
         status = Reader.ReadFile(fileName[0])
