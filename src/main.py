@@ -128,10 +128,6 @@ class MainWindow(QMainWindow):
         fileMenu = menubar.addMenu('Arquivo')
         fileMenu.addAction(welcome)
         fileMenu.addSeparator()
-        fileMenu.addAction(importCAD)
-        fileMenu.addSeparator()
-        fileMenu.addAction(exportCAD)
-        fileMenu.addSeparator()
         fileMenu.addAction(close)
         fileMenu.addAction(exitApp)
 
@@ -145,6 +141,7 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(translationDefects)
 
         importMenu = menubar.addMenu('Importar')
+        importMenu.addAction(importCAD)
 
         exportMenu = menubar.addMenu('Exportar')
         exportMenu.addAction(exportCAD)
