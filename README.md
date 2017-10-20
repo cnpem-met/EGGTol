@@ -25,4 +25,6 @@ This will create a Python Environment (just a folder with a Python Interpreter w
 * A wrapper of the OCCT (OpenCascade Technology) : PythonOCC
 * A package for numerical and scientific computing : NumPy
 
-Further instructions and a binary for Windows based on the WinRAR Self-Extraction File (SFX) will be released soon.
+### Binary Release
+
+After a few months of work, finally a binary release is avaliable at https://hideak.github.io. This binary file is a WinRAR Self-Extraction File, which is itself a .exe file containing an Installation Wizard. Just download the file and follow the Setup Instruction on your display.
