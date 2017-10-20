@@ -12,8 +12,6 @@ from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
-from Import.IGESImport import *
-
 def switchLeftPanels(widget, name, prettyName, parent):
     """
     # Function: switchLeftPanels.
@@ -159,53 +157,13 @@ class importAction(QAction):
     def importActionProcedure(self, parent):
         """
         # Method: importActionProcedure
-        # Description: A procedure that imports an IGES file to the current session.
+        # Description: A procedure for opening the Import Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        if parent.activeCADFile:
-            QMessageBox.information(parent, 'Arquivo .IGES já está aberto',
-                                    'O arquivo ' + str(parent.activeCADFile) + ' já está em excução ' +
-                                    'no momento. Conclua suas atividades e feche o arquivo para ' +
-                                    'realizar uma nova importação.', QMessageBox.Ok, QMessageBox.Ok)
-            return
-
-        from OCC.IGESControl import IGESControl_Reader
-        from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
-        fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
-        if not fileName[0]:
-            parent.loadingWindow.close()
-            return
-        parent.loadingWindow.show()
-        parent.loadingWindow.activateWindow()
-        parent.lastPath = fileName[0]
-        Reader = IGESControl_Reader()
-        status = Reader.ReadFile(fileName[0])
-        shape = None
-        if status == IFSelect_RetDone:
-            Reader.TransferList(Reader.GiveList('xst-model-all'))
-            for i in range(1, Reader.NbShapes()+1):
-                parent.shapeList.append(Reader.Shape(i))
-            shape = Reader.Shape(1)
-            parent.loadingWindow.close()
-        else:
-            QMessageBox.information(parent, 'Erro ao Processar Arquivo',
-                                    'Não foi possível abrir o arquivo especificado.\n' +
-                                    'Verifique se o arquivo possuí a extensão .IGS ou .IGS ' +
-                                    'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
-            parent.loadingWindow.close()
-            return
-        parent.canvas._display.DisplayShape(shape, update=True)
-        parent.canvas._display.FitAll()
-        parent.activeCADFile = fileName[0]
-        file = loadIGESFile(parent.activeCADFile)
-        parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
-        for entity in parent.entitiesObject:
-            if(entity != None):
-                parent.entitiesList.append(entity.description())
-            else:
-                parent.entitiesList.append(('Unsupported Object', []))
-        parent.setWindowTitle(parent.title + ' - ' + fileName[0])
+        from Interface.ImportMenu import importMenu
+        widget = importMenu(parent)
+        switchRightPanels(widget, 'importMenu', 'Painel de Importação', parent)
 
 class exportAction(QAction):
     """

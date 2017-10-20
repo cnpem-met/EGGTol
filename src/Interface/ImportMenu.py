@@ -7,7 +7,7 @@ application. These data can be a point cloud or an IGES model.
 
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox
+                            QGridLayout, QToolButton, QMessageBox, QFileDialog
 from PyQt5.QtCore import QCoreApplication
 
 class importMenu(QWidget):
@@ -42,8 +42,8 @@ class importMenu(QWidget):
         grid.addWidget(label1, 0, 0, 1, 1)
 
         label2 = QLabel('As operações de importação permitem adicionar\n' +
-                        'arquivos CAD em formato IGES ou nuvem de pontos\n' +
-                        'na visualização atual.', self)
+                        'arquivos CAD em formato IGES ou uma nuvem de\n' +
+                        'pontos na visualização atual.', self)
         grid.addWidget(label2, 1, 0, 1, 1)
 
         btn1 = QToolButton()
@@ -56,8 +56,9 @@ class importMenu(QWidget):
         btn2 = QToolButton()
         btn2.setText('Importar uma Nuvem de Pontos .pcd')
         btn2.clicked.connect(lambda: self.importPcd(parent))
-        btn2.setMinimumHeight(50)]
+        btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(266)
+        btn2.setEnabled(False)
         grid.addWidget(btn2, 3, 0)
 
         grid.setColumnStretch(0, 1)
@@ -69,6 +70,50 @@ class importMenu(QWidget):
         # Description: This method imports an IGES file to the current visualization.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
+        if parent.activeCADFile:
+            QMessageBox.information(parent, 'Arquivo .IGES já está aberto',
+                                    'O arquivo ' + str(parent.activeCADFile) + ' já está em excução ' +
+                                    'no momento. Conclua suas atividades e feche o arquivo para ' +
+                                    'realizar uma nova importação.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        from OCC.IGESControl import IGESControl_Reader
+        from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
+        from Import.IGESImport import loadIGESFile, loadEntities, getRawData, getRawParameters
+        fileName = QFileDialog.getOpenFileName(parent, 'Abrir Arquivo .IGES', parent.lastPath)
+        if not fileName[0]:
+            parent.loadingWindow.close()
+            return
+        parent.loadingWindow.show()
+        parent.loadingWindow.activateWindow()
+        parent.lastPath = fileName[0]
+        Reader = IGESControl_Reader()
+        status = Reader.ReadFile(fileName[0])
+        shape = None
+        if status == IFSelect_RetDone:
+            Reader.TransferList(Reader.GiveList('xst-model-all'))
+            for i in range(1, Reader.NbShapes()+1):
+                parent.shapeList.append(Reader.Shape(i))
+            shape = Reader.Shape(1)
+            parent.loadingWindow.close()
+        else:
+            QMessageBox.information(parent, 'Erro ao Processar Arquivo',
+                                    'Não foi possível abrir o arquivo especificado.\n' +
+                                    'Verifique se o arquivo possuí a extensão .IGS ou .IGS ' +
+                                    'e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+            parent.loadingWindow.close()
+            return
+        parent.canvas._display.DisplayShape(shape, update=True)
+        parent.canvas._display.FitAll()
+        parent.activeCADFile = fileName[0]
+        file = loadIGESFile(parent.activeCADFile)
+        parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
+        for entity in parent.entitiesObject:
+            if(entity != None):
+                parent.entitiesList.append(entity.description())
+            else:
+                parent.entitiesList.append(('Unsupported Object', []))
+        parent.setWindowTitle(parent.title + ' - ' + fileName[0])
         pass
 
     def importPcd(self, parent):

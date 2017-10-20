@@ -65,6 +65,7 @@ class discretizeMenu(QWidget):
         btn2.setToolButtonStyle(3)
         btn2.setIconSize(QSize(50, 50))
         btn2.setMinimumWidth(130)
+        btn2.setEnabled(False)
         grid.addWidget(btn2, 2, 1)
 
         btn3 = QToolButton()
@@ -73,6 +74,7 @@ class discretizeMenu(QWidget):
         btn3.setToolButtonStyle(3)
         btn3.setIconSize(QSize(50, 50))
         btn3.setMinimumWidth(130)
+        btn3.setEnabled(False)
         grid.addWidget(btn3, 3, 0)
 
         btn4 = QToolButton()
@@ -81,6 +83,7 @@ class discretizeMenu(QWidget):
         btn4.setToolButtonStyle(3)
         btn4.setIconSize(QSize(50, 50))
         btn4.setMinimumWidth(130)
+        btn4.setEnabled(False)
         grid.addWidget(btn4, 3, 1)
 
         btn5 = QToolButton()
@@ -89,6 +92,7 @@ class discretizeMenu(QWidget):
         btn5.setToolButtonStyle(3)
         btn5.setIconSize(QSize(50, 50))
         btn5.setMinimumWidth(130)
+        btn5.setEnabled(False)
         grid.addWidget(btn5, 4, 0)
 
         btn6 = QToolButton()
@@ -97,6 +101,7 @@ class discretizeMenu(QWidget):
         btn6.setToolButtonStyle(3)
         btn6.setIconSize(QSize(50, 50))
         btn6.setMinimumWidth(130)
+        btn6.setEnabled(False)
         grid.addWidget(btn6, 4, 1)
 
         grid.setColumnStretch(0, 1)
