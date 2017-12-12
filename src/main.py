@@ -132,8 +132,9 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(exitApp)
 
         panelsMenu = menubar.addMenu('Painéis e Menus')
-        panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(entities)
+        panelsMenu.addAction(importCAD)
+        panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(cloud)
         panelsMenu.addAction(defects)
         panelsMenu.addSeparator()

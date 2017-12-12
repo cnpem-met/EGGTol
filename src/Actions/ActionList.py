@@ -149,8 +149,8 @@ class importAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\inbox.svg'), 'Importar Arquivo .IGES', parent)
-        self.setStatusTip('Importar Um Arquivo .IGES')
+        super().__init__(QIcon('..\\icons\\inbox.svg'), 'Painel de Importação', parent)
+        self.setStatusTip('Importar Um Arquivo .IGES ou uma Nuvem de Pontos.')
         self.setIconText('Importar')
         self.triggered.connect(lambda: self.importActionProcedure(parent))
 
@@ -179,7 +179,7 @@ class exportAction(QAction):
         """
 
         super().__init__(QIcon('..\\icons\\outbox.svg'), 'Painel de Exportação', parent)
-        self.setStatusTip('Exportar Um Arquivo .IGES')
+        self.setStatusTip('Exportar Um Modelo CAD como uma Captura de Tela ou uma Nuvem de Pontos.')
         self.setIconText('Exportar')
         self.triggered.connect(lambda: self.exportActionProcedure(parent))
 
