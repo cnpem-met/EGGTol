@@ -60,7 +60,7 @@ class exportMenu(QWidget):
         grid.addWidget(btn2, 3, 0)
 
         btn3 = QToolButton()
-        btn3.setText('Exportar uma Captura de Tela')
+        btn3.setText('Exportar uma Captura de Tela em .png')
         btn3.clicked.connect(lambda: self.exportScreenshot(parent))
         btn3.setMinimumHeight(50)
         btn3.setMinimumWidth(266)
@@ -92,7 +92,7 @@ class exportMenu(QWidget):
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.pcd'
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', defaultName, "Point Cloud Data (*.pcd)")[0]
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', defaultName, 'Point Cloud Data (*.pcd)')[0]
         if not fileName:
             return
         generatePcd(parent.cloudPointsList, fileName)
@@ -108,7 +108,7 @@ class exportMenu(QWidget):
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.txt'
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .txt', defaultName, "Arquivo de Texto (*.txt)")[0]
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .txt', defaultName, 'Arquivo de Texto (*.txt)')[0]
         if not fileName:
             return
         generateTxt(parent.cloudPointsList, fileName)
@@ -119,4 +119,10 @@ class exportMenu(QWidget):
         # Description: This method exports the actual visualization into a screenshot.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+        defaultName = (parent.lastPath).split('.')[0:-1]
+        defaultName = '.'.join(defaultName)
+        defaultName = defaultName + '.png'
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar Captura de Tela', defaultName, 'Imagem PNG (*.png)')[0]
+        if not fileName:
+            return
+        parent.canvas._display.View.Dump(fileName)
