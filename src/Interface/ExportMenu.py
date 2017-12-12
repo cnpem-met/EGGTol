@@ -41,9 +41,8 @@ class exportMenu(QWidget):
         label1 = QLabel('Selecione uma opção de exportação.', self)
         grid.addWidget(label1, 0, 0, 1, 1)
 
-        label2 = QLabel('As operações de exportação permitem gerar\n' +
-                        'arquivos de dados em formato de imagem e\n' +
-                        'nuvem de pontos.', self)
+        label2 = QLabel('As operações de exportação permitem gerar arquivos\n' +
+                        'de dados em formato de imagem e nuvem de pontos.', self)
         grid.addWidget(label2, 1, 0, 1, 1)
 
         btn1 = QToolButton()
@@ -67,8 +66,20 @@ class exportMenu(QWidget):
         btn3.setMinimumWidth(266)
         grid.addWidget(btn3, 4, 0)
 
+        label3 = QLabel('\nFormato .pcd (Point Cloud Data):\n' +
+                        'formato padrão para exportação da nuvem de pontos\n' +
+                        'que pode ser lido com grande maioria dos programas\n' +
+                        'comerciais.\n\n' +
+                        'Formato .txt (Texto Plano):\n' +
+                        'formato contendo todos os pontos gerados ordenados\n' +
+                        'na forma de uma lista.\n\n' +
+                        'Formato .png (Captura de Tela):\n' +
+                        'salva uma imagem do modelo atual no formato Portable\n' +
+                        'Network Graphics.', self)
+        grid.addWidget(label3, 5, 0, 1, 1)
+
         grid.setColumnStretch(0, 1)
-        grid.setRowStretch(5, 1)
+        grid.setRowStretch(6, 1)
 
     def exportPcd(self, parent):
         """
