@@ -5,7 +5,7 @@ files such as .pcd or screenshots.
 # Author: Willian Hideak Arita da Silva.
 """
 
-import sys
+import os, sys
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox, QFileDialog
 from PyQt5.QtCore import QCoreApplication
@@ -89,11 +89,13 @@ class exportMenu(QWidget):
         """
 
         from Discretization.DiscretizeModel import generatePcd
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', parent.lastPath)
-        if not fileName[0]:
+        defaultName = (parent.lastPath).split('.')[0:-1]
+        defaultName = '.'.join(defaultName)
+        defaultName = defaultName + '.pcd'
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', defaultName, "Point Cloud Data (*.pcd)")[0]
+        if not fileName:
             return
-        print(fileName[0])
-        generatePcd(parent.cloudPointsList, fileName[0])
+        generatePcd(parent.cloudPointsList, fileName)
 
     def exportTxt(self, parent):
         """
@@ -101,7 +103,15 @@ class exportMenu(QWidget):
         # Description: This method exports the actual point cloud data into a .txt file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+
+        from Discretization.DiscretizeModel import generateTxt
+        defaultName = (parent.lastPath).split('.')[0:-1]
+        defaultName = '.'.join(defaultName)
+        defaultName = defaultName + '.txt'
+        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .txt', defaultName, "Arquivo de Texto (*.txt)")[0]
+        if not fileName:
+            return
+        generateTxt(parent.cloudPointsList, fileName)
 
     def exportScreenshot(self, parent):
         """

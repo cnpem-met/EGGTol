@@ -429,6 +429,7 @@ def generatePcd(cloudPoints, filePath):
     # Description: This function generates a file CloudData.pcd containing all the
     cloud points specified in the cloudPoints list.
     # Parameters: * List cloudPoints = The list of desired points.
+                  * Str filePath = A string containing the file path for saving.
     """
 
     numberOfPoints = 0
@@ -453,22 +454,21 @@ def generatePcd(cloudPoints, filePath):
     pcdFile.write(pcdText)
     pcdFile.close()
 
-def generateTxt(cloudPoints, separator=' '):
+def generateTxt(cloudPoints, filePath):
     """
     # Function: generateTxt.
     # Description: This function generates a file TxtData.txt containing all the
     cloud points specified in the cloudPoints list.
     # Parameters: * List cloudPoints = The list of desired points.
-                  * String separator = A string for separating the components x, y
-                  and z of a point.
+                  * Str filePath = A string containing the file path for saving.
     """
 
     txtText = ''
     for item in cloudPoints:
         for point in item:
-            txtText += (str(point[0]) + separator +
-                        str(point[1]) + separator +
+            txtText += (str(point[0]) + ' ' +
+                        str(point[1]) + ' ' +
                         str(point[2]) + '\n')
-    pcdFile = open('..\\tmp\\TxtData.txt', 'w')
+    pcdFile = open(filePath, 'w')
     pcdFile.write(txtText)
     pcdFile.close()
