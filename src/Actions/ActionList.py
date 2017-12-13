@@ -519,6 +519,102 @@ class lightAction(QAction):
         parent.canvas._display.display_trihedron()
         parent.canvas._display.Repaint()
 
+class selectionNeutralAction(QAction):
+    """
+    # Class: selectionNeutralAction.
+    # Description: A PyQt5 Action that enables the solid selection mode.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Sólidos', parent)
+        self.setStatusTip('Define como padrão o modo de seleção de sólidos')
+        self.triggered.connect(lambda: self.selectionNeutralActionProcedure(parent))
+
+    def selectionNeutralActionProcedure(self, parent):
+        """
+        # Method: selectionNeutralActionProcedure.
+        # Description: A function call that enables the solid selection mode.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        parent.canvas._display.SetSelectionModeNeutral()
+
+class selectionFaceAction(QAction):
+    """
+    # Class: selectionFaceAction.
+    # Description: A PyQt5 Action that enables the face selection mode.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Faces', parent)
+        self.setStatusTip('Define como padrão o modo de seleção de faces')
+        self.triggered.connect(lambda: self.selectionFaceActionProcedure(parent))
+
+    def selectionFaceActionProcedure(self, parent):
+        """
+        # Method: selectionFaceActionProcedure.
+        # Description: A function call that enables the face selection mode.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        parent.canvas._display.SetSelectionModeFace()
+
+class selectionEdgeAction(QAction):
+    """
+    # Class: selectionEdgeAction.
+    # Description: A PyQt5 Action that enables the edge selection mode.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Arestas', parent)
+        self.setStatusTip('Define como padrão o modo de seleção de arestas')
+        self.triggered.connect(lambda: self.selectionEdgeActionProcedure(parent))
+
+    def selectionEdgeActionProcedure(self, parent):
+        """
+        # Method: selectionEdgeActionProcedure.
+        # Description: A function call that enables the edge selection mode.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        parent.canvas._display.SetSelectionModeEdge()
+
+class selectionVertexAction(QAction):
+    """
+    # Class: selectionVertexAction.
+    # Description: A PyQt5 Action that enables the vertex selection mode.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Vértices', parent)
+        self.setStatusTip('Define como padrão o modo de seleção de vértices')
+        self.triggered.connect(lambda: self.selectionVertexActionProcedure(parent))
+
+    def selectionVertexActionProcedure(self, parent):
+        """
+        # Method: selectionVertexActionProcedure.
+        # Description: A function call that enables the vertex selection mode.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        parent.canvas._display.SetSelectionModeVertex()
+
 class viewTopAction(QAction):
     """
     # Class: viewTopAction.

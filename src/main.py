@@ -105,6 +105,10 @@ class MainWindow(QMainWindow):
         translationDefects = translationDefectsAction(self)
         light = lightAction(self)
         dark = darkAction(self)
+        selectionNeutral = selectionNeutralAction(self)
+        selectionFace = selectionFaceAction(self)
+        selectionEdge = selectionEdgeAction(self)
+        selectionVertex = selectionVertexAction(self)
         viewTop = viewTopAction(self)
         viewBottom = viewBottomAction(self)
         viewLeft = viewLeftAction(self)
@@ -141,12 +145,6 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(autoDiscretize)
         panelsMenu.addAction(translationDefects)
 
-        importMenu = menubar.addMenu('Importar')
-        importMenu.addAction(importCAD)
-
-        exportMenu = menubar.addMenu('Exportar')
-        exportMenu.addAction(exportCAD)
-
         visualizationMenu = menubar.addMenu('Visualização')
         visualizationMenu.addAction(light)
         visualizationMenu.addAction(dark)
@@ -166,6 +164,10 @@ class MainWindow(QMainWindow):
         visualizationMenu.addAction(fitAll)
 
         selectionMenu = menubar.addMenu('Métodos de Seleção')
+        selectionMenu.addAction(selectionNeutral)
+        selectionMenu.addAction(selectionFace)
+        selectionMenu.addAction(selectionEdge)
+        selectionMenu.addAction(selectionVertex)
 
         aboutMenu = menubar.addMenu('Sobre este Aplicativo')
         aboutMenu.addAction(github)
