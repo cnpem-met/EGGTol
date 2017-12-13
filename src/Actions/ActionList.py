@@ -503,7 +503,7 @@ class lightAction(QAction):
         """
 
         super().__init__(QIcon('..\\icons\\sun.svg'), 'Definir Fundo Claro', parent)
-        self.setStatusTip('Configura o fundo de tela com uma cor escura')
+        self.setStatusTip('Configura o fundo de tela com uma cor clara')
         self.setIconText('Claro')
         self.triggered.connect(lambda: self.lightActionProcedure(parent))
 
