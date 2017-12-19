@@ -56,12 +56,14 @@ class defectsMenu(QWidget):
 
         btn2 = QToolButton()
         btn2.setText('Rotação de um Conj. de Pontos')
+        btn2.clicked.connect(lambda: self.rotationalDefectsMenuProcedure(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(266)
         grid.addWidget(btn2, 3, 0)
 
         btn3 = QToolButton()
         btn3.setText('Inserção de Erros Aleatórios')
+        btn3.clicked.connect(lambda: self.randomDefectsMenuProcedure(parent))
         btn3.setMinimumHeight(50)
         btn3.setMinimumWidth(266)
         grid.addWidget(btn2, 4, 0)
@@ -76,6 +78,23 @@ class defectsMenu(QWidget):
         Actions package for displaying the Translational Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         translation = translationDefectsAction(parent)
         translation.translationDefectsActionProcedure(parent)
+
+    def rotationalDefectsMenuProcedure(self, parent):
+        """
+        # Method: rotationalDefectsMenuProcedure.
+        # Description: This method calls the rotationalDefectsActionProcedure from The
+        Actions package for displaying the Rotational Defects Menu side widget.
+        # Parameters: * MainWindow parent = A referente for the main window object.
+        """
+        pass
+
+    def randomDefectsMenuProcedure(self, parent):
+        """
+        # Method: randomDefectsMenuProcedure.
+        # Description: This method calls the randomDefectsActionProcedure from the
+        Actions package for displaying the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        pass
