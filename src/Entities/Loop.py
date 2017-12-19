@@ -52,16 +52,16 @@ class Loop(Entity):
         """
 
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Loop (IGES 508)', [])
-        out[1].append(('* Number of Edge Tuples (N): ' + str(self.N), []))
+        out[1].append(('- Number of Edge Tuples (N): ' + str(self.N), []))
         for i in range(int(self.N)):
-            out[1].append(('* Edge or Vertex? (TYPE(' + str(i+1) + ')): ' + str(self.TYPEList[i]), []))
-            out[1].append(('* Pointer to Edge/Vertex List (EDGE(' + str(i+1) + ')): ' + str(self.EDGEList[i]), []))
-            out[1].append(('* Index of the Edge/Vertex (NDX(' + str(i+1) + ')): ' + str(self.NDXList[i]), []))
-            out[1].append(('* Orientation Flag of First Edge (OF(' + str(i+1) + ')): ' + str(self.OFList[i]), []))
-            out[1].append(('* Number of Under. Space Curves (K(' + str(i+1) + ')): ' + str(self.KList[i]), []))
+            out[1].append(('- Edge or Vertex? (TYPE(' + str(i+1) + ')): ' + str(self.TYPEList[i]), []))
+            out[1].append(('- Pointer to Edge/Vertex List (EDGE(' + str(i+1) + ')): ' + str(self.EDGEList[i]), []))
+            out[1].append(('- Index of the Edge/Vertex (NDX(' + str(i+1) + ')): ' + str(self.NDXList[i]), []))
+            out[1].append(('- Orientation Flag of First Edge (OF(' + str(i+1) + ')): ' + str(self.OFList[i]), []))
+            out[1].append(('- Number of Under. Space Curves (K(' + str(i+1) + ')): ' + str(self.KList[i]), []))
             for j in range(int(self.KList[i])):
-                out[1].append(('* Isoparametric Flag (ISOP(' + str(i+1) + ', ' + str(j+1) + ')): ' + str(self.ISOPList[i][j]), []))
-                out[1].append(('* Pointer to Space Curve (CURV(' + str(i+1) + ', ' + str(j+1) + ')): ' + str(self.CURVList[i][j]), []))
+                out[1].append(('- Isoparametric Flag (ISOP(' + str(i+1) + ', ' + str(j+1) + ')): ' + str(self.ISOPList[i][j]), []))
+                out[1].append(('- Pointer to Space Curve (CURV(' + str(i+1) + ', ' + str(j+1) + ')): ' + str(self.CURVList[i][j]), []))
         return out
 
     def __str__(self):

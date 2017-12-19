@@ -43,11 +43,11 @@ class VertexList(Entity):
         """
 
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Vertex List (IGES 502)', [])
-        out[1].append(('* Number of Vertex Tuples (N): ' + str(self.N), []))
+        out[1].append(('- Number of Vertex Tuples (N): ' + str(self.N), []))
         for i in range(int(self.N)):
-            out[1].append(('* Coordinate X(' + str(i+1) + ')): ' + str(self.XList[i]), []))
-            out[1].append(('* Coordinate Y(' + str(i+1) + ')): ' + str(self.YList[i]), []))
-            out[1].append(('* Coordinate Z(' + str(i+1) + ')): ' + str(self.ZList[i]), []))
+            out[1].append(('- Coordinate X(' + str(i+1) + ')): ' + str(self.XList[i]), []))
+            out[1].append(('- Coordinate Y(' + str(i+1) + ')): ' + str(self.YList[i]), []))
+            out[1].append(('- Coordinate Z(' + str(i+1) + ')): ' + str(self.ZList[i]), []))
         return out
 
     def __str__(self):
@@ -56,7 +56,7 @@ class VertexList(Entity):
         # Description: Provides information for debug purposes.
         # Returns: * Str out = A string containing the object properties.
         """
-        
+
         out = 'Vertex List (Type 502)\n'
         out += '* Number of Vertex Tuples (N): ' + str(self.N) + '\n'
         out += '* -----------------------------------\n'

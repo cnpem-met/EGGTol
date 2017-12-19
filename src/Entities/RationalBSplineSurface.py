@@ -69,31 +69,31 @@ class RationalBSplineSurface(Entity):
 
     def description(self):
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Rational B-Spline Surface (IGES 128)', [])
-        out[1].append(('* Upper Index of First Sum (K1): ' + str(self.K1), []))
-        out[1].append(('* Upper index of Second Sum (K2): ' + str(self.K2), []))
-        out[1].append(('* Degree of First Basis Functions (M1): ' + str(self.M1), []))
-        out[1].append(('* Degree of Second Basis Functions (M2): ' + str(self.M2), []))
-        out[1].append(('* Closed in Direction U? (PROP1): ' + str(self.PROP1), []))
-        out[1].append(('* Closed in Direction V? (PROP2): ' + str(self.PROP2), []))
-        out[1].append(('* Rational or Polynomial? (PROP3): ' + str(self.PROP3), []))
-        out[1].append(('* NonPeriodic or Pediodic in U? (PROP4): ' + str(self.PROP4), []))
-        out[1].append(('* NonPeriodic or Periodic in V? (PROP5): ' + str(self.PROP5), []))
+        out[1].append(('- Upper Index of First Sum (K1): ' + str(self.K1), []))
+        out[1].append(('- Upper index of Second Sum (K2): ' + str(self.K2), []))
+        out[1].append(('- Degree of First Basis Functions (M1): ' + str(self.M1), []))
+        out[1].append(('- Degree of Second Basis Functions (M2): ' + str(self.M2), []))
+        out[1].append(('- Closed in Direction U? (PROP1): ' + str(self.PROP1), []))
+        out[1].append(('- Closed in Direction V? (PROP2): ' + str(self.PROP2), []))
+        out[1].append(('- Rational or Polynomial? (PROP3): ' + str(self.PROP3), []))
+        out[1].append(('- NonPeriodic or Pediodic in U? (PROP4): ' + str(self.PROP4), []))
+        out[1].append(('- NonPeriodic or Periodic in V? (PROP5): ' + str(self.PROP5), []))
         for i in range(int(self.M1)+int(self.K1)+2):
-            out[1].append(('* First Knot Sequence (S(' + str(i-int(self.M1)) + ')): ' + str(self.SList[i]), []))
+            out[1].append(('- First Knot Sequence (S(' + str(i-int(self.M1)) + ')): ' + str(self.SList[i]), []))
         for i in range(int(self.M2)+int(self.K2)+2):
-            out[1].append(('* Second Knot Sequence (T(' + str(i-int(self.M2)) + ')): ' + str(self.TList[i]), []))
+            out[1].append(('- Second Knot Sequence (T(' + str(i-int(self.M2)) + ')): ' + str(self.TList[i]), []))
         for i in range(int(self.K2)+1):
             for j in range(int(self.K1)+1):
-                out[1].append(('* Weight Sequence (W(' + str(j) + ', ' + str(i) + ')): ' + str(self.WList[j][i]), []))
+                out[1].append(('- Weight Sequence (W(' + str(j) + ', ' + str(i) + ')): ' + str(self.WList[j][i]), []))
         for i in range(int(self.K2)+1):
             for j in range(int(self.K1)+1):
-                out[1].append(('* Control Point (X(' + str(j) + ', ' + str(i) + ')): ' + str(self.XList[j][i]), []))
-                out[1].append(('* Control Point (Y(' + str(j) + ', ' + str(i) + ')): ' + str(self.YList[j][i]), []))
-                out[1].append(('* Control Point (Z(' + str(j) + ', ' + str(i) + ')): ' + str(self.ZList[j][i]), []))
-        out[1].append(('* Starting Parameter Value (U(0)): ' + str(self.U0), []))
-        out[1].append(('* Ending Parameter Value (U(1)): ' + str(self.U1), []))
-        out[1].append(('* Starting Parameter Value (V(0)): ' + str(self.V0), []))
-        out[1].append(('* Ending Parameter Value (V(1)): ' + str(self.V1), []))
+                out[1].append(('- Control Point (X(' + str(j) + ', ' + str(i) + ')): ' + str(self.XList[j][i]), []))
+                out[1].append(('- Control Point (Y(' + str(j) + ', ' + str(i) + ')): ' + str(self.YList[j][i]), []))
+                out[1].append(('- Control Point (Z(' + str(j) + ', ' + str(i) + ')): ' + str(self.ZList[j][i]), []))
+        out[1].append(('- Starting Parameter Value (U(0)): ' + str(self.U0), []))
+        out[1].append(('- Ending Parameter Value (U(1)): ' + str(self.U1), []))
+        out[1].append(('- Starting Parameter Value (V(0)): ' + str(self.V0), []))
+        out[1].append(('- Ending Parameter Value (V(1)): ' + str(self.V1), []))
         return out
 
     def __str__(self):

@@ -42,10 +42,10 @@ class Shell(Entity):
         """
 
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Shell (IGES 514)', [])
-        out[1].append(('* Number of Faces (N): ' + str(self.N), []))
+        out[1].append(('- Number of Faces (N): ' + str(self.N), []))
         for i in range(int(self.N)):
-            out[1].append(('* Pointer to Face (FACE(' + str(i+1) + ')): ' + str(self.FACEList[i]), []))
-            out[1].append(('* Orientation Flag (OF(' + str(i+1) + ')): ' + str(self.OFList[i]), []))
+            out[1].append(('- Pointer to Face (FACE(' + str(i+1) + ')): ' + str(self.FACEList[i]), []))
+            out[1].append(('- Orientation Flag (OF(' + str(i+1) + ')): ' + str(self.OFList[i]), []))
         return out
 
     def __str__(self):

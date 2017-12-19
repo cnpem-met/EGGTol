@@ -45,12 +45,12 @@ class ManifoldSolid(Entity):
         """
 
         out = ('#' + str(int(self.seqNumber)//2+1) + ' Manifold Solid (IGES 186)', [])
-        out[1].append(('* Pointer to Shell (SHELL): ' + str(self.SHELL), []))
-        out[1].append(('* Orientation Flag (SOF): ' + str(self.SOF), []))
-        out[1].append(('* Number of Void Shells (N): ' + str(self.N), []))
+        out[1].append(('- Pointer to Shell (SHELL): ' + str(self.SHELL), []))
+        out[1].append(('- Orientation Flag (SOF): ' + str(self.SOF), []))
+        out[1].append(('- Number of Void Shells (N): ' + str(self.N), []))
         for i in range(int(self.N)):
-            out[1].append(('* Pointer to Void Shell (VOID(' + str(i+1) + ')): ' + str(self.VOIDList[i]), []))
-            out[1].append(('* Orientation Flag of Void Shell (VOF(' + str(i+1) + ')): ' + str(self.VOFList[i]), []))
+            out[1].append(('- Pointer to Void Shell (VOID(' + str(i+1) + ')): ' + str(self.VOIDList[i]), []))
+            out[1].append(('- Orientation Flag of Void Shell (VOF(' + str(i+1) + ')): ' + str(self.VOFList[i]), []))
         return out
 
     def __str__(self):
