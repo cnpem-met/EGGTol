@@ -66,7 +66,7 @@ class defectsMenu(QWidget):
         btn3.clicked.connect(lambda: self.randomDefectsMenuProcedure(parent))
         btn3.setMinimumHeight(50)
         btn3.setMinimumWidth(266)
-        grid.addWidget(btn2, 4, 0)
+        grid.addWidget(btn3, 4, 0)
 
         grid.setColumnStretch(0, 1)
         grid.setRowStretch(5, 1)
@@ -97,4 +97,5 @@ class defectsMenu(QWidget):
         Actions package for displaying the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+        random = randomDefectsAction(parent)
+        random.randomDefectsActionProcedure(parent)

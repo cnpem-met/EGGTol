@@ -1,5 +1,5 @@
 Bem-vindo ao Gerador de Nuvem de Pontos!
-Versão v0.7.095 pré-alpha.
+Versão v0.7.096 pré-alpha.
 
 Funcionalidade Básica
 --------------------------

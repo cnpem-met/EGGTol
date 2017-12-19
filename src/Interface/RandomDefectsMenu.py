@@ -1,6 +1,6 @@
 """
-# Module: TranslationDefectsMenu.py
-# Description: This module contains the Translation Defects Side Widget Menu UI
+# Module: RandomDefectsMenu.py
+# Description: This module contains the Random Defects Side Widget Menu UI
 for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
@@ -11,12 +11,11 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
 from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
 
-class translationDefectsMenu(QWidget):
+class randomDefectsMenu(QWidget):
     """
-    # Class: translationDefectsMenu
+    # Class: randomDefectsMenu
     # Description: This class provides a side menu with some options for moving some
-    group of points in an specific direction, usually, normal to the underlying surface
-    which lies the group of points.
+    group of points in a random direction with a displacement provided.
     """
 
     def __init__(self, parent):
@@ -32,7 +31,7 @@ class translationDefectsMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Translational
+        # Description: This method initializes the User Interface Elements of the Random
         Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
@@ -61,7 +60,7 @@ class translationDefectsMenu(QWidget):
         btn2.setMinimumWidth(130)
         grid.addWidget(btn2, 2, 1)
 
-        label3 = QLabel('\nSelecione a entidade que deseja aplicar a translação\n' +
+        label3 = QLabel('\nSelecione a entidade que deseja aplicar a aleatorização\n' +
                         'do grupo de pontos:', self)
         grid.addWidget(label3, 3, 0, 1, 2)
 
@@ -70,65 +69,46 @@ class translationDefectsMenu(QWidget):
         self.selectedObject.setPlaceholderText('Selecione uma entidade')
         grid.addWidget(self.selectedObject, 4, 0, 1, 2)
 
-        btn5 = QToolButton()
-        btn5.setText('Adicionar Entidade Selecionada')
-        btn5.clicked.connect(lambda: self.addSelection(parent))
-        btn5.setMinimumHeight(30)
-        btn5.setMinimumWidth(266)
-        grid.addWidget(btn5, 5, 0, 1, 2)
+        btn3 = QToolButton()
+        btn3.setText('Adicionar Entidade Selecionada')
+        btn3.clicked.connect(lambda: self.addSelection(parent))
+        btn3.setMinimumHeight(30)
+        btn3.setMinimumWidth(266)
+        grid.addWidget(btn3, 5, 0, 1, 2)
 
-        label4 = QLabel('\nInforme uma direção (x, y, z) para a translação dos\n' +
-                        'pontos na face selecionada', self)
+        label4 = QLabel('\nA direção do deslocamento dos pontos será escolhida\n' +
+                        'de maneira aleatória.', self)
         grid.addWidget(label4, 6, 0, 1, 2)
 
-        btn6 = QToolButton()
-        btn6.setText('Utilizar Direção Normal à Superfície')
-        btn6.clicked.connect(lambda: self.setNormalDirection(parent))
-        btn6.setMinimumHeight(30)
-        btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 7, 0, 1, 2)
+        label5 = QLabel('Deslocamento mínimo (em mm):', self)
+        grid.addWidget(label5, 7, 0, 1, 2)
 
-        label5 = QLabel('Direção X:', self)
-        grid.addWidget(label5, 8, 0, 1, 1)
+        self.minOffset = QLineEdit()
+        grid.addWidget(self.minOffset, 8, 0, 1, 2)
 
-        self.xDirection = QLineEdit()
-        grid.addWidget(self.xDirection, 9, 0, 1, 2)
+        label6 = QLabel('Deslocamento máximo (em mm):', self)
+        grid.addWidget(label6, 9, 0, 1, 2)
 
-        label6 = QLabel('Direção Y:', self)
-        grid.addWidget(label6, 10, 0, 1, 1)
+        self.maxOffset = QLineEdit()
+        grid.addWidget(self.maxOffset, 10, 0, 1, 2)
 
-        self.yDirection = QLineEdit()
-        grid.addWidget(self.yDirection, 11, 0, 1, 2)
-
-        label6 = QLabel('Direção Z:', self)
-        grid.addWidget(label6, 12, 0, 1, 1)
-
-        self.zDirection = QLineEdit()
-        grid.addWidget(self.zDirection, 13, 0, 1, 2)
-
-        label7 = QLabel('Deslocamento (em mm):', self)
-        grid.addWidget(label7, 14, 0, 1, 1)
-
-        self.offset = QLineEdit()
-        grid.addWidget(self.offset, 15, 0, 1, 2)
-
-        btn7 = QToolButton()
-        btn7.setText('Aplicar Translação aos Pontos')
-        btn7.clicked.connect(lambda: self.translatePoints(parent))
-        btn7.setMinimumHeight(30)
-        btn7.setMinimumWidth(266)
-        grid.addWidget(btn7, 16, 0, 1, 2)
+        btn4 = QToolButton()
+        btn4.setText('Aplicar Aleatorização aos Pontos')
+        btn4.clicked.connect(lambda: self.randomPoints(parent))
+        btn4.setMinimumHeight(30)
+        btn4.setMinimumWidth(266)
+        grid.addWidget(btn4, 11, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(17, 1)
+        grid.setRowStretch(12, 1)
 
-    def translatePoints(self, parent):
+    def randomPoints(self, parent):
         """
-        # Method: translatePoints.
-        # Description: This method applies a translational defect in the selected
-        entity. The parameters of the defect is defined by the configuration done
-        at the Translation Defects Menu side widget.
+        # Method: randomPoints.
+        # Description: This method applies random manufacturing errors in the selected
+        entity. The random errors has some rules to follow, defined by the configuration
+        done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         pass
@@ -161,7 +141,6 @@ class translationDefectsMenu(QWidget):
         associated in the IGES file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         if parent.canvas._display.GetSelectedShapes():
             parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
         else:

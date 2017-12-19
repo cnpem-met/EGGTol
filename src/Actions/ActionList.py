@@ -357,6 +357,51 @@ class translationDefectsAction(QAction):
         elif parent.rightDockWidget == None:
             parent.canvas._display.SetSelectionModeNeutral()
 
+class randomDefectsAction(QAction):
+    """
+    # Class: randomDefectsAction.
+    # Description: A PyQt5 action that opens the Random Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros Aleatórios', parent)
+        self.setStatusTip('Inserir erros artificiais aleatoriamente em nuvens de pontos.')
+        self.triggered.connect(lambda: self.randomDefectsActionProcedure(parent))
+
+    def randomDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.RandomDefectsMenu import randomDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
+                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
+                                    'nuvem de pontos foi gerada no momento. Utilize ' +
+                                    'o menu de discretização ou importe uma nuvem de pontos ' +
+                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = randomDefectsMenu(parent)
+        switchRightPanels(widget, 'randomDefectsMenu', 'Painel de Geração de Erros Aleatórios', parent)
+        if parent.rightDockWidget == 'randomDefectsMenu':
+            parent.canvas._display.SetSelectionModeFace()
+        elif parent.rightDockWidget == None:
+            parent.canvas._display.SetSelectionModeNeutral()
+
 class closeAction(QAction):
     """
     # Class: closeAction

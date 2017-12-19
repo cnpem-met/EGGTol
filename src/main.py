@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
         # Defining Main Window Properties:
         self.light = True
-        self.title = 'Gerador de Nuvem de Pontos v0.7.095'
+        self.title = 'Gerador de Nuvem de Pontos v0.7.096'
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
@@ -103,6 +103,7 @@ class MainWindow(QMainWindow):
         close = closeAction(self)
         exitApp = exitAction(self)
         translationDefects = translationDefectsAction(self)
+        randomDefects = randomDefectsAction(self)
         light = lightAction(self)
         dark = darkAction(self)
         selectionNeutral = selectionNeutralAction(self)
@@ -143,7 +144,9 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(defects)
         panelsMenu.addSeparator()
         panelsMenu.addAction(autoDiscretize)
+        panelsMenu.addSeparator()
         panelsMenu.addAction(translationDefects)
+        panelsMenu.addAction(randomDefects)
 
         visualizationMenu = menubar.addMenu('Visualização')
         visualizationMenu.addAction(light)
