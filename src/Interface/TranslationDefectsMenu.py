@@ -32,8 +32,8 @@ class translationDefectsMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Export
-        Menu side widget.
+        # Description: This method initializes the User Interface Elements of the Translational
+        Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
