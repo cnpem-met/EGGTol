@@ -112,7 +112,7 @@ class importMenu(QWidget):
             if(entity != None):
                 parent.entitiesList.append(entity.description())
             else:
-                parent.entitiesList.append(('Unsupported Object', []))
+                parent.entitiesList.append(('# Entidade Desconhecida', []))
         parent.setWindowTitle(parent.title + ' - ' + fileName[0])
         pass
 
