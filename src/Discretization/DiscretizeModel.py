@@ -215,7 +215,7 @@ def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametri
     for i in planarFacePointers:
         points, normals = discretizeFace(objectList[pos(i)], objectList, density, precision)
         faceSequenceNumbers.append(i)
-        faceNormalVectors = normals
+        faceNormalVectors.append(normals)
         cloudPointsList.append(points)
     # Discretize each non-planar face:
     for i in nonPlanarFacePointers:
@@ -308,7 +308,7 @@ def discretizeFace(face, objectList, density, precision):
     # Creating a vector of normal vectors:
     normals = []
     for i in range(len(newPoints)):
-        normals.append(newBasisVector)
+        normals.append(newBasisVector[2])
     return newPoints, normals
 
 def discretizeLoop(currentLoop, objectList, precision):

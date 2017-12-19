@@ -172,3 +172,24 @@ class translationDefectsMenu(QWidget):
                 break
             i += 1
         self.selectedObject.setText(parent.entitiesList[i][0])
+        parent.selectedShape = parent.shapeList[i]
+        parent.selectedSequenceNumber = 2*i + 1
+
+    def setNormalDirection(self, parent):
+        """
+        # Method: setNormalDirection.
+        # Description: Method for adding the normal direction of a planar face in the Translational
+        Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        i = 0
+        seqNumber = None
+        while i < len(parent.faceSequenceNumbers):
+            seqNumber = parent.faceSequenceNumbers[i]
+            if(seqNumber == parent.selectedSequenceNumber):
+                break
+            i += 1
+
+        self.xDirection.setText(str(parent.faceNormalVectors[i][0][0]))
+        self.yDirection.setText(str(parent.faceNormalVectors[i][0][1]))
+        self.zDirection.setText(str(parent.faceNormalVectors[i][0][2]))
