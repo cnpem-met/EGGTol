@@ -455,7 +455,8 @@ class closeAction(QAction):
             widget = welcomeMenu(parent)
             switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
             parent.canvas._display.SetSelectionModeNeutral()
-            parent.canvas._display.EraseAll()
+            parent.canvas._display.Context.CloseAllContexts()
+            parent.canvas._display.Context.RemoveAll()
             parent.canvas._display.Repaint()
             parent.setWindowTitle(parent.title)
             parent.activeCADFile = None
