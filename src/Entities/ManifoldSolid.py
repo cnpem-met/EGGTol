@@ -44,7 +44,7 @@ class ManifoldSolid(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Manifold Solid (IGES 186)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Sólido Múltiplo (IGES 186)', [])
         out[1].append(('- Pointer to Shell (SHELL): ' + str(self.SHELL), []))
         out[1].append(('- Orientation Flag (SOF): ' + str(self.SOF), []))
         out[1].append(('- Number of Void Shells (N): ' + str(self.N), []))

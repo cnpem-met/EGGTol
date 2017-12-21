@@ -72,7 +72,7 @@ class RationalBSplineCurve(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Rational B-Spline Curve (IGES 126)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Curva BSpline (IGES 126)', [])
         out[1].append(('- Upper Index of Sum (K): ' + str(self.K), []))
         out[1].append(('- Degree of Basis Function (M): ' + str(self.M), []))
         out[1].append(('- NonPlanar or Planar? (PROP1): ' + str(self.PROP1), []))

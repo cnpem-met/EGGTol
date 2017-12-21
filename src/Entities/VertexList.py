@@ -42,7 +42,7 @@ class VertexList(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Vertex List (IGES 502)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Lista de Vértices (IGES 502)', [])
         out[1].append(('- Number of Vertex Tuples (N): ' + str(self.N), []))
         for i in range(int(self.N)):
             out[1].append(('- Coordinate X(' + str(i+1) + ')): ' + str(self.XList[i]), []))

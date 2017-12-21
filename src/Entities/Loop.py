@@ -51,7 +51,7 @@ class Loop(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Loop (IGES 508)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Fronteira/Laço (IGES 508)', [])
         out[1].append(('- Number of Edge Tuples (N): ' + str(self.N), []))
         for i in range(int(self.N)):
             out[1].append(('- Edge or Vertex? (TYPE(' + str(i+1) + ')): ' + str(self.TYPEList[i]), []))

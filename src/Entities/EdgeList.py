@@ -46,7 +46,7 @@ class EdgeList(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Edge List (IGES 504)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Lista de Arestas (IGES 504)', [])
         out[1].append(('- Number of Edges (N): ' + str(self.N), []))
         for i in range(int(self.N)):
             out[1].append(('- Space Curve (CURV(' + str(i+1) + ')): ' + str(self.CURVList[i]), []))

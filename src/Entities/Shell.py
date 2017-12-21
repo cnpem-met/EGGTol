@@ -41,7 +41,7 @@ class Shell(Entity):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        out = ('#' + str(int(self.seqNumber)//2+1) + ' Shell (IGES 514)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') Casco Sólido (IGES 514)', [])
         out[1].append(('- Number of Faces (N): ' + str(self.N), []))
         for i in range(int(self.N)):
             out[1].append(('- Pointer to Face (FACE(' + str(i+1) + ')): ' + str(self.FACEList[i]), []))
