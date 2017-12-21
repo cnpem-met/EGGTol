@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
         # Defining Main Window Properties:
         self.light = True
-        self.title = 'Gerador de Nuvem de Pontos v0.7.104'
+        self.title = 'Gerador de Nuvem de Pontos v0.7.105'
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
         cloud = cloudAction(self)
         autoDiscretize = autoDiscretizeAction(self)
         defects = defectsAction(self)
+        pointsList = pointsListAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
         translationDefects = translationDefectsAction(self)
@@ -147,6 +148,7 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(exportCAD)
         panelsMenu.addAction(cloud)
         panelsMenu.addAction(defects)
+        panelsMenu.addAction(pointsList)
         panelsMenu.addSeparator()
         panelsMenu.addAction(autoDiscretize)
         panelsMenu.addSeparator()
@@ -198,6 +200,7 @@ class MainWindow(QMainWindow):
         self.toolbar.addAction(exportCAD)
         self.toolbar.addAction(cloud)
         self.toolbar.addAction(defects)
+        self.toolbar.addAction(pointsList)
         self.toolbar.addSeparator()
         self.toolbar.addAction(close)
         self.toolbar.addSeparator()

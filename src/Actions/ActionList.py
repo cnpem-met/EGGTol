@@ -213,7 +213,7 @@ class cloudAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\cloud-download.svg'), 'Painel de Discretização', parent)
+        super().__init__(QIcon('..\\icons\\cloud.svg'), 'Painel de Discretização', parent)
         self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo')
         self.setIconText('Gerar Nuvem')
         self.triggered.connect(lambda: self.cloudActionProcedure(parent))
@@ -282,7 +282,7 @@ class defectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\cloud-download.svg'), 'Painel de Geração de Erros', parent)
+        super().__init__(QIcon('..\\icons\\move.svg'), 'Painel de Geração de Erros', parent)
         self.setStatusTip('Inserir erros artificiais em nuvens de pontos.')
         self.setIconText('Gerar Erros')
         self.triggered.connect(lambda: self.defectsActionProcedure(parent))
@@ -310,6 +310,32 @@ class defectsAction(QAction):
             return
         widget = defectsMenu(parent)
         switchRightPanels(widget, 'defectsMenu', 'Painel de Geração de Erros', parent)
+
+class pointsListAction(QAction):
+    """
+    # Class: pointsListAction.
+    # Description: A PyQt5 action that opens the Points List Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\paper.svg'), 'Painel de Pontos Gerados', parent)
+        self.setStatusTip('Mostra todos os pontos gerados no modelo CAD atual.')
+        self.setIconText('Lista de Pontos')
+        self.triggered.connect(lambda: self.pointsListActionProcedure(parent))
+
+    def pointsListActionProcedure(self, parent):
+        """
+        # Method: pointsListActionProcedure.
+        # Description: The procedure for opening the Points List Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        pass
 
 class translationDefectsAction(QAction):
     """
