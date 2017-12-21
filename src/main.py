@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
         # Defining Main Window Properties:
         self.light = True
-        self.title = 'Gerador de Nuvem de Pontos v0.7.108'
+        self.title = 'Gerador de Nuvem de Pontos v0.7.109'
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
@@ -79,8 +79,11 @@ class MainWindow(QMainWindow):
         # The actual loaded IGES entities into Python objects.
         self.entitiesObject = []
 
-        # The description of each loaded IGES entity.
+        # The description of each loaded IGES entity for the TreeView.
         self.entitiesList = []
+
+        # The description of each loaded or generated cloud point for the TreeView.
+        self.pointsList = []
 
         # The actual loaded IGES OpenCASCADE Shapes.
         self.shapeList = []

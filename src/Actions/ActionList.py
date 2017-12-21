@@ -335,7 +335,16 @@ class pointsListAction(QAction):
         # Description: The procedure for opening the Points List Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+        from Interface.PointsListMenu import pointsListMenu
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
+                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
+                                    'nuvem de pontos foi gerada no momento. Utilize ' +
+                                    'o menu de discretização ou importe uma nuvem de pontos ' +
+                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = pointsListMenu(parent)
+        switchLeftPanels(widget, 'pointsListMenu', 'Painel de Pontos Gerados', parent)
 
 class translationDefectsAction(QAction):
     """
