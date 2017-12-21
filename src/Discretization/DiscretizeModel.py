@@ -169,7 +169,7 @@ def orthonormalizeBasis(basisVector):
             scalarVec((1/normVec(j)), j),
             scalarVec((1/normVec(k)), k)]
 
-def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametric):
+def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametric, gridDiscretization):
     """
     # Function: discretizeModel.
     # Description: This function receives an objectList
@@ -205,7 +205,7 @@ def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametri
     faceNormalVectors = []
     cloudPointsList = []
     for i in planarFacePointers:
-        points, normals = discretizeFace(objectList[pos(i)], objectList, density, precision)
+        points, normals = discretizeFace(objectList[pos(i)], objectList, density, precision, gridDiscretization)
         faceSequenceNumbers.append(i)
         faceNormalVectors.append(normals)
         cloudPointsList.append(points)
@@ -217,7 +217,7 @@ def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametri
         cloudPointsList.append(points)
     return faceSequenceNumbers, faceNormalVectors, cloudPointsList
 
-def discretizeFace(face, objectList, density, precision):
+def discretizeFace(face, objectList, density, precision, gridDiscretization):
     """
     # Function: discretizeFace.
     # Description: This function generates a list of cloud points based on a specific face.
@@ -236,7 +236,6 @@ def discretizeFace(face, objectList, density, precision):
     points = []
 
     # Collecting all the vertices of the planar face.
-    unsortedVertices = []
     currentLoop = objectList[pos(face.LOOPList[0])]
     vertices = discretizeLoop(currentLoop, objectList, precision)
 
@@ -260,17 +259,30 @@ def discretizeFace(face, objectList, density, precision):
     minEdges, maxEdges = minimumEdge(newVertices)
     zCoord = minEdges[2]
 
-    # Discretizing the model with the 'density' parameter:
-    numSpacesX = (maxEdges[0]-minEdges[0])*density
-    numSpacesY = (maxEdges[1]-minEdges[1])*density
+    if(gridDiscretization):
+        # Discretizing the model with the N x N grid parameter:
+        spacingX = (maxEdges[0]-minEdges[0])/density
+        spacingY = (maxEdges[1]-minEdges[1])/density
 
-    # Creating additional points due to discretization:
-    for i in range(1, int(numSpacesX)):
-        for j in range(1, int(numSpacesY)):
-            newX = minEdges[0] + i*(1/density)
-            newY = minEdges[1] + j*(1/density)
-            newPoint = (newX, newY, zCoord)
-            points.append(newPoint)
+        # Creating additional points due to discretization:
+        for i in range(1, int(density)):
+            for j in range(1, int(density)):
+                newX = minEdges[0] + i*spacingX
+                newY = minEdges[1] + j*spacingY
+                newPoint = (newX, newY, zCoord)
+                points.append(newPoint)
+    else:
+        # Discretizing the model with the N points/mm parameter:
+        numSpacesX = (maxEdges[0]-minEdges[0])*density
+        numSpacesY = (maxEdges[1]-minEdges[1])*density
+
+        # Creating additional points due to discretization:
+        for i in range(1, int(numSpacesX)+1):
+            for j in range(1, int(numSpacesY)+1):
+                newX = minEdges[0] + i*(1/density)
+                newY = minEdges[1] + j*(1/density)
+                newPoint = (newX, newY, zCoord)
+                points.append(newPoint)
 
     # Verifying if the new points lies inside the original boundary:
     auxList = []
