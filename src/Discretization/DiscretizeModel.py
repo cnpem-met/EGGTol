@@ -20,7 +20,6 @@ def pos(i):
     # Parameters: * Int i = an index according to the IGES Sequence Number.
     # Returns: * Int = an index according to the Python Lists implementation.
     """
-
     return ((int(i)-1)//2)
 
 def dotProduct(u, v):
@@ -31,7 +30,6 @@ def dotProduct(u, v):
                   * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
     # Returns: * Float dot = The dot product of the two vectors.
     """
-
     dot = (u[0]*v[0] + u[1]*v[1] + u[2]*v[2])
     return dot
 
@@ -43,7 +41,6 @@ def crossProduct(u, v):
                   * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
     # Returns: * Tuple = The cross product of the two vectors.
     """
-
     x, y, z = (u[1]*v[2]-u[2]*v[1]), (u[2]*v[0]-u[0]*v[2]), (u[0]*v[1]-u[1]*v[0])
     return (x, y, z)
 
@@ -55,7 +52,6 @@ def subVec(u, v):
                   * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
     # Returns: * Tuple = The subtraction (u - v) where u and v are vectors.
     """
-
     return ((u[0]-v[0]), (u[1]-v[1]), (u[2]-v[2]))
 
 def scalarVec(s, v):
@@ -65,7 +61,6 @@ def scalarVec(s, v):
     # Parameters: * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
     # Returns: * Tuple = The product s*v where s is a scalar and v is a vector.
     """
-
     newV = [s*i for i in v]
     return (newV[0], newV[1], newV[2])
 
@@ -76,7 +71,6 @@ def normVec(v):
     # Parameters: * Tuple v = A tuple of 3 coordinates (x, y, z) representing a vector.
     # Returns: * Float = The norm |v|, where v is a vector.
     """
-
     return ((v[0]**2) + (v[1]**2) + (v[2]**2))**(1/2)
 
 def minimumEdge(vertices):
@@ -88,7 +82,6 @@ def minimumEdge(vertices):
     # Returns: * List = A list of two vectors (tuples), each representing the minimum coordinates
                         and the maximum coordinates occupied by the vertices of the polygon.
     """
-
     minX = maxX = vertices[0][0]
     minY = maxY = vertices[0][1]
     minZ = maxZ = vertices[0][2]
@@ -166,7 +159,6 @@ def orthonormalizeBasis(basisVector):
     # Parameters: * Tuple basisVector = A tuple of three linear independent vectors.
     # Returns: * Tuple = A tuple of three linear independent orthonormalized vectors.
     """
-
     i = basisVector[0]
     j = basisVector[1]
     k = basisVector[2]
@@ -396,7 +388,6 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
     # Returns: * Tuple = A list containing the points and a list containig the normal vector of
                each point related to the surface.
     """
-
     currentSurface = objectList[pos(face.SURF)]
     newSurface = Surface()
     newSurface.delta_u = 1/Uparam
@@ -431,7 +422,6 @@ def generatePcd(cloudPoints, filePath):
     # Parameters: * List cloudPoints = The list of desired points.
                   * Str filePath = A string containing the file path for saving.
     """
-
     numberOfPoints = 0
     for item in cloudPoints:
         numberOfPoints += len(item)
@@ -462,7 +452,6 @@ def generateTxt(cloudPoints, filePath):
     # Parameters: * List cloudPoints = The list of desired points.
                   * Str filePath = A string containing the file path for saving.
     """
-
     txtText = ''
     for item in cloudPoints:
         for point in item:
