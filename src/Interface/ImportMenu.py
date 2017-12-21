@@ -105,6 +105,7 @@ class importMenu(QWidget):
             return
         parent.canvas._display.DisplayShape(shape, update=True)
         parent.canvas._display.FitAll()
+        parent.canvas._display.ZoomFactor(0.6)
         parent.activeCADFile = fileName[0]
         file = loadIGESFile(parent.activeCADFile)
         parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
