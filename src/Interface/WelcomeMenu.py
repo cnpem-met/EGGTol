@@ -5,7 +5,7 @@
 """
 
 import sys
-from PyQt5.QtWidgets import QTextEdit
+from PyQt5.QtWidgets import QTextEdit, QWidget
 
 class welcomeMenu(QTextEdit):
     """
@@ -19,7 +19,6 @@ class welcomeMenu(QTextEdit):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         super().__init__()
         self.initUI(parent)
 
@@ -30,7 +29,6 @@ class welcomeMenu(QTextEdit):
         Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         welcomeTextFile = open('..\\src\\Interface\\welcome.txt', encoding='utf-8', mode='r')
         with welcomeTextFile:
             text = welcomeTextFile.read()

@@ -63,9 +63,9 @@ class discretizeMenu(QWidget):
         btn2.setText('Discretização\nde Faces')
         btn2.setIcon(QIcon('..\\icons\\cadIcons\\cube.png'))
         btn2.setToolButtonStyle(3)
+        btn2.clicked.connect(lambda: self.faceDiscretizeMenuProcedure(parent))
         btn2.setIconSize(QSize(50, 50))
         btn2.setMinimumWidth(130)
-        btn2.setEnabled(False)
         grid.addWidget(btn2, 2, 1)
 
         btn3 = QToolButton()
@@ -117,3 +117,13 @@ class discretizeMenu(QWidget):
         """
         autoDiscretize = autoDiscretizeAction(parent)
         autoDiscretize.autoDiscretizeActionProcedure(parent)
+
+    def faceDiscretizeMenuProcedure(self, parent):
+        """
+        # Method: faceDiscretizeMenuProcedure.
+        # Description: This method calls the faceDiscretizeActionProcedure from the
+        Actions package for displaying the Face Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        faceDiscretize = faceDiscretizeAction(parent)
+        faceDiscretize.faceDiscretizeActionProcedure(parent)

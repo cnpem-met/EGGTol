@@ -8,7 +8,7 @@ in the program. These actions has internal functions that can be called by the m
 import webbrowser
 
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget, \
-                            QDialog, QGridLayout, QLabel
+                            QDialog, QGridLayout, QLabel, QScrollArea
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
@@ -26,7 +26,10 @@ def switchLeftPanels(widget, name, prettyName, parent):
 
     if parent.leftDockWidget == None:
         dock = QDockWidget(prettyName, parent)
-        dock.setWidget(widget)
+        scroll = QScrollArea(parent)
+        scroll.setWidget(widget)
+        dock.setWidget(scroll)
+        dock.setMinimumWidth(303)
         parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
         parent.leftDockMenu = dock
         parent.leftDockWidget = name
@@ -37,7 +40,10 @@ def switchLeftPanels(widget, name, prettyName, parent):
             parent.leftDockWidget = None
         else:
             dock = QDockWidget(prettyName, parent)
-            dock.setWidget(widget)
+            scroll = QScrollArea(parent)
+            scroll.setWidget(widget)
+            dock.setWidget(scroll)
+            dock.setMinimumWidth(303)
             parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
             parent.leftDockMenu = dock
             parent.leftDockWidget = name
@@ -56,7 +62,10 @@ def switchRightPanels(widget, name, prettyName, parent):
 
     if parent.rightDockWidget == None:
         dock = QDockWidget(prettyName, parent)
-        dock.setWidget(widget)
+        scroll = QScrollArea(parent)
+        scroll.setWidget(widget)
+        dock.setWidget(scroll)
+        dock.setMinimumWidth(303)
         parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
         parent.rightDockMenu = dock
         parent.rightDockWidget = name
@@ -67,7 +76,10 @@ def switchRightPanels(widget, name, prettyName, parent):
             parent.rightDockWidget = None
         else:
             dock = QDockWidget(prettyName, parent)
-            dock.setWidget(widget)
+            scroll = QScrollArea(parent)
+            scroll.setWidget(widget)
+            dock.setWidget(scroll)
+            dock.setMinimumWidth(303)
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
             parent.rightDockWidget = name
@@ -99,7 +111,25 @@ class welcomeAction(QAction):
 
         from Interface.WelcomeMenu import welcomeMenu
         widget = welcomeMenu(parent)
-        switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
+        name = 'welcomeMenu'
+        prettyName = 'Painel de Boas-Vindas!'
+        if parent.leftDockWidget == None:
+            dock = QDockWidget(prettyName, parent)
+            dock.setWidget(widget)
+            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+            parent.leftDockMenu = dock
+            parent.leftDockWidget = name
+        else:
+            parent.removeDockWidget(parent.leftDockMenu)
+            if parent.leftDockWidget == name:
+                parent.leftDockMenu = None
+                parent.leftDockWidget = None
+            else:
+                dock = QDockWidget(prettyName, parent)
+                dock.setWidget(widget)
+                parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+                parent.leftDockMenu = dock
+                parent.leftDockWidget = name
 
 class entitiesAction(QAction):
     """
@@ -249,7 +279,7 @@ class autoDiscretizeAction(QAction):
         """
 
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização Automática', parent)
-        self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo Automaticamente')
+        self.setStatusTip('Gerar uma nuvem de pontos para o modelo automaticamente')
         self.triggered.connect(lambda: self.autoDiscretizeActionProcedure(parent))
 
     def autoDiscretizeActionProcedure(self, parent):
@@ -268,6 +298,40 @@ class autoDiscretizeAction(QAction):
             return
         widget = autoDiscretizeMenu(parent)
         switchRightPanels(widget, 'autoDiscretizeMenu', 'Painel de Discretização Automática', parent)
+
+class faceDiscretizeAction(QAction):
+    """
+    # Class: faceDiscretizeAction.
+    # Description: A PyQt5 action that opens the Face Discretize Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização de Faces', parent)
+        self.setStatusTip('Gerar uma nuvem de pontos para uma face específica do modelo')
+        self.triggered.connect(lambda: self.faceDiscretizeActionProcedure(parent))
+
+    def faceDiscretizeActionProcedure(self, parent):
+        """
+        # Method: faceDiscretizeActionProcedure.
+        # Description: The procedure for opening the Face Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.FaceDiscretizeMenu import faceDiscretizeMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = faceDiscretizeMenu(parent)
+        switchRightPanels(widget, 'faceDiscretizeMenu', 'Painel de Discretização de Faces', parent)
 
 class defectsAction(QAction):
     """
