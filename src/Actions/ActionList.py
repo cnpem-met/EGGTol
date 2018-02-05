@@ -552,7 +552,25 @@ class closeAction(QAction):
             parent.leftDockMenu = parent.leftDockWidget = None
             parent.rightDockMenu = parent.rightDockWidget = None
             widget = welcomeMenu(parent)
-            switchLeftPanels(widget, 'welcomeMenu', 'Painel de Boas-Vindas!', parent)
+            name = 'welcomeMenu'
+            prettyName = 'Painel de Boas-Vindas!'
+            if parent.leftDockWidget == None:
+                dock = QDockWidget(prettyName, parent)
+                dock.setWidget(widget)
+                parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+                parent.leftDockMenu = dock
+                parent.leftDockWidget = name
+            else:
+                parent.removeDockWidget(parent.leftDockMenu)
+                if parent.leftDockWidget == name:
+                    parent.leftDockMenu = None
+                    parent.leftDockWidget = None
+                else:
+                    dock = QDockWidget(prettyName, parent)
+                    dock.setWidget(widget)
+                    parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+                    parent.leftDockMenu = dock
+                    parent.leftDockWidget = name
             parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.Context.CloseAllContexts()
             parent.canvas._display.Context.RemoveAll()
