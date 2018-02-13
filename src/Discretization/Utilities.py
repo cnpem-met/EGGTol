@@ -30,10 +30,9 @@ def frange(x, y, step):
     :return: float
     :rtype: generator
     """
-    step_str = str(step)
     while x <= y:
         yield float(x)
-        x += decimal.Decimal(step_str)
+        x += step
 
 
 # Normalizes knot vector (internal functionality)

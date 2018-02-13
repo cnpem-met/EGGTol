@@ -10,7 +10,7 @@ from Discretization.DiscreteNurbCurve import Curve
 from Discretization.DiscreteNurbSurface import Surface
 from Discretization.Utilities import knotvector_normalize
 from numpy import array, dot
-from numpy.linalg import solve, inv
+from numpy.linalg import inv
 
 def pos(i):
     """

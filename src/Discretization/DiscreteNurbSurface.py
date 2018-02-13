@@ -549,11 +549,14 @@ class Surface(object):
             c_u += 1
 
         # Algorithm A4.3
-        for v in utils.frange(0, 1, self._mDeltaV):
+        for v in utils.frange(self._mDeltaV, 1-self._mDeltaV, self._mDeltaV):
             span_v = utils.find_span(self._mDegreeV, tuple(self._mKnotVectorV), self._mCtrlPts_sizeV, v)
             basis_v = utils.basis_functions(self._mDegreeV, tuple(self._mKnotVectorV), span_v, v)
-            for u in utils.frange(0, 1, self._mDeltaU):
-                #self._mNormalDirect.append(self.normal(u, v))
+            for u in utils.frange(self._mDeltaU, 1-self._mDeltaU, self._mDeltaU):
+                try:
+                    self._mNormalDirect.append(self.normal(u, v))
+                except:
+                    self._mNormalDirect.append(tuple())
                 span_u = utils.find_span(self._mDegreeU, tuple(self._mKnotVectorU), self._mCtrlPts_sizeU, u)
                 basis_u = utils.basis_functions(self._mDegreeU, tuple(self._mKnotVectorU), span_u, u)
                 idx_u = span_u - self._mDegreeU
@@ -663,7 +666,8 @@ class Surface(object):
         :rtype: list
         """
         # Check u and v parameters are correct for the normal evaluation
-        utils.check_uv(u, v, test_normal=True, delta=self._mDelta)
+        #utils.check_uv(u, v, test_normal=True, delta=self._mDeltaU)
+        #utils.check_uv(u, v, test_normal=True, delta=self._mDeltaV)
 
         # Take the 1st derivative of the surface
         skl = self.derivatives(u, v, 1)
