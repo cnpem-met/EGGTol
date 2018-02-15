@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
-def switchLeftPanels(widget, name, prettyName, parent):
+def switchLeftPanels(widget, name, prettyName, parent, scroll):
     """
     # Function: switchLeftPanels.
     # Description: This function opens/hide the side dock widget according to the dock informed
@@ -22,14 +22,19 @@ def switchLeftPanels(widget, name, prettyName, parent):
                   of the main.py file for identification purposes.
                   * Str prettyName = String that will be displayed at the top of the dock widget.
                   * MainWindow parent = A reference for the main window object.
+                  * Boolean scroll = Defines if the side menu will have a vertical scroll bar.
     """
 
     if parent.leftDockWidget == None:
         dock = QDockWidget(prettyName, parent)
-        scroll = QScrollArea(parent)
-        scroll.setWidget(widget)
-        dock.setWidget(scroll)
-        dock.setMinimumWidth(303)
+        content = None
+        if(scroll):
+            content = QScrollArea(parent)
+            content.setWidget(widget)
+            dock.setMinimumWidth(303)
+        else:
+            content = widget
+        dock.setWidget(content)
         parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
         parent.leftDockMenu = dock
         parent.leftDockWidget = name
@@ -40,15 +45,20 @@ def switchLeftPanels(widget, name, prettyName, parent):
             parent.leftDockWidget = None
         else:
             dock = QDockWidget(prettyName, parent)
-            scroll = QScrollArea(parent)
-            scroll.setWidget(widget)
-            dock.setWidget(scroll)
-            dock.setMinimumWidth(303)
+            content = None
+            if(scroll):
+                content = QScrollArea(parent)
+                content.setWidget(widget)
+                dock.setMinimumWidth(303)
+            else:
+                content = widget
+            dock.setWidget(content)
+
             parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
             parent.leftDockMenu = dock
             parent.leftDockWidget = name
 
-def switchRightPanels(widget, name, prettyName, parent):
+def switchRightPanels(widget, name, prettyName, parent, scroll):
     """
     # Function: switchRightPanels.
     # Description: This function opens/hide the side dock widget according to the dock informed
@@ -58,14 +68,19 @@ def switchRightPanels(widget, name, prettyName, parent):
                   of the main.py file for identification purposes.
                   * Str prettyName = String that will be displayed at the top of the dock widget.
                   * MainWindow parent = A reference for the main window object.
+                  * Boolean scroll = Defines if the side menu will have a vertical scroll bar.
     """
 
     if parent.rightDockWidget == None:
         dock = QDockWidget(prettyName, parent)
-        scroll = QScrollArea(parent)
-        scroll.setWidget(widget)
-        dock.setWidget(scroll)
-        dock.setMinimumWidth(303)
+        content = None
+        if(scroll):
+            content = QScrollArea(parent)
+            content.setWidget(widget)
+            dock.setMinimumWidth(303)
+        else:
+            content = widget
+        dock.setWidget(content)
         parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
         parent.rightDockMenu = dock
         parent.rightDockWidget = name
@@ -76,10 +91,14 @@ def switchRightPanels(widget, name, prettyName, parent):
             parent.rightDockWidget = None
         else:
             dock = QDockWidget(prettyName, parent)
-            scroll = QScrollArea(parent)
-            scroll.setWidget(widget)
-            dock.setWidget(scroll)
-            dock.setMinimumWidth(303)
+            content = None
+            if(scroll):
+                content = QScrollArea(parent)
+                content.setWidget(widget)
+                dock.setMinimumWidth(303)
+            else:
+                content = widget
+            dock.setWidget(content)
             parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
             parent.rightDockMenu = dock
             parent.rightDockWidget = name
@@ -164,7 +183,7 @@ class entitiesAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = entitiesMenu(parent)
-        switchLeftPanels(widget, 'entitiesMenu', 'Painel de Entidades', parent)
+        switchLeftPanels(widget, 'entitiesMenu', 'Painel de Entidades', parent, False)
 
 class importAction(QAction):
     """
@@ -193,7 +212,7 @@ class importAction(QAction):
 
         from Interface.ImportMenu import importMenu
         widget = importMenu(parent)
-        switchRightPanels(widget, 'importMenu', 'Painel de Importação', parent)
+        switchRightPanels(widget, 'importMenu', 'Painel de Importação', parent, True)
 
 class exportAction(QAction):
     """
@@ -228,7 +247,7 @@ class exportAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = exportMenu(parent)
-        switchRightPanels(widget, 'exportMenu', 'Painel de Exportação', parent)
+        switchRightPanels(widget, 'exportMenu', 'Painel de Exportação', parent, True)
 
 class cloudAction(QAction):
     """
@@ -263,7 +282,7 @@ class cloudAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = discretizeMenu(parent)
-        switchRightPanels(widget, 'cloudMenu', 'Painel de Discretização', parent)
+        switchRightPanels(widget, 'cloudMenu', 'Painel de Discretização', parent, True)
 
 class autoDiscretizeAction(QAction):
     """
@@ -297,7 +316,8 @@ class autoDiscretizeAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = autoDiscretizeMenu(parent)
-        switchRightPanels(widget, 'autoDiscretizeMenu', 'Painel de Discretização Automática', parent)
+        switchRightPanels(widget, 'autoDiscretizeMenu', 'Painel de Discretização ' +
+                          'Automática', parent, True)
 
 class faceDiscretizeAction(QAction):
     """
@@ -331,7 +351,8 @@ class faceDiscretizeAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = faceDiscretizeMenu(parent)
-        switchRightPanels(widget, 'faceDiscretizeMenu', 'Painel de Discretização de Faces', parent)
+        switchRightPanels(widget, 'faceDiscretizeMenu', 'Painel de Discretização de ' +
+                          'Faces', parent, True)
 
 class defectsAction(QAction):
     """
@@ -373,7 +394,7 @@ class defectsAction(QAction):
                                     'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = defectsMenu(parent)
-        switchRightPanels(widget, 'defectsMenu', 'Painel de Geração de Erros', parent)
+        switchRightPanels(widget, 'defectsMenu', 'Painel de Geração de Erros', parent, True)
 
 class pointsListAction(QAction):
     """
@@ -408,7 +429,7 @@ class pointsListAction(QAction):
                                     'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = pointsListMenu(parent)
-        switchLeftPanels(widget, 'pointsListMenu', 'Painel de Pontos Gerados', parent)
+        switchLeftPanels(widget, 'pointsListMenu', 'Painel de Pontos Gerados', parent, False)
 
 class translationDefectsAction(QAction):
     """
@@ -450,7 +471,7 @@ class translationDefectsAction(QAction):
             return
         widget = translationDefectsMenu(parent)
         switchRightPanels(widget, 'translationDefectsMenu', 'Painel de Geração de Erros por ' +
-                          'Translação', parent)
+                          'Translação', parent, True)
         if parent.rightDockWidget == 'translationDefectsMenu':
             parent.canvas._display.SetSelectionModeFace()
         elif parent.rightDockWidget == None:
@@ -495,7 +516,8 @@ class randomDefectsAction(QAction):
                                     'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = randomDefectsMenu(parent)
-        switchRightPanels(widget, 'randomDefectsMenu', 'Painel de Geração de Erros Aleatórios', parent)
+        switchRightPanels(widget, 'randomDefectsMenu', 'Painel de Geração de Erros ' +
+                          'Aleatórios', parent, True)
         if parent.rightDockWidget == 'randomDefectsMenu':
             parent.canvas._display.SetSelectionModeFace()
         elif parent.rightDockWidget == None:
