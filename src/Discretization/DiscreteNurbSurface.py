@@ -574,7 +574,7 @@ class Surface(object):
                     surfptw[2] += (basis_v[l] * temp[2])
                     surfptw[3] += (basis_v[l] * temp[3])
                 # Divide by weight to obtain 3D surface points
-                surfpt = [surfptw[0] / surfptw[3], surfptw[1] / surfptw[3], surfptw[2] / surfptw[3]]
+                surfpt = (surfptw[0] / surfptw[3], surfptw[1] / surfptw[3], surfptw[2] / surfptw[3])
                 self._mSurfPts.append(surfpt)
 
     # Evaluates n-th order surface derivatives at the given (u,v) parameter
