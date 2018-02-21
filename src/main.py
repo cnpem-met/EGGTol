@@ -75,14 +75,11 @@ class MainWindow(QMainWindow):
         self.rightDockMenu = None
         self.rightDockWidget = None
 
-        # The actual loaded IGES entities into Python objects.
+        # The actual loaded IGES objects into Python objects.
         self.entitiesObject = []
 
         # The description of each loaded IGES entity for the TreeView.
         self.entitiesList = []
-
-        # The description of each loaded or generated cloud point for the TreeView.
-        self.pointsList = []
 
         # The actual loaded IGES OpenCASCADE Shapes.
         self.shapeList = []

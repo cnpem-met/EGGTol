@@ -167,10 +167,8 @@ class autoDiscretizeMenu(QWidget):
             Uparam = Vparam = None
 
         # Performs the autoDiscretization using the Discretization package:
-        file = loadIGESFile(parent.activeCADFile)
-        entities = loadEntities(getRawData(file), getRawParameters(file))
         parent.loadingWindow.show()
-        sequence, normals, points = discretizeModel(entities, density, precision, Uparam, Vparam, useParametric, gridDiscretization)
+        sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision, Uparam, Vparam, useParametric, gridDiscretization)
         parent.faceSequenceNumbers = sequence
         parent.faceNormalVectors = normals
         parent.cloudPointsList = points

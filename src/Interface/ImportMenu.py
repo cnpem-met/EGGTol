@@ -107,8 +107,8 @@ class importMenu(QWidget):
         parent.canvas._display.FitAll()
         parent.canvas._display.ZoomFactor(0.6)
         parent.activeCADFile = fileName[0]
-        file = loadIGESFile(parent.activeCADFile)
-        parent.entitiesObject = loadEntities(getRawData(file), getRawParameters(file))
+        myfile = loadIGESFile(parent.activeCADFile)
+        parent.entitiesObject = loadEntities(getRawData(myfile), getRawParameters(myfile))
         for entity in parent.entitiesObject:
             if(entity != None):
                 parent.entitiesList.append(entity.description())
