@@ -10,10 +10,10 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox, QLineEdit, \
                             QCheckBox, QRadioButton, QSlider
 from PyQt5.QtCore import QCoreApplication, QSize, Qt
-from OCC.Graphic3d import Graphic3d_ArrayOfPoints, Graphic3d_NOM_ALUMINIUM
+from OCC.Graphic3d import Graphic3d_ArrayOfPoints
 from OCC.AIS import AIS_PointCloud
-from OCC.Quantity import Quantity_Color, Quantity_NOC_BLACK, Quantity_NOC_YELLOW, Quantity_NOC_WHITE
-from OCC.Aspect import Aspect_TOM_POINT, Aspect_TOM_STAR
+from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE
+from OCC.Aspect import Aspect_TOM_POINT
 from OCC.Prs3d import Prs3d_PointAspect
 from OCC.gp import gp_Pnt
 from Import.IGESImport import *
