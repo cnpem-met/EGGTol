@@ -5,11 +5,18 @@ for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
 
+# System Imports:
 import sys
+import random
+
+# PyQt5 Imports:
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox, QLineEdit
 from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
+
+# Local Imports:
+from Actions.Functions import *
 
 class randomDefectsMenu(QWidget):
     """
@@ -111,7 +118,22 @@ class randomDefectsMenu(QWidget):
         done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+        # Translating all the points based on given random parameters:
+        minOffset = float(self.minOffset.displayText())
+        maxOffset = float(self.maxOffset.displayText())
+        newCloudPointsList = []
+        for points in parent.cloudPointsList:
+            auxList = []
+            for point in points:
+                direction = self.randomDirection()
+                point = (point[0] + direction[0] * self.randomOffset(minOffset, maxOffset),
+                         point[1] + direction[1] * self.randomOffset(minOffset, maxOffset),
+                         point[2] + direction[2] * self.randomOffset(minOffset, maxOffset))
+                auxList.append(point)
+            newCloudPointsList.append(auxList)
+        parent.cloudPointsList = newCloudPointsList
+        # Rebuilding the point cloud object in the local context:
+        rebuildCloud(parent)
 
     def selectSolids(self, parent):
         """
@@ -121,6 +143,7 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeNeutral()
+        restoreCloud(parent)
 
     def selectSurfaces(self, parent):
         """
@@ -130,6 +153,7 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeFace()
+        restoreCloud(parent)
 
     def addSelection(self, parent):
         """
@@ -151,3 +175,23 @@ class randomDefectsMenu(QWidget):
                 break
             i += 1
         self.selectedObject.setText(parent.entitiesList[i][0])
+
+    def randomDirection(self):
+        """
+        # Method: randomDirection.
+        # Description: Method for generating a random and not biased 3D vector.
+        """
+        direction = [random.gauss(0, 1) for i in range(3)]
+        magnitude = sum(x**2 for x in direction)**(0.5)
+        normalizedDirection = [x/magnitude for x in direction]
+        return normalizedDirection
+
+    def randomOffset(self, minOffset, maxOffset):
+        """
+        # Method: randomOffset.
+        # Description: Method for generating a random number between two specified offset values.
+        # Parameters: * Float minOffset = The minimum value for the offset.
+                      * Float maxOffset = The maximum value for the offset.
+        """
+        randomNumber = random.random()
+        return minOffset + (maxOffset-minOffset)*randomNumber
