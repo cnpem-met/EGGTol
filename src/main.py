@@ -52,7 +52,8 @@ class MainWindow(QMainWindow):
         """
 
         # Defining Main Window Properties:
-        # self.light is a property used by the OpenCASCADe to decide which cursor model to use.
+        # self.light is a property used by the OpenCASCADE modified libraries to decide
+        # which cursor model to use.
         self.light = True
         self.title = 'Gerador de Nuvem de Pontos v0.7.119'
         self.setWindowTitle(self.title)
