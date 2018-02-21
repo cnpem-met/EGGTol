@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
     """
     # Class: MainWindow.
     # Description: This class inherits the QMainWindow class from the PyQt5 framework and
-    prepare the main contents to be displayed using the initUI() method.4
+    prepare the main contents to be displayed using the initUI() method.
     """
 
     def __init__(self):
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         # Method: initUI.
         # Description: This method initialize everything in the main window, like its properties
         and User Interface Elements (Buttons, Menus, ToolBars and so on). It also prepares some
-        variables for store the current information of files and CAD models.
+        variables for handling the current information of files and CAD models.
         """
 
         # Defining Main Window Properties:
@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
 
-        # Defining modeless windows:
+        # Defining a modeless windows:
         self.loadingWindow = loadingMenu()
 
         # Control Variables. Used to storage current session information.
@@ -75,11 +75,16 @@ class MainWindow(QMainWindow):
         self.rightDockMenu = None
         self.rightDockWidget = None
 
-        # The actual loaded IGES objects into Python objects.
+        # The actual loaded IGES entities into Python objects.
         self.entitiesObject = []
+
+        # The actual pointCloud object loaded:
+        self.pointCloudObject = None
+        self.pointAspectObject = None
 
         # The description of each loaded IGES entity for the TreeView.
         self.entitiesList = []
+        self.pointsList = []
 
         # The actual loaded IGES OpenCASCADE Shapes.
         self.shapeList = []

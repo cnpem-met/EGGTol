@@ -5,19 +5,18 @@ for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
 
+# System Imports:
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox, QLineEdit, \
-                            QCheckBox, QRadioButton, QSlider
-from PyQt5.QtCore import QCoreApplication, QSize, Qt
-from OCC.Graphic3d import Graphic3d_ArrayOfPoints
-from OCC.AIS import AIS_PointCloud
-from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE
-from OCC.Aspect import Aspect_TOM_POINT
-from OCC.Prs3d import Prs3d_PointAspect
-from OCC.gp import gp_Pnt
+
+# PyQt5 Imports:
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageBox, \
+                            QLineEdit, QCheckBox, QRadioButton, QSlider
+
+# Local Imports:
 from Import.IGESImport import *
 from Discretization.DiscretizeModel import *
+from Actions.Functions import *
 
 class autoDiscretizeMenu(QWidget):
     """
@@ -164,32 +163,23 @@ class autoDiscretizeMenu(QWidget):
                                         QMessageBox.Ok, QMessageBox.Ok)
                 return
         else:
-            Uparam = Vparam = None
+            Uparam = None
+            Vparam = None
+
+        # Loads the loading window:
+        parent.loadingWindow.show()
 
         # Performs the autoDiscretization using the Discretization package:
-        parent.loadingWindow.show()
-        sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision, Uparam, Vparam, useParametric, gridDiscretization)
-        parent.faceSequenceNumbers = sequence
-        parent.faceNormalVectors = normals
-        parent.cloudPointsList = points
-        generatePcd(parent.cloudPointsList, '..\\tmp\\CloudData.pcd')
+        sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision,
+                                                    Uparam, Vparam, useParametric, gridDiscretization)
+        parent.faceSequenceNumbers += sequence
+        parent.faceNormalVectors += normals
+        parent.cloudPointsList += points
 
-        # Displays the generated points over the model using the PythonOCC lib.
-        # A CloudData.pcd file is generated inside the tmp/ folder for display purposes.
-        pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
-        pc = Graphic3d_ArrayOfPoints(len(pcd_file))
-        for line in pcd_file:
-            x, y, z = map(float, line.split())
-            pc.AddVertex(x, y, z)
-        point_cloud = AIS_PointCloud()
-        point_cloud.SetPoints(pc.GetHandle())
-        ais_context = parent.canvas._display.GetContext().GetObject()
-        point_cloud.UnsetSelectionMode()
-        ais_context.Display(point_cloud.GetHandle())
-        parent.activeCloudFile = '..\\tmp\\CloudData.pcd'
-        aspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_WHITE), 2)
-        point_cloud.SetAspect(aspect.GetHandle())
-        parent.canvas._display.Repaint()
+        # Builds the generated point cloud:
+        buildCloud(parent)
+
+        # Closes the loading window:
         parent.loadingWindow.close()
 
     def UVParametricChanged(self):

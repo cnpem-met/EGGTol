@@ -472,10 +472,6 @@ class translationDefectsAction(QAction):
         widget = translationDefectsMenu(parent)
         switchRightPanels(widget, 'translationDefectsMenu', 'Painel de Geração de Erros por ' +
                           'Translação', parent, True)
-        if parent.rightDockWidget == 'translationDefectsMenu':
-            parent.canvas._display.SetSelectionModeFace()
-        elif parent.rightDockWidget == None:
-            parent.canvas._display.SetSelectionModeNeutral()
 
 class randomDefectsAction(QAction):
     """
@@ -518,10 +514,6 @@ class randomDefectsAction(QAction):
         widget = randomDefectsMenu(parent)
         switchRightPanels(widget, 'randomDefectsMenu', 'Painel de Geração de Erros ' +
                           'Aleatórios', parent, True)
-        if parent.rightDockWidget == 'randomDefectsMenu':
-            parent.canvas._display.SetSelectionModeFace()
-        elif parent.rightDockWidget == None:
-            parent.canvas._display.SetSelectionModeNeutral()
 
 class closeAction(QAction):
     """
@@ -549,12 +541,16 @@ class closeAction(QAction):
         """
 
         from Interface.WelcomeMenu import welcomeMenu
+
+        # Checking if there is a current file:
         if not parent.activeCADFile:
             QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
                                     'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
                                     'momento. Utilize o menu Arquivo > Importar para\n' +
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
+
+        # Creating a confirmation dialog asking for permission to close the file:
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
@@ -568,6 +564,8 @@ class closeAction(QAction):
         buttonNo = box.button(QMessageBox.No)
         buttonNo.setText('Cancelar')
         box.exec_()
+
+        # Executing a routine for closing the current file:
         if box.clickedButton() == buttonYes:
             parent.removeDockWidget(parent.leftDockMenu)
             parent.removeDockWidget(parent.rightDockMenu)
@@ -600,7 +598,11 @@ class closeAction(QAction):
             parent.setWindowTitle(parent.title)
             parent.activeCADFile = None
             parent.activeCloudFile = None
+            parent.entitiesObject = []
+            parent.pointCloudObject = None
+            parent.pointAspectObject = None
             parent.entitiesList = []
+            parent.cloudPointsList = []
             parent.shapeList = []
             parent.canvas._display.View_Iso()
 

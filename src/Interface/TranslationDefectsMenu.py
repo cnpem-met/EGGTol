@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox, QLineEdit
 from PyQt5.QtCore import QCoreApplication, QSize
 from PyQt5.QtGui import QIcon
+from Actions.Functions import *
 
 class translationDefectsMenu(QWidget):
     """
@@ -131,7 +132,20 @@ class translationDefectsMenu(QWidget):
         at the Translation Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        pass
+
+        # Translating all the points based on given parameters:
+        newCloudPointsList = []
+        for points in parent.cloudPointsList:
+            auxList = []
+            for point in points:
+                point = (point[0] + float(self.xDirection.displayText()) * float(self.offset.displayText()),
+                         point[1] + float(self.yDirection.displayText()) * float(self.offset.displayText()),
+                         point[2] + float(self.zDirection.displayText()) * float(self.offset.displayText()))
+                auxList.append(point)
+            newCloudPointsList.append(auxList)
+        parent.cloudPointsList = newCloudPointsList
+        # Rebuilding the point cloud object in the local context:
+        rebuildCloud(parent)
 
     def selectSolids(self, parent):
         """
@@ -140,7 +154,9 @@ class translationDefectsMenu(QWidget):
         The Neutral Selection Mode allows the selection of whole solid CAD models.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+        # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeNeutral()
+        restoreCloud(parent)
 
     def selectSurfaces(self, parent):
         """
@@ -149,7 +165,9 @@ class translationDefectsMenu(QWidget):
         The Face Selection Mode allows the selection of each separated face of the CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+        # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeFace()
+        restoreCloud(parent)
 
     def addSelection(self, parent):
         """
