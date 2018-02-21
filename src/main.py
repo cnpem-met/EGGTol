@@ -6,9 +6,9 @@ and inhirited from the PyQt5 QMainWindow class.
 """
 
 # System Imports:
-import sys
-import getpass
-import os
+import sys       # sys module is used to call sys.exit() when the application ends.
+import getpass   # getpass module is used to get the current user name on Windows.
+import os        # os module is used to handle files and directory operations.
 
 # Importing the load_backend and get_qt_modules from pythonOCC:
 from OCC.Display.backend import get_qt_modules
@@ -19,10 +19,7 @@ load_backend('qt-pyqt5')
 from OCC.Display.qtDisplay import qtViewer3d
 
 # Loading PyQt5 Modules for the interface:
-from PyQt5.QtWidgets import QApplication, QMainWindow, qApp, QAction, \
-                            QDockWidget, QFileDialog, QTreeWidget, QWidget, \
-                            QPushButton, QToolBar, QTreeView, QInputDialog
-from PyQt5.QtCore import QCoreApplication, QDir
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QIcon
 
 # Getting the PyQt5 modules from the PythonOCC lib:
@@ -55,6 +52,7 @@ class MainWindow(QMainWindow):
         """
 
         # Defining Main Window Properties:
+        # self.light is a property used by the OpenCASCADe to decide which cursor model to use.
         self.light = True
         self.title = 'Gerador de Nuvem de Pontos v0.7.119'
         self.setWindowTitle(self.title)
