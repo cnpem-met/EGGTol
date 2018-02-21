@@ -119,7 +119,7 @@ class importMenu(QWidget):
 
     def importPcd(self, parent):
         """
-        # Method: exportTxt
+        # Method: importPcd
         # Description: This method imports a point cloud data from a .pcd file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
