@@ -10,8 +10,12 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
                             QGridLayout, QToolButton, QMessageBox, QLineEdit, \
                             QCheckBox, QRadioButton, QSlider
 from PyQt5.QtCore import QCoreApplication, QSize, Qt
-from OCC.Graphic3d import Graphic3d_ArrayOfPoints
+from OCC.Graphic3d import Graphic3d_ArrayOfPoints, Graphic3d_NOM_ALUMINIUM
 from OCC.AIS import AIS_PointCloud
+from OCC.Quantity import Quantity_Color, Quantity_NOC_BLACK, Quantity_NOC_YELLOW, Quantity_NOC_WHITE
+from OCC.Aspect import Aspect_TOM_POINT, Aspect_TOM_STAR
+from OCC.Prs3d import Prs3d_PointAspect
+from OCC.gp import gp_Pnt
 from Import.IGESImport import *
 from Discretization.DiscretizeModel import *
 
@@ -182,8 +186,12 @@ class autoDiscretizeMenu(QWidget):
         point_cloud = AIS_PointCloud()
         point_cloud.SetPoints(pc.GetHandle())
         ais_context = parent.canvas._display.GetContext().GetObject()
+        point_cloud.UnsetSelectionMode()
         ais_context.Display(point_cloud.GetHandle())
         parent.activeCloudFile = '..\\tmp\\CloudData.pcd'
+        aspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_WHITE), 2)
+        point_cloud.SetAspect(aspect.GetHandle())
+        parent.canvas._display.Repaint()
         parent.loadingWindow.close()
 
     def UVParametricChanged(self):
