@@ -134,6 +134,7 @@ class randomDefectsMenu(QWidget):
         parent.cloudPointsList = newCloudPointsList
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
+        restoreCloud(parent)
 
     def selectSolids(self, parent):
         """
@@ -143,7 +144,8 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeNeutral()
-        restoreCloud(parent)
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def selectSurfaces(self, parent):
         """
@@ -153,7 +155,8 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeFace()
-        restoreCloud(parent)
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def addSelection(self, parent):
         """

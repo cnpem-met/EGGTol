@@ -5,14 +5,17 @@ for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
 
+# System Imports:
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox, QLineEdit, \
+
+# PyQt5 Imports:
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageBox, QLineEdit, \
                             QCheckBox, QRadioButton, QSlider
-from PyQt5.QtCore import QCoreApplication, QSize, Qt
-from OCC.Graphic3d import Graphic3d_ArrayOfPoints
-from OCC.AIS import AIS_PointCloud
+
+# Local Imports:
 from Import.IGESImport import *
+from Actions.Functions import *
 from Discretization.DiscretizeModel import *
 
 class faceDiscretizeMenu(QWidget):
@@ -119,50 +122,31 @@ class faceDiscretizeMenu(QWidget):
         self.precision.textChanged.connect(self.precisionChanged)
         grid.addWidget(self.precision, 15, 0, 1, 2)
 
-        label7 = QLabel('<b><br>Modo de Discretização das Faces Não-Planas:</b>', self)
-        grid.addWidget(label7, 16, 0, 1, 2)
-
-        self.UVParametric = QCheckBox('Discretizar Superfícies Não-Planas usando\n' +
-                                      'Parametrização UV', self)
-        self.UVParametric.stateChanged.connect(self.UVParametricChanged)
-        grid.addWidget(self.UVParametric, 17, 0, 1, 2)
-
-        label8 = QLabel('Núm. de Parâmetros U:', self)
-        grid.addWidget(label8, 18, 0, 1, 2)
-
-        self.UParameter = QLineEdit()
-        self.UParameter.setEnabled(False)
-        grid.addWidget(self.UParameter, 19, 0, 1, 2)
-
-        label9 = QLabel('Núm. de Parâmetros V:', self)
-        grid.addWidget(label9, 20, 0, 1, 2)
-
-        self.VParameter = QLineEdit()
-        self.VParameter.setEnabled(False)
-        grid.addWidget(self.VParameter, 21, 0, 1, 2)
-
-        btn3 = QToolButton()
-        btn3.setText('Aplicar Discretização Automática')
-        btn3.clicked.connect(lambda: self.autoDiscretize(parent))
-        btn3.setMinimumHeight(30)
-        btn3.setMinimumWidth(266)
-        grid.addWidget(btn3, 22, 0, 1, 2)
+        btn4 = QToolButton()
+        btn4.setText('Aplicar Discretização da Face')
+        btn4.clicked.connect(lambda: self.faceDiscretize(parent))
+        btn4.setMinimumHeight(30)
+        btn4.setMinimumWidth(266)
+        grid.addWidget(btn4, 16, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(23, 1)
+        grid.setRowStretch(17, 1)
 
-    def autoDiscretize(self, parent):
+    def faceDiscretize(self, parent):
         """
-        # Method: autoDiscretize.
-        # Description: Performs the discretization process of a loaded CAD Model.
+        # Method: faceDiscretize.
+        # Description: Performs the discretization of a selected face in the loaded CAD Model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+        
+        # Check if there is a point cloud present:
+        if(parent.pointCloudObject):
+            cleanCloud(parent)
 
         # Gets all the required parameters from the User Interface:
         gridDiscretization = self.gridDiscretization.isChecked()
         densityDiscretization = self.densityDiscretization.isChecked()
-        useParametric = self.UVParametric.isChecked()
 
         # Check if the density parameter is OK:
         try:
@@ -187,57 +171,25 @@ class faceDiscretizeMenu(QWidget):
                                     '10 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        # Check if the UParameter and VParameter are OK:
-        if(useParametric):
-            try:
-                Uparam = int(self.UParameter.displayText())
-                Vparam = int(self.VParameter.displayText())
-            except:
-                QMessageBox.information(parent, 'Valores de U e V Inválidos.',
-                                        'Os valores U e V para a discretização paramétrica não são válidos.\n' +
-                                        'Utilize um valor inteiro positivo e tente novamente.',
-                                        QMessageBox.Ok, QMessageBox.Ok)
-                return
-        else:
-            Uparam = Vparam = None
-
-        # Performs the autoDiscretization using the Discretization package:
-        file = loadIGESFile(parent.activeCADFile)
-        entities = loadEntities(getRawData(file), getRawParameters(file))
+        # Loads the loading window:
         parent.loadingWindow.show()
-        sequence, normals, points = discretizeModel(entities, density, precision, Uparam, Vparam, useParametric, gridDiscretization)
-        parent.faceSequenceNumbers = sequence
-        parent.faceNormalVectors = normals
-        parent.cloudPointsList = points
-        generatePcd(parent.cloudPointsList, '..\\tmp\\CloudData.pcd')
 
-        # Displays the generated points over the model using the PythonOCC lib.
-        # A CloudData.pcd file is generated inside the tmp/ folder for display purposes.
-        pcd_file = open('..\\tmp\\CloudData.pcd', 'r').readlines()[10:]
-        pc = Graphic3d_ArrayOfPoints(len(pcd_file))
-        for line in pcd_file:
-            x, y, z = map(float, line.split())
-            pc.AddVertex(x, y, z)
-        point_cloud = AIS_PointCloud()
-        point_cloud.SetPoints(pc.GetHandle())
-        ais_context = parent.canvas._display.GetContext().GetObject()
-        ais_context.Display(point_cloud.GetHandle())
-        parent.activeCloudFile = '..\\tmp\\CloudData.pcd'
+        # Performs the faceDiscretization using the Discretization package:
+        sequence = parent.selectedSequenceNumber
+        points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
+                                         density, precision, gridDiscretization)
+        parent.faceSequenceNumbers.append(sequence)
+        parent.faceNormalVectors.append(normals)
+        parent.cloudPointsList.append(points)
+
+        # Builds the generated point cloud:
+        buildCloud(parent)
+
+        # Updates some properties from the main window:
+        parent.activeCloudFile = 'Pontos Gerados Nesta Sessão'
+
+        # Closes the loading window:
         parent.loadingWindow.close()
-
-    def UVParametricChanged(self):
-        self.UParameter.setEnabled(not self.UParameter.isEnabled())
-        self.VParameter.setEnabled(not self.VParameter.isEnabled())
-
-    def precisionValueChanged(self, value):
-        self.precision.setText(str(value))
-
-    def precisionChanged(self):
-        try:
-            if(int(self.precision.displayText()) >= 10 and int(self.precision.displayText()) <= 50):
-                self.precisionSlider.setSliderPosition(int(self.precision.displayText()))
-        except:
-            return
 
     def selectSolids(self, parent):
         """
@@ -247,6 +199,8 @@ class faceDiscretizeMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeNeutral()
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def selectSurfaces(self, parent):
         """
@@ -256,6 +210,8 @@ class faceDiscretizeMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         parent.canvas._display.SetSelectionModeFace()
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def addSelection(self, parent):
         """
@@ -280,3 +236,13 @@ class faceDiscretizeMenu(QWidget):
         self.selectedObject.setText(parent.entitiesList[i][0])
         parent.selectedShape = parent.shapeList[i]
         parent.selectedSequenceNumber = 2*i + 1
+
+    def precisionValueChanged(self, value):
+        self.precision.setText(str(value))
+
+    def precisionChanged(self):
+        try:
+            if(int(self.precision.displayText()) >= 10 and int(self.precision.displayText()) <= 50):
+                self.precisionSlider.setSliderPosition(int(self.precision.displayText()))
+        except:
+            return

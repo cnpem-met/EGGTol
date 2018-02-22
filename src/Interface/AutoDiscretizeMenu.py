@@ -15,8 +15,8 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageB
 
 # Local Imports:
 from Import.IGESImport import *
-from Discretization.DiscretizeModel import *
 from Actions.Functions import *
+from Discretization.DiscretizeModel import *
 
 class autoDiscretizeMenu(QWidget):
     """
@@ -123,6 +123,10 @@ class autoDiscretizeMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        # Check if there is a point cloud present:
+        if(parent.pointCloudObject):
+            cleanCloud(parent)
+
         # Gets all the required parameters from the User Interface:
         gridDiscretization = self.gridDiscretization.isChecked()
         densityDiscretization = self.densityDiscretization.isChecked()
@@ -178,6 +182,9 @@ class autoDiscretizeMenu(QWidget):
 
         # Builds the generated point cloud:
         buildCloud(parent)
+
+        # Updates some properties from the main window:
+        parent.activeCloudFile = 'Pontos Gerados Nesta Sessão'
 
         # Closes the loading window:
         parent.loadingWindow.close()

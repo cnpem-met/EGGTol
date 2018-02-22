@@ -20,6 +20,7 @@ def cleanCloud(parent):
     """
     parent.canvas._display.Context.Erase(parent.pointCloudObject.GetHandle(), True)
     parent.pointCloudObject = None
+    parent.pointAspectObject = None
 
 def buildCloud(parent):
     """
@@ -51,7 +52,6 @@ def buildCloud(parent):
     parent.canvas._display.Repaint()
 
     # Updates the main window properties:
-    parent.activeCloudFile = 'Pontos Gerados Nesta Sessão'
     parent.pointCloudObject = pointCloud
     parent.pointAspectObject = newAspect
 

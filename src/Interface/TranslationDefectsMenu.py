@@ -146,6 +146,7 @@ class translationDefectsMenu(QWidget):
         parent.cloudPointsList = newCloudPointsList
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
+        restoreCloud(parent)
 
     def selectSolids(self, parent):
         """
@@ -156,7 +157,8 @@ class translationDefectsMenu(QWidget):
         """
         # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeNeutral()
-        restoreCloud(parent)
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def selectSurfaces(self, parent):
         """
@@ -167,7 +169,8 @@ class translationDefectsMenu(QWidget):
         """
         # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeFace()
-        restoreCloud(parent)
+        if(parent.pointCloudObject):
+            restoreCloud(parent)
 
     def addSelection(self, parent):
         """
