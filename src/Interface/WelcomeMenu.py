@@ -4,8 +4,11 @@
 # Author: Willian Hideak Arita da Silva.
 """
 
-import sys
-from PyQt5.QtWidgets import QTextEdit, QWidget
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QTextEdit
+
+# Local Imports:
+from Resources.Strings import MyStrings
 
 class welcomeMenu(QTextEdit):
     """
@@ -29,7 +32,5 @@ class welcomeMenu(QTextEdit):
         Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        welcomeTextFile = open('..\\src\\Interface\\welcome.txt', encoding='utf-8', mode='r')
-        with welcomeTextFile:
-            text = welcomeTextFile.read()
-            self.setText(text)
+        self.setText(MyStrings.welcomeMenuDescription)
+        self.setReadOnly(True)

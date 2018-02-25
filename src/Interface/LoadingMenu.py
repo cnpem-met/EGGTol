@@ -5,9 +5,12 @@ while the applications works in loading processes.
 # Author: Willian Hideak Arita da Silva.
 """
 
-import sys
-from PyQt5.QtWidgets import QDialog, QLabel, QGridLayout
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QDialog
 from PyQt5.QtGui import QIcon
+
+# Local Imports:
+from Resources.Strings import MyStrings
 
 class loadingMenu(QDialog):
     """
@@ -20,7 +23,6 @@ class loadingMenu(QDialog):
         # Method: __init__.
         # Description: The init method for initializing the inhirited properties.
         """
-
         super().__init__()
         self.initUI()
 
@@ -30,8 +32,6 @@ class loadingMenu(QDialog):
         # Description: This method initializes the User Interface Elements of the Export
         Menu side widget.
         """
-
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        self.setWindowTitle('Carregando... Por favor, aguarde.')
-        self.resize(400, 1)
-        grid = QGridLayout()
+        self.setWindowTitle(MyStrings.popupLoadingTitle)
+        self.resize(200, 1)

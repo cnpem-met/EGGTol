@@ -26,6 +26,7 @@ from PyQt5.QtGui import QIcon
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
 # Importing PyQt5 elements and menus from the Interface package:
+from Resources.Strings import MyStrings
 from Interface.DefectsMenu import *
 from Interface.DiscretizeMenu import *
 from Interface.LoadingMenu import *
@@ -55,7 +56,7 @@ class MainWindow(QMainWindow):
         # self.light is a property used by the OpenCASCADE modified libraries to decide
         # which cursor model to use.
         self.light = True
-        self.title = 'Gerador de Nuvem de Pontos v0.7.119'
+        self.title = MyStrings.applicationTitle + ' ' + MyStrings.applicationVersion
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
         self.resize(1300, 650)
@@ -141,13 +142,13 @@ class MainWindow(QMainWindow):
         # Defining the MenuBar:
         menubar = self.menuBar()
 
-        fileMenu = menubar.addMenu('Arquivo')
+        fileMenu = menubar.addMenu(MyStrings.menuBarFile)
         fileMenu.addAction(welcome)
         fileMenu.addSeparator()
         fileMenu.addAction(close)
         fileMenu.addAction(exitApp)
 
-        panelsMenu = menubar.addMenu('Painéis e Menus')
+        panelsMenu = menubar.addMenu(MyStrings.menuBarPanels)
         panelsMenu.addAction(entities)
         panelsMenu.addAction(importCAD)
         panelsMenu.addAction(exportCAD)
@@ -161,7 +162,7 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(translationDefects)
         panelsMenu.addAction(randomDefects)
 
-        visualizationMenu = menubar.addMenu('Visualização')
+        visualizationMenu = menubar.addMenu(MyStrings.menuBarVisualization)
         visualizationMenu.addAction(light)
         visualizationMenu.addAction(dark)
         visualizationMenu.addSeparator()
@@ -179,13 +180,13 @@ class MainWindow(QMainWindow):
         visualizationMenu.addSeparator()
         visualizationMenu.addAction(fitAll)
 
-        selectionMenu = menubar.addMenu('Métodos de Seleção')
+        selectionMenu = menubar.addMenu(MyStrings.menuBarSelection)
         selectionMenu.addAction(selectionNeutral)
         selectionMenu.addAction(selectionFace)
         selectionMenu.addAction(selectionEdge)
         selectionMenu.addAction(selectionVertex)
 
-        aboutMenu = menubar.addMenu('Sobre este Aplicativo')
+        aboutMenu = menubar.addMenu(MyStrings.menuBarAbout)
         aboutMenu.addAction(github)
         aboutMenu.addAction(devPage)
         aboutMenu.addSeparator()
@@ -226,15 +227,14 @@ class MainWindow(QMainWindow):
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        box.setWindowTitle('Encerrar o Gerador de Pontos')
-        box.setText('Tem certeza que deseja encerrar? As alterações\n' +
-                    'não salvas/exportadas serão perdidas.')
+        box.setWindowTitle(MyStrings.popupExitTitle)
+        box.setText(MyStrings.popupExitMessage)
         box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         box.setDefaultButton(QMessageBox.No)
         buttonYes = box.button(QMessageBox.Yes)
-        buttonYes.setText('Encerrar')
+        buttonYes.setText(MyStrings.popupExitButtonOK)
         buttonNo = box.button(QMessageBox.No)
-        buttonNo.setText('Cancelar')
+        buttonNo.setText(MyStrings.popupExitButtonCancel)
         box.exec_()
         if box.clickedButton() == buttonYes:
             event.accept()

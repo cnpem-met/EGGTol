@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageB
 from Import.IGESImport import *
 from Actions.Functions import *
 from Discretization.DiscretizeModel import *
+from Resources.Strings import MyStrings
 
 class autoDiscretizeMenu(QWidget):
     """
@@ -46,29 +47,26 @@ class autoDiscretizeMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel('O método de discretização automática irá procurar\n' +
-                        'pelas faces do modelo e discretizar segundo os\n' +
-                        'parâmetros especificados.', self)
+        label1 = QLabel(MyStrings.autoDiscretizeMenuDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
-        label2 = QLabel('<b><br>Modo de Discretização das Faces Planas:</b>', self)
+        label2 = QLabel(MyStrings.flatDiscretizationHeader, self)
         grid.addWidget(label2, 1, 0, 1, 2)
 
-        self.gridDiscretization = QRadioButton('Discretização em Grade N x N', self)
+        self.gridDiscretization = QRadioButton(MyStrings.gridDiscretization, self)
         self.gridDiscretization.setChecked(True)
         grid.addWidget(self.gridDiscretization, 2, 0, 1, 2)
 
-        self.densityDiscretization = QRadioButton('Discretização em N pontos/mm', self)
+        self.densityDiscretization = QRadioButton(MyStrings.nonGridDiscretization, self)
         grid.addWidget(self.densityDiscretization, 3, 0, 1, 2)
 
-        label3 = QLabel('Informe o valor de N para a discretização:', self)
+        label3 = QLabel(MyStrings.askingForNValue, self)
         grid.addWidget(label3, 4, 0, 1, 2)
 
         self.density = QLineEdit()
         grid.addWidget(self.density, 5, 0, 1, 2)
 
-        label4 = QLabel('Informe a precisão desejada para o enquadramento\n' +
-                        'dos pontos em bordas e limites curvos (10 a 50):' , self)
+        label4 = QLabel(MyStrings.askingForPrecision, self)
         grid.addWidget(label4, 6, 0, 1, 2)
 
         self.precisionSlider = QSlider(Qt.Horizontal, self)
@@ -83,22 +81,21 @@ class autoDiscretizeMenu(QWidget):
         self.precision.textChanged.connect(self.precisionChanged)
         grid.addWidget(self.precision, 8, 0, 1, 2)
 
-        label5 = QLabel('<b><br>Modo de Discretização das Faces Não-Planas:</b>', self)
+        label5 = QLabel(MyStrings.nonFlatDiscretizationHeader, self)
         grid.addWidget(label5, 9, 0, 1, 2)
 
-        self.UVParametric = QCheckBox('Discretizar Superfícies Não-Planas usando\n' +
-                                      'Parametrização UV', self)
+        self.UVParametric = QCheckBox(MyStrings.askingForUVDiscretization, self)
         self.UVParametric.stateChanged.connect(self.UVParametricChanged)
         grid.addWidget(self.UVParametric, 10, 0, 1, 2)
 
-        label6 = QLabel('Núm. de Parâmetros U:', self)
+        label6 = QLabel(MyStrings.askingForUParameter, self)
         grid.addWidget(label6, 11, 0, 1, 2)
 
         self.UParameter = QLineEdit()
         self.UParameter.setEnabled(False)
         grid.addWidget(self.UParameter, 12, 0, 1, 2)
 
-        label7 = QLabel('Núm. de Parâmetros V:', self)
+        label7 = QLabel(MyStrings.askingForVParameter, self)
         grid.addWidget(label7, 13, 0, 1, 2)
 
         self.VParameter = QLineEdit()
@@ -106,7 +103,7 @@ class autoDiscretizeMenu(QWidget):
         grid.addWidget(self.VParameter, 14, 0, 1, 2)
 
         btn1 = QToolButton()
-        btn1.setText('Aplicar Discretização Automática')
+        btn1.setText(MyStrings.autoDiscretizeApply)
         btn1.clicked.connect(lambda: self.autoDiscretize(parent))
         btn1.setMinimumHeight(30)
         btn1.setMinimumWidth(266)
@@ -136,10 +133,8 @@ class autoDiscretizeMenu(QWidget):
         try:
             density = float(self.density.displayText())
         except:
-            QMessageBox.information(parent, 'Valor inválido para N.',
-                                    'O valor escolhido para N não é válido.\n' +
-                                    'Utilize um valor numérico positivo que se enquadre ' +
-                                    'nas unidades de N pontos/mm ou de uma grade N x N.',
+            QMessageBox.information(parent, MyStrings.popupInvalidNTitle,
+                                    MyStrings.popupInvalidNDescription,
                                     QMessageBox.Ok, QMessageBox.Ok)
             return
 
@@ -149,10 +144,9 @@ class autoDiscretizeMenu(QWidget):
             if(precision > 50 or precision < 10):
                 raise
         except:
-            QMessageBox.information(parent, 'Precisão Inválida.',
-                                    'A precisão informada não é válida.\n' +
-                                    'Utilize uma precisão positiva que esteja entre ' +
-                                    '10 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
+                                    MyStrings.popupInvalidPrecisionDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
 
         # Check if the UParameter and VParameter are OK:
@@ -161,9 +155,8 @@ class autoDiscretizeMenu(QWidget):
                 Uparam = int(self.UParameter.displayText())
                 Vparam = int(self.VParameter.displayText())
             except:
-                QMessageBox.information(parent, 'Valores de U e V Inválidos.',
-                                        'Os valores U e V para a discretização paramétrica não são válidos.\n' +
-                                        'Utilize um valor inteiro positivo e tente novamente.',
+                QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
+                                        MyStrings.popupInvalidUVDescription,
                                         QMessageBox.Ok, QMessageBox.Ok)
                 return
         else:
@@ -184,7 +177,7 @@ class autoDiscretizeMenu(QWidget):
         buildCloud(parent)
 
         # Updates some properties from the main window:
-        parent.activeCloudFile = 'Pontos Gerados Nesta Sessão'
+        parent.activeCloudFile = MyStrings.currentSessionGeneratedPoints
 
         # Closes the loading window:
         parent.loadingWindow.close()
