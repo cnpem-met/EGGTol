@@ -65,7 +65,4 @@ def rebuildCloud(parent):
     buildCloud(parent)
 
 def restoreCloud(parent):
-    localContext = parent.canvas._display.GetContext().GetObject()
-    localContext.Display(parent.pointCloudObject.GetHandle())
-    parent.pointCloudObject.SetAspect(parent.pointAspectObject.GetHandle())
     parent.canvas._display.Repaint()

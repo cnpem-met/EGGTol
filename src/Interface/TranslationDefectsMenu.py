@@ -146,7 +146,7 @@ class translationDefectsMenu(QWidget):
         parent.cloudPointsList = newCloudPointsList
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
-        restoreCloud(parent)
+        #restoreCloud(parent)
 
     def selectSolids(self, parent):
         """
