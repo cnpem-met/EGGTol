@@ -68,7 +68,7 @@ class RationalBSplineSurface(Entity):
         self.V1 = V1
 
     def description(self):
-        out = ('(' + str(int(self.seqNumber)//2+1) + ') Superfície BSpline (IGES 128)', [])
+        out = ('(' + str(int(self.seqNumber)//2+1) + ') B-Spline Surface (IGES 128)', [])
         out[1].append(('- Upper Index of First Sum (K1): ' + str(self.K1), []))
         out[1].append(('- Upper index of Second Sum (K2): ' + str(self.K2), []))
         out[1].append(('- Degree of First Basis Functions (M1): ' + str(self.M1), []))

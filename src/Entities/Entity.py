@@ -39,4 +39,4 @@ class Entity(object):
         # Returns: * Tuple out = A tuple containing a string and a list of properties.
         """
 
-        return (('# Entidade Desconhecida', []))
+        return (('# Unknown IGES Entity', []))
