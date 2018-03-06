@@ -17,10 +17,11 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageB
 from Import.IGESImport import *
 from Actions.Functions import *
 from Discretization.DiscretizeModel import *
+from Resources.Strings import MyStrings
 
 class faceDiscretizeMenu(QWidget):
     """
-    # Class: autoDiscretizeMenu.
+    # Class: faceDiscretizeMenu.
     # Description: This class provides a side menu with some options to configure
     the Face Discretization process.
     """
@@ -46,68 +47,64 @@ class faceDiscretizeMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel('O método de discretização por faces irá discretizar\n' +
-                        'faces individuais conforme uma seleção.\n', self)
+        label1 = QLabel(MyStrings.faceDiscretizeDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
-        label2 = QLabel('<b>Modo de Seleção</b>', self)
+        label2 = QLabel(MyStrings.selectionModeHeader, self)
         grid.addWidget(label2, 1, 0, 1, 2)
 
-        label3 = QLabel('O método de seleção deterinará qual tipo de\n' +
-                        'entidade será selecionada na tela principal.')
+        label3 = QLabel(MyStrings.askingForSelectionMethod)
         grid.addWidget(label3, 2, 0, 1, 2)
 
         btn1 = QToolButton()
-        btn1.setText('Selecionar\nSólidos')
+        btn1.setText(MyStrings.selectionModeSolids)
         btn1.clicked.connect(lambda: self.selectSolids(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(130)
         grid.addWidget(btn1, 3, 0)
 
         btn2 = QToolButton()
-        btn2.setText('Selecionar\nSupefícies')
+        btn2.setText(MyStrings.selectionModeSurfaces)
         btn2.clicked.connect(lambda: self.selectSurfaces(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(130)
         grid.addWidget(btn2, 3, 1)
 
-        label4 = QLabel('<b><br>Seleção de Entidade</b>')
+        label4 = QLabel(MyStrings.entitySelectionHeader)
         grid.addWidget(label4, 4, 0, 1, 2)
 
-        label5 = QLabel('Selecione a entidade que deseja aplicar a translação\n' +
-                        'do grupo de pontos:', self)
+        label5 = QLabel(MyStrings.askingForEntity, self)
         grid.addWidget(label5, 5, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
-        self.selectedObject.setPlaceholderText('Selecione uma entidade')
+        self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
         grid.addWidget(self.selectedObject, 6, 0, 1, 2)
 
         btn3 = QToolButton()
-        btn3.setText('Adicionar Entidade Selecionada')
+        btn3.setText(MyStrings.addEntityOption)
         btn3.clicked.connect(lambda: self.addSelection(parent))
         btn3.setMinimumHeight(30)
         btn3.setMinimumWidth(266)
         grid.addWidget(btn3, 7, 0, 1, 2)
 
-        label4 = QLabel('<b><br>Modo de Discretização das Faces Planas:</b>', self)
+        label4 = QLabel(MyStrings.flatDiscretizationHeader, self)
         grid.addWidget(label4, 8, 0, 1, 2)
 
-        self.gridDiscretization = QRadioButton('Discretização em Grade N x N', self)
+        self.gridDiscretization = QRadioButton(MyStrings.gridDiscretization, self)
         self.gridDiscretization.setChecked(True)
         grid.addWidget(self.gridDiscretization, 9, 0, 1, 2)
 
-        self.densityDiscretization = QRadioButton('Discretização em N pontos/mm', self)
+        self.densityDiscretization = QRadioButton(MyStrings.nonGridDiscretization, self)
         grid.addWidget(self.densityDiscretization, 10, 0, 1, 2)
 
-        label5 = QLabel('Informe o valor de N para a discretização:', self)
+        label5 = QLabel(MyStrings.askingForNValue, self)
         grid.addWidget(label5, 11, 0, 1, 2)
 
         self.density = QLineEdit()
         grid.addWidget(self.density, 12, 0, 1, 2)
 
-        label6 = QLabel('Informe a precisão desejada para o enquadramento\n' +
-                        'dos pontos em bordas e limites curvos (10 a 50):' , self)
+        label6 = QLabel(MyStrings.askingForPrecision , self)
         grid.addWidget(label6, 13, 0, 1, 2)
 
         self.precisionSlider = QSlider(Qt.Horizontal, self)
@@ -123,7 +120,7 @@ class faceDiscretizeMenu(QWidget):
         grid.addWidget(self.precision, 15, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText('Aplicar Discretização da Face')
+        btn4.setText(MyStrings.faceDiscretizeApply)
         btn4.clicked.connect(lambda: self.faceDiscretize(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
@@ -139,7 +136,7 @@ class faceDiscretizeMenu(QWidget):
         # Description: Performs the discretization of a selected face in the loaded CAD Model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        
+
         # Check if there is a point cloud present:
         if(parent.pointCloudObject):
             cleanCloud(parent)
@@ -152,10 +149,7 @@ class faceDiscretizeMenu(QWidget):
         try:
             density = float(self.density.displayText())
         except:
-            QMessageBox.information(parent, 'Valor inválido para N.',
-                                    'O valor escolhido para N não é válido.\n' +
-                                    'Utilize um valor numérico positivo que se enquadre ' +
-                                    'nas unidades de N pontos/mm ou de uma grade N x N.',
+            QMessageBox.information(parent, MyStrings.popupInvalidNTitle, MyStrings.popupInvalidNDescription,
                                     QMessageBox.Ok, QMessageBox.Ok)
             return
 
@@ -165,10 +159,8 @@ class faceDiscretizeMenu(QWidget):
             if(precision > 50 or precision < 10):
                 raise
         except:
-            QMessageBox.information(parent, 'Precisão Inválida.',
-                                    'A precisão informada não é válida.\n' +
-                                    'Utilize uma precisão positiva que esteja entre ' +
-                                    '10 e 50 e tente novamente.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
+                                    MyStrings.popupInvalidPrecisionDescription, QMessageBox.Ok, QMessageBox.Ok)
             return
 
         # Loads the loading window:
@@ -186,7 +178,7 @@ class faceDiscretizeMenu(QWidget):
         buildCloud(parent)
 
         # Updates some properties from the main window:
-        parent.activeCloudFile = 'Pontos Gerados Nesta Sessão'
+        parent.activeCloudFile = MyStrings.currentSessionGeneratedPoints
 
         # Closes the loading window:
         parent.loadingWindow.close()

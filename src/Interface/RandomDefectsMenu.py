@@ -6,17 +6,14 @@ for calling the discretization functions.
 """
 
 # System Imports:
-import sys
 import random
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox, QLineEdit
-from PyQt5.QtCore import QCoreApplication, QSize
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit
 
 # Local Imports:
 from Actions.Functions import *
+from Resources.Strings import MyStrings
 
 class randomDefectsMenu(QWidget):
     """
@@ -46,61 +43,58 @@ class randomDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel('Selecione um Modo de Seleção.', self)
+        label1 = QLabel(MyStrings.randomDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
-        label2 = QLabel('O método de seleção determinará qual tipo de\n' +
-                        'entidade será selecionada na tela principal.', self)
+        label2 = QLabel(MyStrings.selectionModeHeader, self)
         grid.addWidget(label2, 1, 0, 1, 2)
 
+        label3 = QLabel(MyStrings.askingForSelectionMethod, self)
+        grid.addWidget(label2, 2, 0, 1, 2)
+
         btn1 = QToolButton()
-        btn1.setText('Selecionar\nSólidos')
+        btn1.setText(MyStrings.selectionModeSolids)
         btn1.clicked.connect(lambda: self.selectSolids(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(130)
-        grid.addWidget(btn1, 2, 0)
+        grid.addWidget(btn1, 3, 0)
 
         btn2 = QToolButton()
-        btn2.setText('Selecionar\nSupefícies')
+        btn2.setText(MyStrings.selectionModeSurfaces)
         btn2.clicked.connect(lambda: self.selectSurfaces(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(130)
-        grid.addWidget(btn2, 2, 1)
+        grid.addWidget(btn2, 3, 1)
 
-        label3 = QLabel('\nSelecione a entidade que deseja aplicar a aleatorização\n' +
-                        'do grupo de pontos:', self)
-        grid.addWidget(label3, 3, 0, 1, 2)
+        label4 = QLabel(MyStrings.askingForEntity, self)
+        grid.addWidget(label4, 4, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
-        self.selectedObject.setPlaceholderText('Selecione uma entidade')
-        grid.addWidget(self.selectedObject, 4, 0, 1, 2)
+        self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
+        grid.addWidget(self.selectedObject, 5, 0, 1, 2)
 
         btn3 = QToolButton()
-        btn3.setText('Adicionar Entidade Selecionada')
+        btn3.setText(MyStrings.addEntityOption)
         btn3.clicked.connect(lambda: self.addSelection(parent))
         btn3.setMinimumHeight(30)
         btn3.setMinimumWidth(266)
-        grid.addWidget(btn3, 5, 0, 1, 2)
+        grid.addWidget(btn3, 6, 0, 1, 2)
 
-        label4 = QLabel('\nA direção do deslocamento dos pontos será escolhida\n' +
-                        'de maneira aleatória.', self)
-        grid.addWidget(label4, 6, 0, 1, 2)
-
-        label5 = QLabel('Deslocamento mínimo (em mm):', self)
+        label5 = QLabel(MyStrings.askingForMinimumOffset self)
         grid.addWidget(label5, 7, 0, 1, 2)
 
         self.minOffset = QLineEdit()
         grid.addWidget(self.minOffset, 8, 0, 1, 2)
 
-        label6 = QLabel('Deslocamento máximo (em mm):', self)
+        label6 = QLabel(MyStrings.askingForMaximumOffset, self)
         grid.addWidget(label6, 9, 0, 1, 2)
 
         self.maxOffset = QLineEdit()
         grid.addWidget(self.maxOffset, 10, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText('Aplicar Aleatorização aos Pontos')
+        btn4.setText(MyStrings.randomDefectsApply)
         btn4.clicked.connect(lambda: self.randomPoints(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
@@ -118,6 +112,7 @@ class randomDefectsMenu(QWidget):
         done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
         # Translating all the points based on given random parameters:
         minOffset = float(self.minOffset.displayText())
         maxOffset = float(self.maxOffset.displayText())
@@ -132,9 +127,9 @@ class randomDefectsMenu(QWidget):
                 auxList.append(point)
             newCloudPointsList.append(auxList)
         parent.cloudPointsList = newCloudPointsList
+
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
-        restoreCloud(parent)
 
     def selectSolids(self, parent):
         """

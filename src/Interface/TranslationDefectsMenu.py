@@ -5,12 +5,12 @@ for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
 
-import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox, QLineEdit
-from PyQt5.QtCore import QCoreApplication, QSize
-from PyQt5.QtGui import QIcon
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit
+
+# Local Imports:
 from Actions.Functions import *
+from Resources.Strings import MyStrings
 
 class translationDefectsMenu(QWidget):
     """
@@ -41,88 +41,88 @@ class translationDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel('Selecione um Modo de Seleção.', self)
+        label1 = QLabel(MyStrings.translationDefectsDescription)
         grid.addWidget(label1, 0, 0, 1, 2)
 
-        label2 = QLabel('O método de seleção determinará qual tipo de\n' +
-                        'entidade será selecionada na tela principal.', self)
+        label2 = QLabel(MyStrings.selectionModeHeader, self)
         grid.addWidget(label2, 1, 0, 1, 2)
 
+        label3 = QLabel(MyStrings.askingForSelectionMethod, self)
+        grid.addWidget(label3, 2, 0, 1, 2)
+
         btn1 = QToolButton()
-        btn1.setText('Selecionar\nSólidos')
+        btn1.setText(MyStrings.selectionModeSolids)
         btn1.clicked.connect(lambda: self.selectSolids(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(130)
-        grid.addWidget(btn1, 2, 0)
+        grid.addWidget(btn1, 3, 0)
 
         btn2 = QToolButton()
-        btn2.setText('Selecionar\nSupefícies')
+        btn2.setText(MyStrings.selectionModeSurfaces)
         btn2.clicked.connect(lambda: self.selectSurfaces(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(130)
-        grid.addWidget(btn2, 2, 1)
+        grid.addWidget(btn2, 3, 1)
 
-        label3 = QLabel('\nSelecione a entidade que deseja aplicar a translação\n' +
-                        'do grupo de pontos:', self)
-        grid.addWidget(label3, 3, 0, 1, 2)
+        label4 = QLabel(MyStrings.askingForEntity, self)
+        grid.addWidget(label4, 4, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
-        self.selectedObject.setPlaceholderText('Selecione uma entidade')
-        grid.addWidget(self.selectedObject, 4, 0, 1, 2)
+        self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
+        grid.addWidget(self.selectedObject, 5, 0, 1, 2)
 
         btn5 = QToolButton()
-        btn5.setText('Adicionar Entidade Selecionada')
+        btn5.setText(MyStrings.addEntityOption)
         btn5.clicked.connect(lambda: self.addSelection(parent))
         btn5.setMinimumHeight(30)
         btn5.setMinimumWidth(266)
-        grid.addWidget(btn5, 5, 0, 1, 2)
+        grid.addWidget(btn5, 6, 0, 1, 2)
 
-        label4 = QLabel('\nInforme uma direção (x, y, z) para a translação dos\n' +
-                        'pontos na face selecionada', self)
-        grid.addWidget(label4, 6, 0, 1, 2)
+        label5 = QLabel(MyStrings.askingForDirection, self)
+        grid.addWidget(label5, 7, 0, 1, 2)
 
         btn6 = QToolButton()
-        btn6.setText('Utilizar Direção Normal à Superfície')
+        btn6.setText(MyStrings.useNormalDirectionOption)
         btn6.clicked.connect(lambda: self.setNormalDirection(parent))
         btn6.setMinimumHeight(30)
         btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 7, 0, 1, 2)
+        grid.addWidget(btn6, 8, 0, 1, 2)
 
-        label5 = QLabel('Direção X:', self)
-        grid.addWidget(label5, 8, 0, 1, 1)
+        label6 = QLabel(MyStrings.askingForXDirection, self)
+        grid.addWidget(label6, 9, 0, 1, 1)
 
         self.xDirection = QLineEdit()
-        grid.addWidget(self.xDirection, 9, 0, 1, 2)
+        grid.addWidget(self.xDirection, 10, 0, 1, 2)
 
-        label6 = QLabel('Direção Y:', self)
-        grid.addWidget(label6, 10, 0, 1, 1)
+        label7 = QLabel(MyStrings.askingForYDirection, self)
+        grid.addWidget(label7, 11, 0, 1, 1)
 
         self.yDirection = QLineEdit()
-        grid.addWidget(self.yDirection, 11, 0, 1, 2)
+        grid.addWidget(self.yDirection, 12, 0, 1, 2)
 
-        label6 = QLabel('Direção Z:', self)
-        grid.addWidget(label6, 12, 0, 1, 1)
+        label8 = QLabel(MyStrings.askingForZDirection, self)
+        grid.addWidget(label8, 13, 0, 1, 1)
 
         self.zDirection = QLineEdit()
-        grid.addWidget(self.zDirection, 13, 0, 1, 2)
+        grid.addWidget(self.zDirection, 14, 0, 1, 2)
 
-        label7 = QLabel('Deslocamento (em mm):', self)
-        grid.addWidget(label7, 14, 0, 1, 1)
+        label9 = QLabel(MyStrings.askingForOffset, self)
+        grid.addWidget(label9, 15, 0, 1, 1)
 
         self.offset = QLineEdit()
-        grid.addWidget(self.offset, 15, 0, 1, 2)
+        grid.addWidget(self.offset, 16, 0, 1, 2)
 
         btn7 = QToolButton()
-        btn7.setText('Aplicar Translação aos Pontos')
+        btn7.setText(MyStrings.translationDefectsApply)
         btn7.clicked.connect(lambda: self.translatePoints(parent))
         btn7.setMinimumHeight(30)
         btn7.setMinimumWidth(266)
-        grid.addWidget(btn7, 16, 0, 1, 2)
+        grid.addWidget(btn7, 17, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(17, 1)
+        grid.setRowStretch(18, 1)
 
     def translatePoints(self, parent):
         """
@@ -144,9 +144,9 @@ class translationDefectsMenu(QWidget):
                 auxList.append(point)
             newCloudPointsList.append(auxList)
         parent.cloudPointsList = newCloudPointsList
+
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
-        #restoreCloud(parent)
 
     def selectSolids(self, parent):
         """

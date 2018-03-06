@@ -6,6 +6,7 @@ assigned with the current UI buttons.
 # Author: Willian Hideak Arita da Silva.
 """
 
+# OpenCASCADE Imports:
 from OCC.Graphic3d import Graphic3d_ArrayOfPoints
 from OCC.AIS import AIS_PointCloud
 from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE
@@ -65,4 +66,5 @@ def rebuildCloud(parent):
     buildCloud(parent)
 
 def restoreCloud(parent):
+    rebuildCloud(parent)
     parent.canvas._display.Repaint()

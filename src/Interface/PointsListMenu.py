@@ -5,10 +5,9 @@ a list of generated or loaded point cloud and their properties.
 # Author: Willian Hideak Arita da Silva.
 """
 
-import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QTreeView
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QTreeView
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtCore import QCoreApplication, QSize, Qt
 
 class pointsListMenu(QTreeView):
     """

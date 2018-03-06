@@ -47,7 +47,7 @@ class autoDiscretizeMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel(MyStrings.autoDiscretizeMenuDescription, self)
+        label1 = QLabel(MyStrings.autoDiscretizeDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.flatDiscretizationHeader, self)

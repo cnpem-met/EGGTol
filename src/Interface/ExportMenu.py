@@ -5,10 +5,11 @@ files such as .pcd or screenshots.
 # Author: Willian Hideak Arita da Silva.
 """
 
-import os, sys
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog, \
-                            QGridLayout, QToolButton, QMessageBox, QFileDialog
-from PyQt5.QtCore import QCoreApplication
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QFileDialog
+
+# Local Imports:
+from Resources.Strings import MyStrings
 
 class exportMenu(QWidget):
     """
@@ -38,48 +39,35 @@ class exportMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel('Selecione uma opção de exportação.', self)
+        label1 = QLabel(MyStrings.exportDescription, self)
         grid.addWidget(label1, 0, 0, 1, 1)
 
-        label2 = QLabel('As operações de exportação permitem gerar arquivos\n' +
-                        'de dados em formato de imagem e nuvem de pontos.', self)
-        grid.addWidget(label2, 1, 0, 1, 1)
-
         btn1 = QToolButton()
-        btn1.setText('Exportar Nuvem de Pontos em .pcd')
+        btn1.setText(MyStrings.exportOptionPcd)
         btn1.clicked.connect(lambda: self.exportPcd(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(266)
-        grid.addWidget(btn1, 2, 0)
+        grid.addWidget(btn1, 1, 0)
 
         btn2 = QToolButton()
-        btn2.setText('Exportar Nuvem de Pontos em .txt')
+        btn2.setText(MyStrings.exportOptionTxt)
         btn2.clicked.connect(lambda: self.exportTxt(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(266)
-        grid.addWidget(btn2, 3, 0)
+        grid.addWidget(btn2, 2, 0)
 
         btn3 = QToolButton()
-        btn3.setText('Exportar uma Captura de Tela em .png')
+        btn3.setText(MyStrings.exportOptionPng)
         btn3.clicked.connect(lambda: self.exportScreenshot(parent))
         btn3.setMinimumHeight(50)
         btn3.setMinimumWidth(266)
-        grid.addWidget(btn3, 4, 0)
+        grid.addWidget(btn3, 3, 0)
 
-        label3 = QLabel('\nFormato .pcd (Point Cloud Data):\n' +
-                        'formato padrão para exportação da nuvem de pontos\n' +
-                        'que pode ser lido com grande maioria dos programas\n' +
-                        'comerciais.\n\n' +
-                        'Formato .txt (Texto Plano):\n' +
-                        'formato contendo todos os pontos gerados ordenados\n' +
-                        'na forma de uma lista.\n\n' +
-                        'Formato .png (Captura de Tela):\n' +
-                        'salva uma imagem do modelo atual no formato Portable\n' +
-                        'Network Graphics.', self)
-        grid.addWidget(label3, 5, 0, 1, 1)
+        label2 = QLabel(MyStrings.exportOptionDescription, self)
+        grid.addWidget(label2, 4, 0, 1, 1)
 
         grid.setColumnStretch(0, 1)
-        grid.setRowStretch(6, 1)
+        grid.setRowStretch(5, 1)
 
     def exportPcd(self, parent):
         """
@@ -92,7 +80,7 @@ class exportMenu(QWidget):
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.pcd'
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .pcd', defaultName, 'Point Cloud Data (*.pcd)')[0]
+        fileName = QFileDialog.getSaveFileName(parent, MyStrings.exportPcdTitle, defaultName, MyStrings.exportPcdFormat)[0]
         if not fileName:
             return
         generatePcd(parent.cloudPointsList, fileName)
@@ -108,7 +96,7 @@ class exportMenu(QWidget):
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.txt'
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar arquivo .txt', defaultName, 'Arquivo de Texto (*.txt)')[0]
+        fileName = QFileDialog.getSaveFileName(parent, MyStrings.exportTxtTitle, defaultName, MyStrings.exportTxtFormat)[0]
         if not fileName:
             return
         generateTxt(parent.cloudPointsList, fileName)
@@ -122,7 +110,8 @@ class exportMenu(QWidget):
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.png'
-        fileName = QFileDialog.getSaveFileName(parent, 'Exportar Captura de Tela', defaultName, 'Imagem PNG (*.png)')[0]
+        fileName = QFileDialog.getSaveFileName(parent, MyStrings.exportScreenshotTitle, defaultName,
+                                               MyStrings.exportScreenshotFormat)[0]
         if not fileName:
             return
         parent.canvas._display.View.Dump(fileName)
