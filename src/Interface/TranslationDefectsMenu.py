@@ -124,6 +124,29 @@ class translationDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(18, 1)
 
+    def normalizePoints(self, parent):
+        """
+        # Method: normalizePoints
+        # Description: This method applies a normalization of the direction
+        vector for further use.
+        # Parameters: * MainWindow parent = A reference for the main window object
+        """
+
+        # Getting information from the interface:
+        try:
+            x = float(self.xDirection.displayText())
+            y = float(self.yDirection.displayText())
+            z = float(self.zDirection.displayText())
+        except:
+            return
+
+        # Evaluating the module value:
+        module = (x**2 + y**2 + z**2)**(1/2)
+        x, y, z = x/module, y/module, z/module
+        self.xDirection.setText(str(x))
+        self.yDirection.setText(str(y))
+        self.zDirection.setText(str(z))
+
     def translatePoints(self, parent):
         """
         # Method: translatePoints.
@@ -133,27 +156,34 @@ class translationDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Normalizing the direction vector:
-        x = float(self.xDirection.displayText())
-        y = float(self.yDirection.displayText())
-        z = float(self.zDirection.displayText())
-        module = (x**2 + y**2 + z**2)**(1/2)
-        x, y, z = x/module, y/module, z/module
-        self.xDirection.setText(str(x))
-        self.yDirection.setText(str(y))
-        self.zDirection.setText(str(z))
+        # Normalizing the given direction:
+        self.normalizePoints(parent)
 
-        # Translating all the points based on given parameters:
-        newCloudPointsList = []
-        for points in parent.cloudPointsList:
-            auxList = []
-            for point in points:
-                point = (point[0] + float(self.xDirection.displayText()) * float(self.offset.displayText()),
-                         point[1] + float(self.yDirection.displayText()) * float(self.offset.displayText()),
-                         point[2] + float(self.zDirection.displayText()) * float(self.offset.displayText()))
-                auxList.append(point)
-            newCloudPointsList.append(auxList)
-        parent.cloudPointsList = newCloudPointsList
+        # Getting information about the selected surface:
+        index = 0
+        seqNumber = None
+        while index < len(parent.faceSequenceNumbers):
+            seqNumber = parent.faceSequenceNumbers[index]
+            if(seqNumber == parent.selectedSequenceNumber):
+                break
+            index += 1
+
+        # Translating all the points on the selected surface based on given parameters:
+        newPointsList = []
+        offset = float(self.offset.displayText())
+        if(self.xDirection.displayText() == 'Multiple Values'):
+            for i in range(len(parent.cloudPointsList[index])):
+                point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
+                         parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
+                         parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
+                newPointsList.append(point)
+        else:
+            for i in range(len(parent.cloudPointsList[index])):
+                point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
+                         parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
+                         parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
+                newPointsList.append(point)
+        parent.cloudPointsList[index] = newPointsList
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
@@ -213,14 +243,6 @@ class translationDefectsMenu(QWidget):
         Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        i = 0
-        seqNumber = None
-        while i < len(parent.faceSequenceNumbers):
-            seqNumber = parent.faceSequenceNumbers[i]
-            if(seqNumber == parent.selectedSequenceNumber):
-                break
-            i += 1
-
-        self.xDirection.setText(str(parent.faceNormalVectors[i][0][0]))
-        self.yDirection.setText(str(parent.faceNormalVectors[i][0][1]))
-        self.zDirection.setText(str(parent.faceNormalVectors[i][0][2]))
+        self.xDirection.setText('Multiple Values')
+        self.yDirection.setText('Multiple Values')
+        self.zDirection.setText('Multiple Values')
