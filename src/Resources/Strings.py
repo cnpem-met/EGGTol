@@ -23,6 +23,166 @@ class MyStrings():
     menuBarAbout = 'About this application'
 
     # Action Strings:
+    actionWelcomePrettyName = 'Welcome Panel'
+    actionWelcomeStatusTip = ('Shows the welcome menu, including a short description of ' +
+                             'the application')
+    actionWelcomeIconText = 'Welcome!'
+    actionWelcomeName = 'welcomeMenu'
+
+    actionEntitiesPrettyName = 'Entities Panel'
+    actionEntitiesStatusTip = 'Shows the entities tree'
+    actionEntitiesIconText = 'Entities'
+    actionEntitiesName = 'entitiesMenu'
+
+    actionImportPrettyName = ''
+    actionImportStatusTip = ''
+    actionImportIconText = ''
+    actionImportName = ''
+
+    actionExportPrettyName = ''
+    actionExportStatusTip = ''
+    actionExportIconText = ''
+    actionExportName = ''
+
+    actionCloudPrettyName = ''
+    actionCloudStatusTip = ''
+    actionCloudIconText = ''
+    actionCloudName = ''
+
+    actionAutoDiscretizePrettyName = ''
+    actionAutoDiscretizeStatusTip = ''
+    actionAutoDiscretizeIconText = ''
+    actionAutoDiscretizeName = ''
+
+    actionFaceDiscretizePrettyName = ''
+    actionFaceDiscretizeStatusTip = ''
+    actionFaceDiscretizeIconText = ''
+    actionFaceDiscretizeName = ''
+
+    actionDefectsPrettyName = ''
+    actionDefectsStatusTip = ''
+    actionDefectsIconText = ''
+    actionDefectsName = ''
+
+    actionPointsListPrettyName = ''
+    actionPointsListStatusTip = ''
+    actionPointsListIconText = ''
+    actionPointsListName = ''
+
+    actionTranslationPrettyName = ''
+    actionTranslationStatusTip = ''
+    actionTranslationIconText = ''
+    actionTranslationName = ''
+
+    actionRandomPrettyName = ''
+    actionRandomStatusTip = ''
+    actionRandomIconText = ''
+    actionRandomName = ''
+
+    actionClosePrettyName = ''
+    actionCloseStatusTip = ''
+    actionCloseIconText = ''
+    actionCloseName = ''
+
+    actionExitPrettyName = ''
+    actionExitStatusTip = ''
+    actionExitIconText = ''
+    actionExitName = ''
+
+    actionDarkPrettyName = ''
+    actionDarkStatusTip = ''
+    actionDarkIconText = ''
+    actionDarkName = ''
+
+    actionLightPrettyName = ''
+    actionLightStatusTip = ''
+    actionLightIconText = ''
+    actionLightName = ''
+
+    actionSelectionNeutralPrettyName = ''
+    actionSelectionNeutralStatusTip = ''
+    actionSelectionNeutralIconText = ''
+    actionSelectionNeutralName = ''
+
+    actionSelectionFacePrettyName = ''
+    actionSelectionFaceStatusTip = ''
+    actionSelectionFaceIconText = ''
+    actionSelectionFaceName = ''
+
+    actionSelectionEdgePrettyName = ''
+    actionSelectionEdgeStatusTip = ''
+    actionSelectionEdgeIconText = ''
+    actionSelectionEdgeName = ''
+
+    actionSelectionVertexPrettyName = ''
+    actionSelectionVertexStatusTip = ''
+    actionSelectionVertexIconText = ''
+    actionSelectionVertexName = ''
+
+    actionViewTopPrettyName = ''
+    actionViewTopStatusTip = ''
+    actionViewTopIconText = ''
+    actionViewTopName = ''
+
+    actionViewBottomPrettyName = ''
+    actionViewBottomStatusTip = ''
+    actionViewBottomIconText = ''
+    actionViewBottomName = ''
+
+    actionViewLeftPrettyName = ''
+    actionViewLeftStatusTip = ''
+    actionViewLeftIconText = ''
+    actionViewLeftName = ''
+
+    actionViewRightPrettyName = ''
+    actionViewRightStatusTip = ''
+    actionViewRightIconText = ''
+    actionViewRightName = ''
+
+    actionViewTopFrontPrettyName = ''
+    actionViewTopFrontStatusTip = ''
+    actionViewTopFrontIconText = ''
+    actionViewTopFrontName = ''
+
+    actionViewTopRearPrettyName = ''
+    actionViewTopRearStatusTip = ''
+    actionViewTopRearIconText = ''
+    actionViewTopRearName = ''
+
+    actionViewIsoPrettyName = ''
+    actionViewIsoStatusTip = ''
+    actionViewIsoIconText = ''
+    actionViewIsoName = ''
+
+    actionWireframePrettyName = ''
+    actionWireframeStatusTip = ''
+    actionWireframeIconText = ''
+    actionWireframeName = ''
+
+    actionShadedPrettyName = ''
+    actionShadedStatusTip = ''
+    actionShadedIconText = ''
+    actionShadedName = ''
+
+    actionFitAllPrettyName = ''
+    actionFitAllStatusTip = ''
+    actionFitAllIconText = ''
+    actionFitAllName = ''
+
+    actionGithubPrettyName = ''
+    actionGithubStatusTip = ''
+    actionGithubIconText = ''
+    actionGithubName = ''
+
+    actionDeveloperPrettyName = ''
+    actionDeveloperStatusTip = ''
+    actionDeveloperIconText = ''
+    actionDeveloperName = ''
+
+    actionEmailPrettyName = ''
+    actionEmailStatusTip = ''
+    actionEmailIconText = ''
+    actionEmailName = ''
 
     # Pop-up Window Strings:
     popupExitTitle = 'Quit the ' + applicationTitle

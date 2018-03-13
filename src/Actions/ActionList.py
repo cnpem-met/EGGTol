@@ -5,12 +5,16 @@ in the program. These actions has internal functions that can be called by the m
 # Author: Willian Hideak Arita da Silva.
 """
 
+# System Imports:
 import webbrowser
 
-from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox, qApp, QDockWidget, \
-                            QDialog, QGridLayout, QLabel, QScrollArea
+# PyQt5 Imports:
+from PyQt5.QtWidgets import QAction, QMessageBox, qApp, QDockWidget, QScrollArea
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
+
+# Local Imports:
+from Resources.Strings import MyStrings
 
 def switchLeftPanels(widget, name, prettyName, parent, scroll):
     """
@@ -116,9 +120,9 @@ class welcomeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), 'Painel de Boas-Vindas', parent)
-        self.setStatusTip('Exibe o menu de boas vindas, incluindo o welcome.txt')
-        self.setIconText('Bem-Vindo!')
+        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), MyStrings.actionWelcomePrettyName, parent)
+        self.setStatusTip(MyStrings.actionWelcomeStatusTip)
+        self.setIconText(MyStrings.actionWelcomeIconText)
         self.triggered.connect(lambda: self.welcomeActionProcedure(parent))
 
     def welcomeActionProcedure(self, parent):
@@ -130,8 +134,8 @@ class welcomeAction(QAction):
 
         from Interface.WelcomeMenu import welcomeMenu
         widget = welcomeMenu(parent)
-        name = 'welcomeMenu'
-        prettyName = 'Painel de Boas-Vindas!'
+        name = MyStrings.actionWelcomeName
+        prettyName = MyStrings.actionWelcomePrettyName
         if parent.leftDockWidget == None:
             dock = QDockWidget(prettyName, parent)
             dock.setWidget(widget)
@@ -163,9 +167,9 @@ class entitiesAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\Server.svg'), 'Painel de Entidades', parent)
-        self.setStatusTip('Exibe a Árvore de Entidades')
-        self.setIconText('Entidades')
+        super().__init__(QIcon('..\\icons\\Server.svg'), MyStrings.actionEntitiesPrettyName, parent)
+        self.setStatusTip(MyStrings.actionEntitiesStatusTip)
+        self.setIconText(MyStrings.actionEntitiesIconText)
         self.triggered.connect(lambda: self.entitiesActionProcedure(parent))
 
     def entitiesActionProcedure(self, parent):
@@ -183,7 +187,7 @@ class entitiesAction(QAction):
                                     'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = entitiesMenu(parent)
-        switchLeftPanels(widget, 'entitiesMenu', 'Painel de Entidades', parent, False)
+        switchLeftPanels(widget, MyStrings.actionEntitiesName, MyStrings.actionEntitiesPrettyName, parent, False)
 
 class importAction(QAction):
     """
@@ -1073,34 +1077,6 @@ class fitAllAction(QAction):
         self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
 
     def setShadedActionProcedure(self, parent):
-        """
-        # Method: fitAllActionProcedure.
-        # Description: The procedure for adjusting all elements to fit on the screen.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
-
-        parent.canvas._display.FitAll()
-        parent.canvas._display.Repaint()
-
-class fitAllAction(QAction):
-    """
-    # Class: fitAllAction.
-    # Description: A PyQt5 action that adjusts all elements to fit on the screen.
-    """
-
-    def __init__(self, parent):
-        """
-        # Method: __init__.
-        # Description: The init method for initializing the inhirited properties.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
-
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Ajustar Elementos à Tela', parent)
-        self.setStatusTip('Ajusta o zoom para que todos os elementos fiquem no visualizador')
-        self.setIconText('Ajustar Elementos')
-        self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
-
-    def fitAllActionProcedure(self, parent):
         """
         # Method: fitAllActionProcedure.
         # Description: The procedure for adjusting all elements to fit on the screen.
