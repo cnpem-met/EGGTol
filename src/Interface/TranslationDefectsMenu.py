@@ -133,6 +133,16 @@ class translationDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        # Normalizing the direction vector:
+        x = float(self.xDirection.displayText())
+        y = float(self.yDirection.displayText())
+        z = float(self.zDirection.displayText())
+        module = (x**2 + y**2 + z**2)**(1/2)
+        x, y, z = x/module, y/module, z/module
+        self.xDirection.setText(str(x))
+        self.yDirection.setText(str(y))
+        self.zDirection.setText(str(z))
+
         # Translating all the points based on given parameters:
         newCloudPointsList = []
         for points in parent.cloudPointsList:
