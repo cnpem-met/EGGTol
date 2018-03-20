@@ -13,7 +13,7 @@ class MyStrings():
 
     # Window Title Strings:
     applicationTitle = 'Point Cloud Generator'
-    applicationVersion = 'v0.7.135'
+    applicationVersion = 'v0.7.139'
 
     # MenuBar Strings:
     menuBarFile = 'File'
@@ -287,6 +287,10 @@ class MyStrings():
                                      'oriented offsets to all selected points.')
     translationDefectsApply = 'Apply translation defects'
 
+    rotationalDefectsDescription = ('The rotational defects method will apply a specific\n' +
+                                    'transformation matrix to rotate a group of points.')
+    rotationalDefectsApply = 'Apply rotational defects'
+
     # General Side Widget Strings:
     flatDiscretizationHeader = '<b><br>Discretization mode for flat surfaces:</b>'
     nonFlatDiscretizationHeader = '<b><br>Discretization mode for non-flat surfaces:</b>'
@@ -309,12 +313,14 @@ class MyStrings():
                        'actions:')
     askingForDirection = ('Enter a direction (x, y, z) for applying the points\n' +
                           'translation at the selected face:')
+    askingForAngles = ('Enter a group of angles (x, y, z) that will be used\n' +
+                       'to rotate the selected group of points.')
     askingForMinimumOffset = 'Minimum offset (mm):'
     askingForMaximumOffset = 'Maximum offset (mm):'
     askingForOffset = 'Offset (mm):'
-    askingForXDirection = 'X Direction:'
-    askingForYDirection = 'Y Direction'
-    askingForZDirection = 'Z Direction'
+    askingForXValue = 'X Value:'
+    askingForYValue = 'Y Value'
+    askingForZValue = 'Z Value'
     selectionModeSolids = 'Solid Selection\nMode'
     selectionModeSurfaces = 'Surface Selection\nMode'
     addEntityOption = 'Add selected entity'

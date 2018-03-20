@@ -1,23 +1,33 @@
 """
-# Module: TranslationDefectsMenu.py
+# Module: RotationalnDefectsMenu.py
 # Description: This module contains the Translation Defects Side Widget Menu UI
 for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
 
+# Numpy Imports:
+from numpy import array, dot
+
 # PyQt5 Imports:
 from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit
+
+# OpenCASCADE Imports:
+from OCC.Bnd import Bnd_Box
+from OCC.BRepBndLib import brepbndlib_Add
 
 # Local Imports:
 from Actions.Functions import *
 from Resources.Strings import MyStrings
 
-class translationDefectsMenu(QWidget):
+# System Imports:
+import math
+
+class rotationalDefectsMenu(QWidget):
     """
-    # Class: translationDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in an specific direction, usually, normal to the underlying surface
-    which lies the group of points.
+    # Class: rotationalDefectsMenu
+    # Description: This class provides a side menu with some options for rotating some
+    group of points in an specific direction that can be defined relative to some basis
+    axis, usually located at the face's center of mass.
     """
 
     def __init__(self, parent):
@@ -33,7 +43,7 @@ class translationDefectsMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Translational
+        # Description: This method initializes the User Interface Elements of the Rotational
         Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
@@ -41,7 +51,7 @@ class translationDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel(MyStrings.translationDefectsDescription)
+        label1 = QLabel(MyStrings.rotationalDefectsDescription)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -79,85 +89,46 @@ class translationDefectsMenu(QWidget):
         btn5.setMinimumWidth(266)
         grid.addWidget(btn5, 6, 0, 1, 2)
 
-        label5 = QLabel(MyStrings.askingForDirection, self)
+        label5 = QLabel(MyStrings.askingForAngles, self)
         grid.addWidget(label5, 7, 0, 1, 2)
 
-        btn6 = QToolButton()
-        btn6.setText(MyStrings.useNormalDirectionOption)
-        btn6.clicked.connect(lambda: self.setNormalDirection(parent))
-        btn6.setMinimumHeight(30)
-        btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 8, 0, 1, 2)
-
         label6 = QLabel(MyStrings.askingForXValue, self)
-        grid.addWidget(label6, 9, 0, 1, 1)
+        grid.addWidget(label6, 8, 0, 1, 1)
 
-        self.xDirection = QLineEdit()
-        grid.addWidget(self.xDirection, 10, 0, 1, 2)
+        self.xAngle = QLineEdit()
+        grid.addWidget(self.xAngle, 9, 0, 1, 2)
 
         label7 = QLabel(MyStrings.askingForYValue, self)
-        grid.addWidget(label7, 11, 0, 1, 1)
+        grid.addWidget(label7, 10, 0, 1, 1)
 
-        self.yDirection = QLineEdit()
-        grid.addWidget(self.yDirection, 12, 0, 1, 2)
+        self.yAngle = QLineEdit()
+        grid.addWidget(self.yAngle, 11, 0, 1, 2)
 
         label8 = QLabel(MyStrings.askingForZValue, self)
-        grid.addWidget(label8, 13, 0, 1, 1)
+        grid.addWidget(label8, 12, 0, 1, 1)
 
-        self.zDirection = QLineEdit()
-        grid.addWidget(self.zDirection, 14, 0, 1, 2)
+        self.zAngle = QLineEdit()
+        grid.addWidget(self.zAngle, 13, 0, 1, 2)
 
-        label9 = QLabel(MyStrings.askingForOffset, self)
-        grid.addWidget(label9, 15, 0, 1, 1)
-
-        self.offset = QLineEdit()
-        grid.addWidget(self.offset, 16, 0, 1, 2)
-
-        btn7 = QToolButton()
-        btn7.setText(MyStrings.translationDefectsApply)
-        btn7.clicked.connect(lambda: self.translatePoints(parent))
-        btn7.setMinimumHeight(30)
-        btn7.setMinimumWidth(266)
-        grid.addWidget(btn7, 17, 0, 1, 2)
+        btn6 = QToolButton()
+        btn6.setText(MyStrings.rotationalDefectsApply)
+        btn6.clicked.connect(lambda: self.rotatePoints(parent))
+        btn6.setMinimumHeight(30)
+        btn6.setMinimumWidth(266)
+        grid.addWidget(btn6, 14, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(18, 1)
+        grid.setRowStretch(15, 1)
 
-    def normalizePoints(self, parent):
+    def rotatePoints(self, parent):
         """
-        # Method: normalizePoints
-        # Description: This method applies a normalization of the direction
-        vector for further use.
-        # Parameters: * MainWindow parent = A reference for the main window object
-        """
-
-        # Getting information from the interface:
-        try:
-            x = float(self.xDirection.displayText())
-            y = float(self.yDirection.displayText())
-            z = float(self.zDirection.displayText())
-        except:
-            return
-
-        # Evaluating the module value:
-        module = (x**2 + y**2 + z**2)**(1/2)
-        x, y, z = x/module, y/module, z/module
-        self.xDirection.setText(str(x))
-        self.yDirection.setText(str(y))
-        self.zDirection.setText(str(z))
-
-    def translatePoints(self, parent):
-        """
-        # Method: translatePoints.
-        # Description: This method applies a translational defect in the selected
+        # Method: rotatePoints.
+        # Description: This method applies a rotational defect in the selected
         entity. The parameters of the defect is defined by the configuration done
-        at the Translation Defects Menu side widget.
+        at the Rotational Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        # Normalizing the given direction:
-        self.normalizePoints(parent)
 
         # Getting information about the selected surface:
         index = 0
@@ -168,22 +139,65 @@ class translationDefectsMenu(QWidget):
                 break
             index += 1
 
-        # Translating all the points on the selected surface based on given parameters:
+        # Getting the rotation parameters:
+        angleX = (float(self.xAngle.displayText())/180) * math.pi
+        angleY = (float(self.yAngle.displayText())/180) * math.pi
+        angleZ = (float(self.zAngle.displayText())/180) * math.pi
+
+        # Defining the rotation matrix along the three axis:
+        matrixX = array([[1, 0, 0],
+                         [0, math.cos(angleX), -math.sin(angleX)],
+                         [0, math.sin(angleX), math.cos(angleX)]])
+        matrixY = array([[math.cos(angleY), 0, math.sin(angleY)],
+                         [0, 1, 0],
+                         [-math.sin(angleY), 0, math.cos(angleY)]])
+        matrixZ = array([[math.cos(angleZ), -math.sin(angleZ), 0],
+                         [math.sin(angleZ), math.cos(angleZ), 0],
+                         [0, 0, 1]])
+
+        # Apply the boundary box functions to define the center point of a face:
+        boundaryBox = Bnd_Box()
+        brepbndlib_Add(parent.selectedShape, boundaryBox)
+        xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+        deltaX = xMax - xMin
+        deltaY = yMax - yMin
+        deltaZ = zMax - zMin
+        centerX = xMin + deltaX/2
+        centerY = yMin + deltaY/2
+        centerZ = zMin + deltaZ/2
+
+        # Translating the points near to the default basis vector:
         newPointsList = []
-        offset = float(self.offset.displayText())
-        if(self.xDirection.displayText() == 'Multiple Values'):
-            for i in range(len(parent.cloudPointsList[index])):
-                point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
-                         parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
-                         parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
-                newPointsList.append(point)
-        else:
-            for i in range(len(parent.cloudPointsList[index])):
-                point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
-                         parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
-                         parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
-                newPointsList.append(point)
+        for i in range(len(parent.cloudPointsList[index])):
+            point = (parent.cloudPointsList[index][i][0] - centerX,
+                     parent.cloudPointsList[index][i][1] - centerY,
+                     parent.cloudPointsList[index][i][2] - centerZ)
+            newPointsList.append(point)
         parent.cloudPointsList[index] = newPointsList
+
+        # Rotating all the points on the selected surface based on given parameters:
+        newPointsList = []
+        for i in range(len(parent.cloudPointsList[index])):
+            point = array([[parent.cloudPointsList[index][i][0]],
+                           [parent.cloudPointsList[index][i][1]],
+                           [parent.cloudPointsList[index][i][2]]])
+            point = dot(matrixX, point)
+            point = dot(matrixY, point)
+            point = dot(matrixZ, point)
+            newPointsList.append((point[0][0], point[1][0], point[2][0]))
+        parent.cloudPointsList[index] = newPointsList
+
+        # Translating the points back to the origianl basis vector:
+        newPointsList = []
+        for i in range(len(parent.cloudPointsList[index])):
+            point = (parent.cloudPointsList[index][i][0] + centerX,
+                     parent.cloudPointsList[index][i][1] + centerY,
+                     parent.cloudPointsList[index][i][2] + centerZ)
+            newPointsList.append(point)
+        parent.cloudPointsList[index] = newPointsList
+
+        print(parent.faceSequenceNumbers)
+        print(parent.cloudPointsList)
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
@@ -236,13 +250,10 @@ class translationDefectsMenu(QWidget):
         parent.selectedShape = parent.shapeList[i]
         parent.selectedSequenceNumber = 2*i + 1
 
-    def setNormalDirection(self, parent):
+    def getCenterOfMass(self, parent):
         """
-        # Method: setNormalDirection.
-        # Description: Method for adding the normal direction of a planar face in the Translational
-        Defects Menu side widget.
+        # Method: getCenterOfMass.
+        # Description: This method gets the center of mass of a shape as a tuple of
+        coordinates x, y, z of a shape.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        self.xDirection.setText('Multiple Values')
-        self.yDirection.setText('Multiple Values')
-        self.zDirection.setText('Multiple Values')

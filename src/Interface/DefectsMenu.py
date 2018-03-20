@@ -82,7 +82,8 @@ class defectsMenu(QWidget):
         Actions package for displaying the Rotational Defects Menu side widget.
         # Parameters: * MainWindow parent = A referente for the main window object.
         """
-        pass
+        rotational = rotationalDefectsAction(parent)
+        rotational.rotationalDefectsActionProcedure(parent)
 
     def randomDefectsMenuProcedure(self, parent):
         """

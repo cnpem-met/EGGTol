@@ -112,6 +112,7 @@ class randomDefectsMenu(QWidget):
         done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
         # Getting information about the selected surface:
         index = 0
         seqNumber = None
@@ -121,7 +122,7 @@ class randomDefectsMenu(QWidget):
                 break
             index += 1
 
-        # Translating all the points based on given random parameters:
+        # Randomizing all the points based on given random parameters:
         minOffset = float(self.minOffset.displayText())
         maxOffset = float(self.maxOffset.displayText())
         newPointsList = []

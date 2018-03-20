@@ -477,6 +477,48 @@ class translationDefectsAction(QAction):
         switchRightPanels(widget, 'translationDefectsMenu', 'Painel de Geração de Erros por ' +
                           'Translação', parent, True)
 
+class rotationalDefectsAction(QAction):
+    """
+    # Class: rotationalDefectsAction.
+    # Description: A PyQt5 action that opens the Rotational Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros por Rotação', parent)
+        self.setStatusTip('Inserir erros artificiais devido à rotação em nuvens de pontos.')
+        self.triggered.connect(lambda: self.translationDefectsActionProcedure(parent))
+
+    def rotationalDefectsActionProcedure(self, parent):
+        """
+        # Method: rotationalDefectsActionProcedure.
+        # Description: The procedure for opening the Rotational Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.RotationalDefectsMenu import rotationalDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
+                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
+                                    'nuvem de pontos foi gerada no momento. Utilize ' +
+                                    'o menu de discretização ou importe uma nuvem de pontos ' +
+                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = rotationalDefectsMenu(parent)
+        switchRightPanels(widget, 'rotationalDefectsMenu', 'Painel de Geração de Erros por ' +
+                          'Rotação', parent, True)
+
 class randomDefectsAction(QAction):
     """
     # Class: randomDefectsAction.
