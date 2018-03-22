@@ -358,6 +358,41 @@ class faceDiscretizeAction(QAction):
         switchRightPanels(widget, 'faceDiscretizeMenu', 'Painel de Discretização de ' +
                           'Faces', parent, True)
 
+class surfaceDiscretizeAction(QAction):
+    """
+    # Class: surfaceDiscretizeAction.
+    # Description: A PyQt5 action that opens the Surface Discretize Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização de Faces Não-Planas', parent)
+        self.setStatusTip('Gerar uma nuvem de pontos para uma face não-plana específica do modelo')
+        self.triggered.connect(lambda: self.surfaceDiscretizeActionProcedure(parent))
+
+    def surfaceDiscretizeActionProcedure(self, parent):
+        """
+        # Method: surfaceDiscretizeActionProcedure.
+        # Description: The procedure for opening the Surface Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.SurfaceDiscretizeMenu import surfaceDiscretizeMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
+                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
+                                    'momento. Utilize o menu Arquivo > Importar para\n' +
+                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = surfaceDiscretizeMenu(parent)
+        switchRightPanels(widget, 'surfaceDiscretizeMenu', 'Painel de Discretização de ' +
+                          'Faces Não-Planas', parent, True)
+
 class defectsAction(QAction):
     """
     # Class: defectsAction.

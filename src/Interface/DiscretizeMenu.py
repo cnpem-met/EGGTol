@@ -94,9 +94,9 @@ class discretizeMenu(QWidget):
         btn6.setText(MyStrings.discretizeOptionSurface)
         btn6.setIcon(QIcon('..\\icons\\cadIcons\\surface.png'))
         btn6.setToolButtonStyle(3)
+        btn6.clicked.connect(lambda: self.surfaceDiscretizeMenuProcedure(parent))
         btn6.setIconSize(QSize(50, 50))
         btn6.setMinimumWidth(130)
-        btn6.setEnabled(False)
         grid.addWidget(btn6, 3, 1)
 
         grid.setColumnStretch(0, 1)
@@ -122,3 +122,13 @@ class discretizeMenu(QWidget):
         """
         faceDiscretize = faceDiscretizeAction(parent)
         faceDiscretize.faceDiscretizeActionProcedure(parent)
+
+    def surfaceDiscretizeMenuProcedure(self, parent):
+        """
+        # Method: surfaceDiscretizeMenuProcedure.
+        # Description: This method calls the surfaceDiscretizeActionProcedure from there
+        Actions package for displaying the Face Discretize Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        surfaceDiscretize = surfaceDiscretizeAction(parent)
+        surfaceDiscretize.surfaceDiscretizeActionProcedure(parent)

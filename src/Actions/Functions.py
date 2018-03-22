@@ -9,7 +9,7 @@ assigned with the current UI buttons.
 # OpenCASCADE Imports:
 from OCC.Graphic3d import Graphic3d_ArrayOfPoints
 from OCC.AIS import AIS_PointCloud
-from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE
+from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE, Quantity_NOC_BLACK
 from OCC.Aspect import Aspect_TOM_POINT
 from OCC.Prs3d import Prs3d_PointAspect
 
@@ -48,7 +48,7 @@ def buildCloud(parent):
     localContext.Display(pointCloud.GetHandle())
 
     # Sets a new aspect for displaying the points in the point cloud:
-    newAspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_WHITE), 2)
+    newAspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_BLACK), 2)
     pointCloud.SetAspect(newAspect.GetHandle())
     parent.canvas._display.Repaint()
 

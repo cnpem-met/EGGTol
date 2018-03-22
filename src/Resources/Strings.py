@@ -273,6 +273,10 @@ class MyStrings():
                                  'according to a selection.')
     faceDiscretizeApply = 'Apply face discretization'
 
+    surfaceDiscretizeDescription = ('The non-flat surface discretization method will discretize\n' +
+                                    'according to a selection.')
+    surfaceDiscretizeApply = 'Apply surface discretization'
+
     importDescription = ('Select an import option.\n\n' +
                          'The import operations allows adding IGES format CAD\n' +
                          'files or a cloud data in the current visualization.\n')
@@ -301,16 +305,15 @@ class MyStrings():
     nonGridDiscretization = 'N points/mm Discretization'
 
     askingForNValue = 'Enter the value of N for discretization:'
-    askingForPrecision = ('Enter the desired precision for cropping the\n' +
-                         'points on curved boundary limits:')
-    askingForUVDiscretization = ('Discretize non-flat surfaces using\n' +
-                                 'UV Parametrization')
+    askingForPrecision = ('Enter the desired precision for cropping the points\n' +
+                          'on curved boundary limits:')
+    askingForUVDiscretization = ('Discretize non-flat surfaces using U and V\n' +
+                                 'Parametrization')
     askingForSelectionMethod = ('The selection method will determine which entity type\n' +
                                'will be selected in the main window.')
     askingForUParameter = 'U parameter value:'
     askingForVParameter = 'V parameter value:'
-    askingForEntity = ('Select an entity which will be used to apply\n' +
-                       'actions:')
+    askingForEntity = ('Select an entity which will be used to apply actions:')
     askingForDirection = ('Enter a direction (x, y, z) for applying the points\n' +
                           'translation at the selected face:')
     askingForAngles = ('Enter a group of angles (x, y, z) that will be used\n' +

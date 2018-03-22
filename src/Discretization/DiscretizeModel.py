@@ -162,11 +162,11 @@ def orthonormalizeBasis(basisVector):
     i = basisVector[0]
     j = basisVector[1]
     k = basisVector[2]
-    s = ((dotProduct(i, j))/(dotProduct(j, j)))
-    proj = scalarVec(s, j)
-    newI = subVec(i, proj)
-    return [scalarVec((1/normVec(newI)), newI),
-            scalarVec((1/normVec(j)), j),
+    s = ((dotProduct(j, i))/(dotProduct(i, i)))
+    proj = scalarVec(s, i)
+    newJ = subVec(j, proj)
+    return [scalarVec((1/normVec(i)), i),
+            scalarVec((1/normVec(newJ)), newJ),
             scalarVec((1/normVec(k)), k)]
 
 def discretizeModel(objectList, density, precision, Uparam, Vparam, useParametric, gridDiscretization):

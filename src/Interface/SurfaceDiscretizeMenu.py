@@ -1,6 +1,6 @@
 """
-# Module: FaceDiscretizeMenu.py
-# Description: This module contains the Face Discretization Side Widget Menu UI
+# Module: SurfaceDiscretizeMenu.py
+# Description: This module contains the Surface Discretization Side Widget Menu UI
 for calling the discretization functions.
 # Author: Willian Hideak Arita da Silva.
 """
@@ -11,7 +11,7 @@ import sys
 # PyQt5 Imports:
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageBox, QLineEdit, \
-                            QRadioButton, QSlider
+                            QCheckBox, QRadioButton, QSlider
 
 # Local Imports:
 from Import.IGESImport import *
@@ -19,11 +19,11 @@ from Actions.Functions import *
 from Discretization.DiscretizeModel import *
 from Resources.Strings import MyStrings
 
-class faceDiscretizeMenu(QWidget):
+class surfaceDiscretizeMenu(QWidget):
     """
-    # Class: faceDiscretizeMenu.
+    # Class: surfaceDiscretizeMenu.
     # Description: This class provides a side menu with some options to configure
-    the Face Discretization process.
+    the Surface Discretization process.
     """
 
     def __init__(self, parent):
@@ -39,15 +39,15 @@ class faceDiscretizeMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Face
-        Discretize Menu side widget.
+        # Description: This method initializes the User Interface Elements of the
+        Surface Discretize Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel(MyStrings.faceDiscretizeDescription, self)
+        label1 = QLabel(MyStrings.surfaceDiscretizeDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -88,52 +88,36 @@ class faceDiscretizeMenu(QWidget):
         btn3.setMinimumWidth(266)
         grid.addWidget(btn3, 7, 0, 1, 2)
 
-        label4 = QLabel(MyStrings.flatDiscretizationHeader, self)
-        grid.addWidget(label4, 8, 0, 1, 2)
+        label6 = QLabel(MyStrings.nonFlatDiscretizationHeader, self)
+        grid.addWidget(label6, 8, 0, 1, 2)
 
-        self.gridDiscretization = QRadioButton(MyStrings.gridDiscretization, self)
-        self.gridDiscretization.setChecked(True)
-        grid.addWidget(self.gridDiscretization, 9, 0, 1, 2)
+        label7 = QLabel(MyStrings.askingForUParameter, self)
+        grid.addWidget(label7, 9, 0, 1, 2)
 
-        self.densityDiscretization = QRadioButton(MyStrings.nonGridDiscretization, self)
-        grid.addWidget(self.densityDiscretization, 10, 0, 1, 2)
+        self.UParameter = QLineEdit()
+        grid.addWidget(self.UParameter, 10, 0, 1, 2)
 
-        label5 = QLabel(MyStrings.askingForNValue, self)
-        grid.addWidget(label5, 11, 0, 1, 2)
+        label8 = QLabel(MyStrings.askingForVParameter, self)
+        grid.addWidget(label8, 11, 0, 1, 2)
 
-        self.density = QLineEdit()
-        grid.addWidget(self.density, 12, 0, 1, 2)
-
-        label6 = QLabel(MyStrings.askingForPrecision , self)
-        grid.addWidget(label6, 13, 0, 1, 2)
-
-        self.precisionSlider = QSlider(Qt.Horizontal, self)
-        self.precisionSlider.setMaximum(50)
-        self.precisionSlider.setMinimum(10)
-        self.precisionSlider.setSingleStep(1)
-        self.precisionSlider.valueChanged.connect(self.precisionValueChanged)
-        grid.addWidget(self.precisionSlider, 14, 0, 1, 2)
-
-        self.precision = QLineEdit()
-        self.precision.setText('10')
-        self.precision.textChanged.connect(self.precisionChanged)
-        grid.addWidget(self.precision, 15, 0, 1, 2)
+        self.VParameter = QLineEdit()
+        grid.addWidget(self.VParameter, 12, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText(MyStrings.faceDiscretizeApply)
-        btn4.clicked.connect(lambda: self.faceDiscretize(parent))
+        btn4.setText(MyStrings.surfaceDiscretizeApply)
+        btn4.clicked.connect(lambda: self.surfaceDiscretize(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
-        grid.addWidget(btn4, 16, 0, 1, 2)
+        grid.addWidget(btn4, 13, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(17, 1)
+        grid.setRowStretch(14, 1)
 
-    def faceDiscretize(self, parent):
+    def surfaceDiscretize(self, parent):
         """
-        # Method: faceDiscretize.
-        # Description: Performs the discretization of a selected face in the loaded CAD Model.
+        # Method: surfaceDiscretize.
+        # Description: Performs the discretization of a selected surface in the loaded CAD Model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
@@ -142,34 +126,16 @@ class faceDiscretizeMenu(QWidget):
             cleanCloud(parent)
 
         # Gets all the required parameters from the User Interface:
-        gridDiscretization = self.gridDiscretization.isChecked()
-        densityDiscretization = self.densityDiscretization.isChecked()
-
-        # Check if the density parameter is OK:
-        try:
-            density = float(self.density.displayText())
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidNTitle, MyStrings.popupInvalidNDescription,
-                                    QMessageBox.Ok, QMessageBox.Ok)
-            return
-
-        # Check if the precision parameter is OK:
-        try:
-            precision = float(self.precision.displayText())
-            if(precision > 50 or precision < 10):
-                raise
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
-                                    MyStrings.popupInvalidPrecisionDescription, QMessageBox.Ok, QMessageBox.Ok)
-            return
+        Uparam = float(self.UParameter.displayText())
+        Vparam = float(self.VParameter.displayText())
 
         # Loads the loading window:
         parent.loadingWindow.show()
 
-        # Performs the faceDiscretization using the Discretization package:
+        # Performs the surfaceDiscretization using the Discretization package:
         sequence = parent.selectedSequenceNumber
-        points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
-                                         density, precision, gridDiscretization)
+        points, normals = discretizeSurface(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
+                                            Uparam, Vparam)
         parent.faceSequenceNumbers.append(sequence)
         parent.faceNormalVectors.append(normals)
         parent.cloudPointsList.append(points)
@@ -228,13 +194,3 @@ class faceDiscretizeMenu(QWidget):
         self.selectedObject.setText(parent.entitiesList[i][0])
         parent.selectedShape = parent.shapeList[i]
         parent.selectedSequenceNumber = 2*i + 1
-
-    def precisionValueChanged(self, value):
-        self.precision.setText(str(value))
-
-    def precisionChanged(self):
-        try:
-            if(int(self.precision.displayText()) >= 10 and int(self.precision.displayText()) <= 50):
-                self.precisionSlider.setSliderPosition(int(self.precision.displayText()))
-        except:
-            return
