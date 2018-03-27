@@ -28,7 +28,6 @@ def switchLeftPanels(widget, name, prettyName, parent, scroll):
                   * MainWindow parent = A reference for the main window object.
                   * Boolean scroll = Defines if the side menu will have a vertical scroll bar.
     """
-
     if parent.leftDockWidget == None:
         dock = QDockWidget(prettyName, parent)
         content = None
@@ -74,7 +73,6 @@ def switchRightPanels(widget, name, prettyName, parent, scroll):
                   * MainWindow parent = A reference for the main window object.
                   * Boolean scroll = Defines if the side menu will have a vertical scroll bar.
     """
-
     if parent.rightDockWidget == None:
         dock = QDockWidget(prettyName, parent)
         content = None
@@ -119,7 +117,6 @@ class welcomeAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), MyStrings.actionWelcomePrettyName, parent)
         self.setStatusTip(MyStrings.actionWelcomeStatusTip)
         self.setIconText(MyStrings.actionWelcomeIconText)
@@ -131,28 +128,10 @@ class welcomeAction(QAction):
         # Description: A procedure for opening the Welcome Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         from Interface.WelcomeMenu import welcomeMenu
         widget = welcomeMenu(parent)
-        name = MyStrings.actionWelcomeName
-        prettyName = MyStrings.actionWelcomePrettyName
-        if parent.leftDockWidget == None:
-            dock = QDockWidget(prettyName, parent)
-            dock.setWidget(widget)
-            parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-            parent.leftDockMenu = dock
-            parent.leftDockWidget = name
-        else:
-            parent.removeDockWidget(parent.leftDockMenu)
-            if parent.leftDockWidget == name:
-                parent.leftDockMenu = None
-                parent.leftDockWidget = None
-            else:
-                dock = QDockWidget(prettyName, parent)
-                dock.setWidget(widget)
-                parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-                parent.leftDockMenu = dock
-                parent.leftDockWidget = name
+        switchLeftPanels(widget, MyStrings.actionWelcomeName, MyStrings.actionWelcomePrettyName,
+                         parent, False)
 
 class entitiesAction(QAction):
     """
@@ -166,7 +145,6 @@ class entitiesAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         super().__init__(QIcon('..\\icons\\Server.svg'), MyStrings.actionEntitiesPrettyName, parent)
         self.setStatusTip(MyStrings.actionEntitiesStatusTip)
         self.setIconText(MyStrings.actionEntitiesIconText)
@@ -178,13 +156,11 @@ class entitiesAction(QAction):
         # Description: A procedure for opening the Entities Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         from Interface.EntitiesMenu import entitiesMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = entitiesMenu(parent)
         switchLeftPanels(widget, MyStrings.actionEntitiesName, MyStrings.actionEntitiesPrettyName, parent, False)
@@ -202,9 +178,9 @@ class importAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\inbox.svg'), 'Painel de Importação', parent)
-        self.setStatusTip('Importar Um Arquivo .IGES ou uma Nuvem de Pontos.')
-        self.setIconText('Importar')
+        super().__init__(QIcon('..\\icons\\inbox.svg'), MyStrings.actionImportPrettyName, parent)
+        self.setStatusTip(MyStrings.actionImportStatusTip)
+        self.setIconText(MyStrings.actionImportIconText)
         self.triggered.connect(lambda: self.importActionProcedure(parent))
 
     def importActionProcedure(self, parent):
@@ -216,7 +192,7 @@ class importAction(QAction):
 
         from Interface.ImportMenu import importMenu
         widget = importMenu(parent)
-        switchRightPanels(widget, 'importMenu', 'Painel de Importação', parent, True)
+        switchRightPanels(widget, MyStrings.actionImportName,  MyStrings.actionImportPrettyName, parent, True)
 
 class exportAction(QAction):
     """
@@ -231,9 +207,9 @@ class exportAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\outbox.svg'), 'Painel de Exportação', parent)
-        self.setStatusTip('Exportar Um Modelo CAD como uma Captura de Tela ou uma Nuvem de Pontos.')
-        self.setIconText('Exportar')
+        super().__init__(QIcon('..\\icons\\outbox.svg'), MyStrings.actionExportPrettyName, parent)
+        self.setStatusTip(MyStrings.actionExportStatusTip)
+        self.setIconText(MyStrings.actionExportIconText)
         self.triggered.connect(lambda: self.exportActionProcedure(parent))
 
     def exportActionProcedure(self, parent):
@@ -245,13 +221,12 @@ class exportAction(QAction):
 
         from Interface.ExportMenu import exportMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES ou .pcd foi aberto',
-                                    'Não há nenhum arquivo .IGS, .IGES ou .pcd ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = exportMenu(parent)
-        switchRightPanels(widget, 'exportMenu', 'Painel de Exportação', parent, True)
+        switchRightPanels(widget, MyStrings.actionExportName, MyStrings.actionExportPrettyName, parent, True)
 
 class cloudAction(QAction):
     """
@@ -266,9 +241,9 @@ class cloudAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\cloud.svg'), 'Painel de Discretização', parent)
-        self.setStatusTip('Gerar uma Nuvem de Pontos para o Modelo')
-        self.setIconText('Gerar Nuvem')
+        super().__init__(QIcon('..\\icons\\cloud.svg'), MyStrings.actionCloudPrettyName, parent)
+        self.setStatusTip(MyStrings.actionCloudStatusTip)
+        self.setIconText(MyStrings.actionCloudIconText)
         self.triggered.connect(lambda: self.cloudActionProcedure(parent))
 
     def cloudActionProcedure(self, parent):
@@ -280,13 +255,12 @@ class cloudAction(QAction):
 
         from Interface.DiscretizeMenu import discretizeMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = discretizeMenu(parent)
-        switchRightPanels(widget, 'cloudMenu', 'Painel de Discretização', parent, True)
+        switchRightPanels(widget, MyStrings.actionCloudName, MyStrings.actionCloudPrettyName, parent, True)
 
 class autoDiscretizeAction(QAction):
     """
@@ -301,8 +275,8 @@ class autoDiscretizeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização Automática', parent)
-        self.setStatusTip('Gerar uma nuvem de pontos para o modelo automaticamente')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionAutoDiscretizePrettyName, parent)
+        self.setStatusTip(MyStrings.actionAutoDiscretizeStatusTip)
         self.triggered.connect(lambda: self.autoDiscretizeActionProcedure(parent))
 
     def autoDiscretizeActionProcedure(self, parent):
@@ -314,14 +288,13 @@ class autoDiscretizeAction(QAction):
 
         from Interface.AutoDiscretizeMenu import autoDiscretizeMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = autoDiscretizeMenu(parent)
-        switchRightPanels(widget, 'autoDiscretizeMenu', 'Painel de Discretização ' +
-                          'Automática', parent, True)
+        switchRightPanels(widget, MyStrings.actionAutoDiscretizeName, MyStrings.actionAutoDiscretizePrettyName,
+                          parent, True)
 
 class faceDiscretizeAction(QAction):
     """
@@ -336,8 +309,8 @@ class faceDiscretizeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização de Faces', parent)
-        self.setStatusTip('Gerar uma nuvem de pontos para uma face específica do modelo')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionFaceDiscretizePrettyName, parent)
+        self.setStatusTip(MyStrings.actionFaceDiscretizeStatusTip)
         self.triggered.connect(lambda: self.faceDiscretizeActionProcedure(parent))
 
     def faceDiscretizeActionProcedure(self, parent):
@@ -349,14 +322,13 @@ class faceDiscretizeAction(QAction):
 
         from Interface.FaceDiscretizeMenu import faceDiscretizeMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = faceDiscretizeMenu(parent)
-        switchRightPanels(widget, 'faceDiscretizeMenu', 'Painel de Discretização de ' +
-                          'Faces', parent, True)
+        switchRightPanels(widget, MyStrings.actionFaceDiscretizeName, MyStrings.actionFaceDiscretizePrettyName,
+                          parent, True)
 
 class surfaceDiscretizeAction(QAction):
     """
@@ -371,8 +343,8 @@ class surfaceDiscretizeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Discretização de Faces Não-Planas', parent)
-        self.setStatusTip('Gerar uma nuvem de pontos para uma face não-plana específica do modelo')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionSurfaceDiscretizePrettyName, parent)
+        self.setStatusTip(MyStrings.actionSurfaceDiscretizeStatusTip)
         self.triggered.connect(lambda: self.surfaceDiscretizeActionProcedure(parent))
 
     def surfaceDiscretizeActionProcedure(self, parent):
@@ -384,14 +356,13 @@ class surfaceDiscretizeAction(QAction):
 
         from Interface.SurfaceDiscretizeMenu import surfaceDiscretizeMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = surfaceDiscretizeMenu(parent)
-        switchRightPanels(widget, 'surfaceDiscretizeMenu', 'Painel de Discretização de ' +
-                          'Faces Não-Planas', parent, True)
+        switchRightPanels(widget, MyStrings.actionSurfaceDiscretizeName, MyStrings.actionSurfaceDiscretizePrettyName,
+                          parent, True)
 
 class defectsAction(QAction):
     """
@@ -406,9 +377,9 @@ class defectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\move.svg'), 'Painel de Geração de Erros', parent)
-        self.setStatusTip('Inserir erros artificiais em nuvens de pontos.')
-        self.setIconText('Gerar Erros')
+        super().__init__(QIcon('..\\icons\\move.svg'), MyStrings.actionDefectsPrettyName, parent)
+        self.setStatusTip(MyStrings.actionDefectsStatusTip)
+        self.setIconText(MyStrings.actionDefectsIconText)
         self.triggered.connect(lambda: self.defectsActionProcedure(parent))
 
     def defectsActionProcedure(self, parent):
@@ -420,20 +391,18 @@ class defectsAction(QAction):
 
         from Interface.DefectsMenu import defectsMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         if not parent.activeCloudFile:
-            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
-                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
-                                    'nuvem de pontos foi gerada no momento. Utilize ' +
-                                    'o menu de discretização ou importe uma nuvem de pontos ' +
-                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = defectsMenu(parent)
-        switchRightPanels(widget, 'defectsMenu', 'Painel de Geração de Erros', parent, True)
+        switchRightPanels(widget, MyStrings.actionDefectsName, MyStrings.actionDefectsPrettyName,
+                          parent, True)
 
 class pointsListAction(QAction):
     """
@@ -448,9 +417,9 @@ class pointsListAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\paper.svg'), 'Painel de Pontos Gerados', parent)
-        self.setStatusTip('Mostra todos os pontos gerados no modelo CAD atual.')
-        self.setIconText('Lista de Pontos')
+        super().__init__(QIcon('..\\icons\\paper.svg'), MyStrings.actionPointsListPrettyName, parent)
+        self.setStatusTip(MyStrings.actionPointsListStatusTip)
+        self.setIconText(MyStrings.actionPointsListIconText)
         self.triggered.connect(lambda: self.pointsListActionProcedure(parent))
 
     def pointsListActionProcedure(self, parent):
@@ -461,14 +430,13 @@ class pointsListAction(QAction):
         """
         from Interface.PointsListMenu import pointsListMenu
         if not parent.activeCloudFile:
-            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
-                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
-                                    'nuvem de pontos foi gerada no momento. Utilize ' +
-                                    'o menu de discretização ou importe uma nuvem de pontos ' +
-                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = pointsListMenu(parent)
-        switchLeftPanels(widget, 'pointsListMenu', 'Painel de Pontos Gerados', parent, False)
+        switchLeftPanels(widget, MyStrings.actionPointsListName, MyStrings.actionPointsListPrettyName,
+                         parent, False)
 
 class translationDefectsAction(QAction):
     """
@@ -483,8 +451,8 @@ class translationDefectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros por Translação', parent)
-        self.setStatusTip('Inserir erros artificiais devido à translação em nuvens de pontos.')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionTranslationPrettyName, parent)
+        self.setStatusTip(MyStrings.actionTranslationStatusTip)
         self.triggered.connect(lambda: self.translationDefectsActionProcedure(parent))
 
     def translationDefectsActionProcedure(self, parent):
@@ -496,21 +464,18 @@ class translationDefectsAction(QAction):
 
         from Interface.TranslationDefectsMenu import translationDefectsMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         if not parent.activeCloudFile:
-            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
-                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
-                                    'nuvem de pontos foi gerada no momento. Utilize ' +
-                                    'o menu de discretização ou importe uma nuvem de pontos ' +
-                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = translationDefectsMenu(parent)
-        switchRightPanels(widget, 'translationDefectsMenu', 'Painel de Geração de Erros por ' +
-                          'Translação', parent, True)
+        switchRightPanels(widget, MyStrings.actionTranslationName, MyStrings.actionTranslationPrettyName,
+                          parent, True)
 
 class rotationalDefectsAction(QAction):
     """
@@ -525,9 +490,9 @@ class rotationalDefectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros por Rotação', parent)
-        self.setStatusTip('Inserir erros artificiais devido à rotação em nuvens de pontos.')
-        self.triggered.connect(lambda: self.translationDefectsActionProcedure(parent))
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionRotationPrettyName, parent)
+        self.setStatusTip(MyStrings.actionRotationStatusTip)
+        self.triggered.connect(lambda: self.rotationalDefectsActionProcedure(parent))
 
     def rotationalDefectsActionProcedure(self, parent):
         """
@@ -538,21 +503,18 @@ class rotationalDefectsAction(QAction):
 
         from Interface.RotationalDefectsMenu import rotationalDefectsMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         if not parent.activeCloudFile:
-            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
-                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
-                                    'nuvem de pontos foi gerada no momento. Utilize ' +
-                                    'o menu de discretização ou importe uma nuvem de pontos ' +
-                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    MessageBox.Ok, QMessageBox.Ok)
             return
         widget = rotationalDefectsMenu(parent)
-        switchRightPanels(widget, 'rotationalDefectsMenu', 'Painel de Geração de Erros por ' +
-                          'Rotação', parent, True)
+        switchRightPanels(widget, MyStrings.actionRotationName, MyStrings.actionRotationPrettyName,
+                          parent, True)
 
 class randomDefectsAction(QAction):
     """
@@ -567,8 +529,8 @@ class randomDefectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Painel de Geração de Erros Aleatórios', parent)
-        self.setStatusTip('Inserir erros artificiais aleatoriamente em nuvens de pontos.')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionRandomPrettyName, parent)
+        self.setStatusTip(MyStrings.actionRandomStatusTip)
         self.triggered.connect(lambda: self.randomDefectsActionProcedure(parent))
 
     def randomDefectsActionProcedure(self, parent):
@@ -580,21 +542,18 @@ class randomDefectsAction(QAction):
 
         from Interface.RandomDefectsMenu import randomDefectsMenu
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         if not parent.activeCloudFile:
-            QMessageBox.information(parent, 'Nenhuma Nuvem de Pontos presente',
-                                    'Não há nenhum arquivo .pcd aberto e nenhuma ' +
-                                    'nuvem de pontos foi gerada no momento. Utilize ' +
-                                    'o menu de discretização ou importe uma nuvem de pontos ' +
-                                    'para inserir erros.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = randomDefectsMenu(parent)
-        switchRightPanels(widget, 'randomDefectsMenu', 'Painel de Geração de Erros ' +
-                          'Aleatórios', parent, True)
+        switchRightPanels(widget, MyStrings.actionRandomName, MyStrings.actionRandomPrettyName,
+                          parent, True)
 
 class closeAction(QAction):
     """
@@ -609,9 +568,9 @@ class closeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\cross.svg'), 'Fechar Arquivo', parent)
-        self.setStatusTip('Fecha o modelo CAD atual')
-        self.setIconText('Fechar')
+        super().__init__(QIcon('..\\icons\\cross.svg'), MyStrings.actionClosePrettyName, parent)
+        self.setStatusTip(MyStrings.actionCloseStatusTip)
+        self.setIconText(MyStrings.actionCloseIconText)
         self.triggered.connect(lambda: self.closeActionProcedure(parent))
 
     def closeActionProcedure(self, parent):
@@ -621,62 +580,54 @@ class closeAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        from Interface.WelcomeMenu import welcomeMenu
-
-        # Checking if there is a current file:
+        # Checking if there is a current opened file:
         if not parent.activeCADFile:
-            QMessageBox.information(parent, 'Nenhum arquivo .IGES foi aberto',
-                                    'Não há nenhum arquivo .IGS ou .IGES ativo no\n' +
-                                    'momento. Utilize o menu Arquivo > Importar para\n' +
-                                    'para abrir um arquivo.', QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
             return
 
         # Creating a confirmation dialog asking for permission to close the file:
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        box.setWindowTitle('Fechar Arquivo')
-        box.setText('Tem certeza que deseja fechar o arquivo? As alterações\n' +
-                    'não salvas/exportadas serão perdidas.')
+        box.setWindowTitle(MyStrings.popupCloseTitle)
+        box.setText(MyStrings.popupCloseMessage)
         box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         box.setDefaultButton(QMessageBox.No)
         buttonYes = box.button(QMessageBox.Yes)
-        buttonYes.setText('Fechar')
+        buttonYes.setText(MyStrings.popupCloseButtonOK)
         buttonNo = box.button(QMessageBox.No)
-        buttonNo.setText('Cancelar')
+        buttonNo.setText(MyStrings.popupCloseButtonCancel)
         box.exec_()
 
         # Executing a routine for closing the current file:
         if box.clickedButton() == buttonYes:
+
+            # Importing the Welcome Menu Side Widget:
+            from Interface.WelcomeMenu import welcomeMenu
+
+            # Removing all the current displayed side widgets:
             parent.removeDockWidget(parent.leftDockMenu)
             parent.removeDockWidget(parent.rightDockMenu)
             parent.leftDockMenu = parent.leftDockWidget = None
             parent.rightDockMenu = parent.rightDockWidget = None
+
+            # Redisplaying the Welcome Menu
             widget = welcomeMenu(parent)
-            name = 'welcomeMenu'
-            prettyName = 'Painel de Boas-Vindas!'
-            if parent.leftDockWidget == None:
-                dock = QDockWidget(prettyName, parent)
-                dock.setWidget(widget)
-                parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-                parent.leftDockMenu = dock
-                parent.leftDockWidget = name
-            else:
-                parent.removeDockWidget(parent.leftDockMenu)
-                if parent.leftDockWidget == name:
-                    parent.leftDockMenu = None
-                    parent.leftDockWidget = None
-                else:
-                    dock = QDockWidget(prettyName, parent)
-                    dock.setWidget(widget)
-                    parent.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-                    parent.leftDockMenu = dock
-                    parent.leftDockWidget = name
+            switchLeftPanels(widget, MyStrings.actionWelcomeName, MyStrings.actionWelcomePrettyName,
+                            parent, False)
+
+            # Defining the default display mode for a clean session:
             parent.canvas._display.SetSelectionModeNeutral()
             parent.canvas._display.Context.CloseAllContexts()
             parent.canvas._display.Context.RemoveAll()
             parent.canvas._display.Repaint()
+
+            # Definint the original window title:
             parent.setWindowTitle(parent.title)
+
+            # Erasing all the current saved parameters:
             parent.activeCADFile = None
             parent.activeCloudFile = None
             parent.entitiesObject = []
@@ -685,6 +636,8 @@ class closeAction(QAction):
             parent.entitiesList = []
             parent.cloudPointsList = []
             parent.shapeList = []
+
+            # Applying an isometric visualization mode:
             parent.canvas._display.View_Iso()
 
 class exitAction(QAction):
@@ -700,9 +653,9 @@ class exitAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\circle-cross.svg'), 'Encerrar', parent)
-        self.setStatusTip('Encerra o programa')
-        self.setIconText('Encerrar')
+        super().__init__(QIcon('..\\icons\\circle-cross.svg'), MyStrings.actionExitPrettyName, parent)
+        self.setStatusTip(MyStrings.actionExitStatusTip)
+        self.setIconText(MyStrings.actionExitIconText)
         self.triggered.connect(lambda: self.exitActionProcedure())
 
     def exitActionProcedure(self):
@@ -710,20 +663,21 @@ class exitAction(QAction):
         # Method: exitActionProcedure.
         # Description: The procedure for closing the application and all the opened files.
         """
-
+        # Create a confirmation dialog asking for permission to quit the application:
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
         box.setWindowIcon(QIcon('..\\icons\\desktopIcons\\main.png'))
-        box.setWindowTitle('Encerrar o Gerador de Pontos')
-        box.setText('Tem certeza que deseja encerrar? As alterações\n' +
-                    'não salvas/exportadas serão perdidas.')
+        box.setWindowTitle(MyStrings.popupExitTitle)
+        box.setText(MyStrings.popupExitMessage)
         box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         box.setDefaultButton(QMessageBox.No)
         buttonYes = box.button(QMessageBox.Yes)
-        buttonYes.setText('Encerrar')
+        buttonYes.setText(MyStrings.popupExitButtonOK)
         buttonNo = box.button(QMessageBox.No)
-        buttonNo.setText('Cancelar')
+        buttonNo.setText(MyStrings.popupExitButtonCancel)
         box.exec_()
+
+        # Executing a routine for quitting the application:
         if box.clickedButton() == buttonYes:
             qApp.quit()
 
@@ -739,10 +693,9 @@ class darkAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\moon.svg'), 'Definir Fundo Escuro', parent)
-        self.setStatusTip('Configura o fundo de tela com uma cor escura')
-        self.setIconText('Escuro')
+        super().__init__(QIcon('..\\icons\\moon.svg'), MyStrings.actionDarkPrettyName, parent)
+        self.setStatusTip(MyStrings.actionDarkStatusTip)
+        self.setIconText(MyStrings.actionDarkIconText)
         self.triggered.connect(lambda: self.darkActionProcedure(parent))
 
     def darkActionProcedure(self, parent):
@@ -751,7 +704,6 @@ class darkAction(QAction):
         # Description: The procedure for setting a dark background.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.light = False
         parent.canvas._display.set_bg_gradient_color(10, 10, 10, 10, 10, 43)
         parent.canvas._display.display_trihedron_white()
@@ -769,10 +721,9 @@ class lightAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\sun.svg'), 'Definir Fundo Claro', parent)
-        self.setStatusTip('Configura o fundo de tela com uma cor clara')
-        self.setIconText('Claro')
+        super().__init__(QIcon('..\\icons\\sun.svg'), MyStrings.actionLightPrettyName, parent)
+        self.setStatusTip(MyStrings.actionLightStatusTip)
+        self.setIconText(MyStrings.actionLightIconText)
         self.triggered.connect(lambda: self.lightActionProcedure(parent))
 
     def lightActionProcedure(self, parent):
@@ -781,7 +732,6 @@ class lightAction(QAction):
         # Description: The procedure for setting a light background.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.light = True
         parent.canvas._display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
         parent.canvas._display.display_trihedron()
@@ -792,15 +742,14 @@ class selectionNeutralAction(QAction):
     # Class: selectionNeutralAction.
     # Description: A PyQt5 Action that enables the solid selection mode.
     """
-
     def __init__(self, parent):
         """
         # Method: __init__.
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Sólidos', parent)
-        self.setStatusTip('Define como padrão o modo de seleção de sólidos')
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), MyStrings.actionSelectionNeutralPrettyName, parent)
+        self.setStatusTip(MyStrings.actionSelectionNeutralStatusTip)
         self.triggered.connect(lambda: self.selectionNeutralActionProcedure(parent))
 
     def selectionNeutralActionProcedure(self, parent):
@@ -823,8 +772,8 @@ class selectionFaceAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Faces', parent)
-        self.setStatusTip('Define como padrão o modo de seleção de faces')
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), MyStrings.actionSelectionFacePrettyName, parent)
+        self.setStatusTip(MyStrings.actionSelectionFaceStatusTip)
         self.triggered.connect(lambda: self.selectionFaceActionProcedure(parent))
 
     def selectionFaceActionProcedure(self, parent):
@@ -847,8 +796,8 @@ class selectionEdgeAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Arestas', parent)
-        self.setStatusTip('Define como padrão o modo de seleção de arestas')
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), MyStrings.actionSelectionEdgePrettyName, parent)
+        self.setStatusTip(MyStrings.actionSelectionEdgeStatusTip)
         self.triggered.connect(lambda: self.selectionEdgeActionProcedure(parent))
 
     def selectionEdgeActionProcedure(self, parent):
@@ -871,8 +820,8 @@ class selectionVertexAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\icons\\arrow-right.svg'), 'Modo de Seleção de Vértices', parent)
-        self.setStatusTip('Define como padrão o modo de seleção de vértices')
+        super().__init__(QIcon('..\icons\\arrow-right.svg'), MyStrings.actionSelectionVertexPrettyName, parent)
+        self.setStatusTip(MyStrings.actionSelectionVertexStatusTip)
         self.triggered.connect(lambda: self.selectionVertexActionProcedure(parent))
 
     def selectionVertexActionProcedure(self, parent):
@@ -895,10 +844,9 @@ class viewTopAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Superior', parent)
-        self.setStatusTip('Exibe a vista superior do modelo CAD atual')
-        self.setIconText('Vista Superior')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewTopPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewTopStatusTip)
+        self.setIconText(MyStrings.actionViewTopIconText)
         self.triggered.connect(lambda: self.viewTopActionProcedure(parent))
 
     def viewTopActionProcedure(self, parent):
@@ -907,7 +855,6 @@ class viewTopAction(QAction):
         # Description: The procedure for setting the top view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Top()
         parent.canvas._display.Repaint()
 
@@ -923,10 +870,9 @@ class viewBottomAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Inferior', parent)
-        self.setStatusTip('Exibe a vista inferior do modelo CAD atual')
-        self.setIconText('Vista Inferior')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewBottomPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewBottomStatusTip)
+        self.setIconText(MyStrings.actionViewBottomIconText)
         self.triggered.connect(lambda: self.viewBottomActionProcedure(parent))
 
     def viewBottomActionProcedure(self, parent):
@@ -935,7 +881,6 @@ class viewBottomAction(QAction):
         # Description: The procedure for setting the bottom view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Bottom()
         parent.canvas._display.Repaint()
 
@@ -951,10 +896,9 @@ class viewLeftAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Lateral Esquerda', parent)
-        self.setStatusTip('Exibe a vista lateral esquerda do modelo CAD atual')
-        self.setIconText('Vista Lateral Esquerda')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewLeftPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewLeftStatusTip)
+        self.setIconText(MyStrings.actionViewLeftIconText)
         self.triggered.connect(lambda: self.viewLeftActionProcedure(parent))
 
     def viewLeftActionProcedure(self, parent):
@@ -963,7 +907,6 @@ class viewLeftAction(QAction):
         # Description: The procedure for setting the left view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Left()
         parent.canvas._display.Repaint()
 
@@ -979,10 +922,9 @@ class viewRightAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Lateral Direita', parent)
-        self.setStatusTip('Exibe a vista lateral direita do modelo CAD atual')
-        self.setIconText('Vista Lateral Direita')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewRightPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewRightStatusTip)
+        self.setIconText(MyStrings.actionViewRightIconText)
         self.triggered.connect(lambda: self.viewRightActionProcedure(parent))
 
     def viewRightActionProcedure(self, parent):
@@ -991,7 +933,6 @@ class viewRightAction(QAction):
         # Description: The procedure for setting the right view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Right()
         parent.canvas._display.Repaint()
 
@@ -1007,10 +948,9 @@ class viewFrontAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Frontal', parent)
-        self.setStatusTip('Exibe a vista frontal do modelo CAD atual')
-        self.setIconText('Vista Frontal')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewFrontPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewFrontStatusTip)
+        self.setIconText(MyStrings.actionViewFrontIconText)
         self.triggered.connect(lambda: self.viewFrontActionProcedure(parent))
 
     def viewFrontActionProcedure(self, parent):
@@ -1019,7 +959,6 @@ class viewFrontAction(QAction):
         # Description: The procedure for setting the front view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Front()
         parent.canvas._display.Repaint()
 
@@ -1035,10 +974,9 @@ class viewRearAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Posterior', parent)
-        self.setStatusTip('Exibe a vista posterior do modelo CAD atual')
-        self.setIconText('Vista Posterior')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewRearPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewRearStatusTip)
+        self.setIconText(MyStrings.actionViewRearIconText)
         self.triggered.connect(lambda: self.viewRearActionProcedure(parent))
 
     def viewRearActionProcedure(self, parent):
@@ -1047,7 +985,6 @@ class viewRearAction(QAction):
         # Description: The procedure for setting the rear view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Rear()
         parent.canvas._display.Repaint()
 
@@ -1063,10 +1000,9 @@ class viewIsoAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\box.svg'), 'Vista Isométrica', parent)
-        self.setStatusTip('Exibe a vista isométrica do modelo CAD atual')
-        self.setIconText('Vista Isométrica')
+        super().__init__(QIcon('..\\icons\\box.svg'), MyStrings.actionViewIsoPrettyName, parent)
+        self.setStatusTip(MyStrings.actionViewIsoStatusTip)
+        self.setIconText(MyStrings.actionViewIsoIconText)
         self.triggered.connect(lambda: self.viewIsoActionProcedure(parent))
 
     def viewIsoActionProcedure(self, parent):
@@ -1075,7 +1011,6 @@ class viewIsoAction(QAction):
         # Description: The procedure for setting the isometric view of a CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.View_Iso()
         parent.canvas._display.Repaint()
 
@@ -1091,10 +1026,9 @@ class setWireframeAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Exibir Modelo Wireframe', parent)
-        self.setStatusTip('Exibe um modelo Wireframe do CAD atual')
-        self.setIconText('Modelo Wireframe')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionWireframePrettyName, parent)
+        self.setStatusTip(MyStrings.actionWireframeStatusTip)
+        self.setIconText(MyStrings.actionWireframeIconText)
         self.triggered.connect(lambda: self.setWireframeActionProcedure(parent))
 
     def setWireframeActionProcedure(self, parent):
@@ -1103,7 +1037,6 @@ class setWireframeAction(QAction):
         # Description: The procedure for displaying a model in wireframe visualization.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.SetModeWireFrame()
         parent.canvas._display.Repaint()
 
@@ -1119,10 +1052,9 @@ class setShadedAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Exibir Modelo Sólido', parent)
-        self.setStatusTip('Exibe um modelo sólido do CAD atual')
-        self.setIconText('Modelo Sólido')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionShadedPrettyName, parent)
+        self.setStatusTip(MyStrings.actionShadedStatusTip)
+        self.setIconText(MyStrings.actionShadedIconText)
         self.triggered.connect(lambda: self.setShadedActionProcedure(parent))
 
     def setShadedActionProcedure(self, parent):
@@ -1131,7 +1063,6 @@ class setShadedAction(QAction):
         # Description: The procedure for displaying a model in shaded (solid) visualization.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.SetModeShaded()
         parent.canvas._display.Repaint()
 
@@ -1147,19 +1078,17 @@ class fitAllAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Ajustar Elementos à Tela', parent)
-        self.setStatusTip('Ajusta o zoom para que todos os elementos fiquem no visualizador')
-        self.setIconText('Ajustar Elementos')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionFitAllPrettyName, parent)
+        self.setStatusTip(MyStrings.actionFitAllStatusTip)
+        self.setIconText(MyStrings.actionFitAllIconText)
         self.triggered.connect(lambda: self.fitAllActionProcedure(parent))
 
-    def setShadedActionProcedure(self, parent):
+    def fitAllActionProcedure(self, parent):
         """
         # Method: fitAllActionProcedure.
         # Description: The procedure for adjusting all elements to fit on the screen.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         parent.canvas._display.FitAll()
         parent.canvas._display.Repaint()
 
@@ -1176,10 +1105,9 @@ class githubAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir Projeto no GitHub', parent)
-        self.setStatusTip('Exibe informações sobre esse projeto, hospedado no GitHub.com')
-        self.setIconText('GitHub')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionGithubPrettyName, parent)
+        self.setStatusTip(MyStrings.actionGithubStatusTip)
+        self.setIconText(MyStrings.actionGithubIconText)
         self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))
 
 class developerPageAction(QAction):
@@ -1195,9 +1123,9 @@ class developerPageAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Abrir https://hideak.github.io', parent)
-        self.setStatusTip('Exibe o site do desenvolvedor, incluindo projetos em progresso')
-        self.setIconText('Página do Desenvolvedor')
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionDeveloperPrettyName, parent)
+        self.setStatusTip(MyStrings.actionDeveloperStatusTip)
+        self.setIconText(MyStrings.actionDeveloperIconText)
         self.triggered.connect(lambda: webbrowser.open('https://hideak.github.io'))
 
 class emailAction(QAction):
@@ -1205,7 +1133,6 @@ class emailAction(QAction):
     # Class: emailAction.
     # Description: A PyQt5 action that opens an email prompt for reporting bugs.
     """
-
     def __init__(self, parent):
         """
         # Method: __init__.
@@ -1213,7 +1140,7 @@ class emailAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\mail.svg'), 'Enviar Email ao Desenvolvedor', parent)
-        self.setStatusTip('Abre uma janela para envio de email ao desenvolvedor')
-        self.setIconText('Email')
+        super().__init__(QIcon('..\\icons\\mail.svg'), MyStrings.actionEmailPrettyName, parent)
+        self.setStatusTip(MyStrings.actionEmailStatusTip)
+        self.setIconText(MyStrings.actionEmailIconText)
         self.triggered.connect(lambda: webbrowser.open('mailto:willianhideak@hotmail.com'))

@@ -13,7 +13,7 @@ class MyStrings():
 
     # Window Title Strings:
     applicationTitle = 'Point Cloud Generator'
-    applicationVersion = 'v0.7.139'
+    applicationVersion = 'v0.7.141'
 
     # MenuBar Strings:
     menuBarFile = 'File'
@@ -34,155 +34,136 @@ class MyStrings():
     actionEntitiesIconText = 'Entities'
     actionEntitiesName = 'entitiesMenu'
 
-    actionImportPrettyName = ''
-    actionImportStatusTip = ''
-    actionImportIconText = ''
-    actionImportName = ''
+    actionImportPrettyName = 'Import Panel'
+    actionImportStatusTip = 'Import an IGES file or a point cloud file'
+    actionImportIconText = 'Import'
+    actionImportName = 'importMenu'
 
-    actionExportPrettyName = ''
-    actionExportStatusTip = ''
-    actionExportIconText = ''
-    actionExportName = ''
+    actionExportPrettyName = 'Export Panel'
+    actionExportStatusTip = 'Export a CAD model as a screenshot or a point cloud file'
+    actionExportIconText = 'Export'
+    actionExportName = 'exportMenu'
 
-    actionCloudPrettyName = ''
-    actionCloudStatusTip = ''
-    actionCloudIconText = ''
-    actionCloudName = ''
+    actionCloudPrettyName = 'Discretization Panel'
+    actionCloudStatusTip = 'Generates a point cloud for the model'
+    actionCloudIconText = 'Generate Cloud'
+    actionCloudName = 'cloudMenu'
 
-    actionAutoDiscretizePrettyName = ''
-    actionAutoDiscretizeStatusTip = ''
-    actionAutoDiscretizeIconText = ''
-    actionAutoDiscretizeName = ''
+    actionAutoDiscretizePrettyName = 'Auto Discretization Panel'
+    actionAutoDiscretizeStatusTip = 'Generates a point cloud for the model automatically'
+    actionAutoDiscretizeName = 'autoDiscretizeMenu'
 
-    actionFaceDiscretizePrettyName = ''
-    actionFaceDiscretizeStatusTip = ''
-    actionFaceDiscretizeIconText = ''
-    actionFaceDiscretizeName = ''
+    actionFaceDiscretizePrettyName = 'Flat Surface Discretization Panel'
+    actionFaceDiscretizeStatusTip = ('Generates a point cloud for a specific flat surface of ' +
+                                     'the model')
+    actionFaceDiscretizeName = 'faceDiscretizeMenu'
 
-    actionDefectsPrettyName = ''
-    actionDefectsStatusTip = ''
-    actionDefectsIconText = ''
-    actionDefectsName = ''
+    actionSurfaceDiscretizePrettyName = 'Parametric Discretization Panel'
+    actionSurfaceDiscretizeStatusTip = ('Generates a point cloud for a specific non-flat ' +
+                                        'surface of the model')
+    actionSurfaceDiscretizeName = 'surfaceDiscretizeMenu'
 
-    actionPointsListPrettyName = ''
-    actionPointsListStatusTip = ''
-    actionPointsListIconText = ''
-    actionPointsListName = ''
+    actionDefectsPrettyName = 'Deviation Generator Panel'
+    actionDefectsStatusTip = 'Insert artificial deviations in point clouds'
+    actionDefectsIconText = 'Apply Deviations'
+    actionDefectsName = 'defectsMenu'
 
-    actionTranslationPrettyName = ''
-    actionTranslationStatusTip = ''
-    actionTranslationIconText = ''
-    actionTranslationName = ''
+    actionPointsListPrettyName = 'Points Panel'
+    actionPointsListStatusTip = 'Shows all the generated points in the loaded CAD model'
+    actionPointsListIconText = 'List of Points'
+    actionPointsListName = 'pointsMenu'
 
-    actionRandomPrettyName = ''
-    actionRandomStatusTip = ''
-    actionRandomIconText = ''
-    actionRandomName = ''
+    actionTranslationPrettyName = 'Translational Deviation Panel'
+    actionTranslationStatusTip = 'Insert artificial translational deviations in point clouds'
+    actionTranslationName = 'translationDefectsMenu'
 
-    actionClosePrettyName = ''
-    actionCloseStatusTip = ''
-    actionCloseIconText = ''
-    actionCloseName = ''
+    actionRotationPrettyName = 'Rotational Deviation Panel'
+    actionRotationStatusTip = 'Insert artificial rotational deviations in point clouds'
+    actionRotationName = 'rotationDefectsMenu'
 
-    actionExitPrettyName = ''
-    actionExitStatusTip = ''
-    actionExitIconText = ''
-    actionExitName = ''
+    actionRandomPrettyName = 'Random Deviation Panel'
+    actionRandomStatusTip = 'Insert artificial random deviations in point clouds'
+    actionRandomName = 'randomDefectsMenu'
 
-    actionDarkPrettyName = ''
-    actionDarkStatusTip = ''
-    actionDarkIconText = ''
-    actionDarkName = ''
+    actionClosePrettyName = 'Close File'
+    actionCloseStatusTip = 'Close the current CAD model'
+    actionCloseIconText = 'Close'
 
-    actionLightPrettyName = ''
-    actionLightStatusTip = ''
-    actionLightIconText = ''
-    actionLightName = ''
+    actionExitPrettyName = 'Exit'
+    actionExitStatusTip = 'Quits the application'
+    actionExitIconText = 'Exit'
 
-    actionSelectionNeutralPrettyName = ''
-    actionSelectionNeutralStatusTip = ''
-    actionSelectionNeutralIconText = ''
-    actionSelectionNeutralName = ''
+    actionDarkPrettyName = 'Define Dark Background'
+    actionDarkStatusTip = 'Configures the background with a dark color'
+    actionDarkIconText = 'Dark'
 
-    actionSelectionFacePrettyName = ''
-    actionSelectionFaceStatusTip = ''
-    actionSelectionFaceIconText = ''
-    actionSelectionFaceName = ''
+    actionLightPrettyName = 'Define Light Background'
+    actionLightStatusTip = 'Configures the background with a light color'
+    actionLightIconText = 'Light'
 
-    actionSelectionEdgePrettyName = ''
-    actionSelectionEdgeStatusTip = ''
-    actionSelectionEdgeIconText = ''
-    actionSelectionEdgeName = ''
+    actionSelectionNeutralPrettyName = 'Solid Selection Mode'
+    actionSelectionNeutralStatusTip = 'Configures the default selection mode for solids only'
 
-    actionSelectionVertexPrettyName = ''
-    actionSelectionVertexStatusTip = ''
-    actionSelectionVertexIconText = ''
-    actionSelectionVertexName = ''
+    actionSelectionFacePrettyName = 'Face Selection Mode'
+    actionSelectionFaceStatusTip = 'Configures the default selection mode for faces only'
 
-    actionViewTopPrettyName = ''
-    actionViewTopStatusTip = ''
-    actionViewTopIconText = ''
-    actionViewTopName = ''
+    actionSelectionEdgePrettyName = 'Edge Selection Mode'
+    actionSelectionEdgeStatusTip = 'Configures the default selection mode for edges only'
 
-    actionViewBottomPrettyName = ''
-    actionViewBottomStatusTip = ''
-    actionViewBottomIconText = ''
-    actionViewBottomName = ''
+    actionSelectionVertexPrettyName = 'Vertex Selection Mode'
+    actionSelectionVertexStatusTip = 'Configures the default selection mode for vertices only'
 
-    actionViewLeftPrettyName = ''
-    actionViewLeftStatusTip = ''
-    actionViewLeftIconText = ''
-    actionViewLeftName = ''
+    actionViewTopPrettyName = 'Top View'
+    actionViewTopStatusTip = 'Shows the top view of the current CAD model'
+    actionViewTopIconText = 'Top View'
 
-    actionViewRightPrettyName = ''
-    actionViewRightStatusTip = ''
-    actionViewRightIconText = ''
-    actionViewRightName = ''
+    actionViewBottomPrettyName = 'Bottom View'
+    actionViewBottomStatusTip = 'Shows the bottom view of the current CAD model'
+    actionViewBottomIconText = 'Bottom View'
 
-    actionViewTopFrontPrettyName = ''
-    actionViewTopFrontStatusTip = ''
-    actionViewTopFrontIconText = ''
-    actionViewTopFrontName = ''
+    actionViewLeftPrettyName = 'Left View'
+    actionViewLeftStatusTip = 'Shows the left view of the current CAD model'
+    actionViewLeftIconText = 'Left View'
 
-    actionViewTopRearPrettyName = ''
-    actionViewTopRearStatusTip = ''
-    actionViewTopRearIconText = ''
-    actionViewTopRearName = ''
+    actionViewRightPrettyName = 'Right View'
+    actionViewRightStatusTip = 'Shows the right view of the current CAD model'
+    actionViewRightIconText = 'Right View'
 
-    actionViewIsoPrettyName = ''
-    actionViewIsoStatusTip = ''
-    actionViewIsoIconText = ''
-    actionViewIsoName = ''
+    actionViewFrontPrettyName = 'Front View'
+    actionViewFrontStatusTip = 'Shows the front view of the current CAD model'
+    actionViewFrontIconText = 'Front View'
 
-    actionWireframePrettyName = ''
-    actionWireframeStatusTip = ''
-    actionWireframeIconText = ''
-    actionWireframeName = ''
+    actionViewRearPrettyName = 'Rear View'
+    actionViewRearStatusTip = 'Shows the rear view of the current CAD model'
+    actionViewRearIconText = 'Rear View'
 
-    actionShadedPrettyName = ''
-    actionShadedStatusTip = ''
-    actionShadedIconText = ''
-    actionShadedName = ''
+    actionViewIsoPrettyName = 'Isometric View'
+    actionViewIsoStatusTip = 'Shows the isometric view of the current CAD model'
+    actionViewIsoIconText = 'ISO View'
 
-    actionFitAllPrettyName = ''
-    actionFitAllStatusTip = ''
-    actionFitAllIconText = ''
-    actionFitAllName = ''
+    actionWireframePrettyName = 'Wireframe CAD Mode'
+    actionWireframeStatusTip = 'Shows a wireframe model of the current CAD'
+    actionWireframeIconText = 'Wireframe Mode'
 
-    actionGithubPrettyName = ''
-    actionGithubStatusTip = ''
-    actionGithubIconText = ''
-    actionGithubName = ''
+    actionShadedPrettyName = 'Shaded CAD Mode'
+    actionShadedStatusTip = 'Shows a shaded model of the current CAD'
+    actionShadedIconText = 'Shaded Mode'
 
-    actionDeveloperPrettyName = ''
-    actionDeveloperStatusTip = ''
-    actionDeveloperIconText = ''
-    actionDeveloperName = ''
+    actionFitAllPrettyName = 'Fit All Elements'
+    actionFitAllStatusTip = 'Adjusts the zoom level to frame all current elements'
+    actionFitAllIconText = 'Fit All'
 
-    actionEmailPrettyName = ''
-    actionEmailStatusTip = ''
-    actionEmailIconText = ''
-    actionEmailName = ''
+    actionGithubPrettyName = 'Open GitHub Project'
+    actionGithubStatusTip = 'Shows information about this project, hosted on GitHub.com'
+    actionGithubIconText = 'GitHub'
+
+    actionDeveloperPrettyName = 'Open https://hideak.github.io'
+    actionDeveloperStatusTip = 'Shows the developer webpage, including in-progress projects'
+    actionDeveloperIconText = 'Dev Page'
+
+    actionEmailPrettyName = 'Send E-mail to Developer'
+    actionEmailStatusTip = 'Opens a window to send an e-mail to the developer'
+    actionEmailIconText = 'E-mail'
 
     # Pop-up Window Strings:
     popupExitTitle = 'Quit the ' + applicationTitle
@@ -191,10 +172,11 @@ class MyStrings():
     popupExitButtonOK = 'Quit'
     popupExitButtonCancel = 'Cancel'
 
-    popupCloseTitle = ''
-    popupCloseMessage = ''
-    popupCloseButtonOK = ''
-    popupCloseButtonCancel = ''
+    popupCloseTitle = 'Close File'
+    popupCloseMessage = ('Are you sure you want to close the file? Unsaved\n' +
+                         'changes will be lost.')
+    popupCloseButtonOK = 'Close'
+    popupCloseButtonCancel = 'Cancel'
 
     popupLoadingTitle = 'Computing...'
 
@@ -221,6 +203,15 @@ class MyStrings():
     popupInvalidIgesFileDescription = ('An error ocurred while processing the specified IGES file.\n' +
                                        'Please, check if the file has an .IGS or .IGES extension and ' +
                                        'try again.')
+
+    popupNoIgesFileTitle = 'No .IGES file was opened'
+    popupNoIgesFileDescription = ('There aren\'t any active IGES file at the moment.\n' +
+                                  'Please, use the IMPORT side widget to open an existing file.')
+
+    popupNoCloudTitle = 'No point cloud was generated'
+    popupNoCloudDescription = ('There aren\'t any active point cloud at the moment.\n' +
+                               'Please, use the GENERATE CLOUD side widget to generate a new cloud file\n' +
+                               'or use the IMPORT side widget to import an existing one.')
 
     # File Dialog Windows Strings:
     exportPcdTitle = 'Export .pcd file'
@@ -341,7 +332,7 @@ class MyStrings():
                               '----------------------\n\n' +
                               '* To get started, make an .IGES file import using the IMPORT side widget.\n\n' +
                               '* To discretize a model, use the GENERATE CLOUD side widget.\n\n' +
-                              '* To apply translational and rotational erros, use the GENERATE ERRORS side widget\n\n' +
+                              '* To apply translational and rotational erros, use the APPLY DEVIATIONS side widget\n\n' +
                               '* To export the generated point cloud to a .pcd (Point Cloud Data) file or to a plain ' +
                               'text file (.txt), use the EXPORT menu.\n\n' +
                               '* To show the current entities of the opened file, use the ENTITIES menu.\n\n' +

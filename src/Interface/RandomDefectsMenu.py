@@ -50,7 +50,7 @@ class randomDefectsMenu(QWidget):
         grid.addWidget(label2, 1, 0, 1, 2)
 
         label3 = QLabel(MyStrings.askingForSelectionMethod, self)
-        grid.addWidget(label2, 2, 0, 1, 2)
+        grid.addWidget(label3, 2, 0, 1, 2)
 
         btn1 = QToolButton()
         btn1.setText(MyStrings.selectionModeSolids)
