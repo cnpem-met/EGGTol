@@ -116,7 +116,7 @@ class importMenu(QWidget):
         parent.activeCADFile = fileName[0]
         parent.setWindowTitle(parent.title + ' - ' + fileName[0])
 
-        # Loading the IGES entities as Python objects:
+        # Loading the IGES entities as Python objects for generating the entitiesList:
         myfile = loadIGESFile(parent.activeCADFile)
         parent.entitiesObject = loadEntities(getRawData(myfile), getRawParameters(myfile))
         for entity in parent.entitiesObject:

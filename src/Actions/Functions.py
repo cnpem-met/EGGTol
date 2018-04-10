@@ -52,6 +52,18 @@ def buildCloud(parent):
     pointCloud.SetAspect(newAspect.GetHandle())
     parent.canvas._display.Repaint()
 
+    # Updates the main window information about the pointsList:
+    pointsList = [];
+    for i in range(len(parent.cloudPointsList)):
+        pointsList.append(('Boundary Face #' + str(parent.faceSequenceNumbers[i]//2+1) + ' Points',[]))
+        for j in range(len(parent.cloudPointsList[i])):
+            xValue = parent.cloudPointsList[i][j][0]
+            yValue = parent.cloudPointsList[i][j][1]
+            zValue = parent.cloudPointsList[i][j][2]
+            pointsList[i][1].append(('Point ' + str(j) + ' (' +
+                                     str(xValue) + ' ' + str(yValue) + ' ' + str(zValue) + ')', []))
+    parent.pointsList = pointsList
+
     # Updates the main window properties:
     parent.pointCloudObject = pointCloud
     parent.pointAspectObject = newAspect
