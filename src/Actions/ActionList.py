@@ -634,8 +634,16 @@ class closeAction(QAction):
             parent.pointCloudObject = None
             parent.pointAspectObject = None
             parent.entitiesList = []
-            parent.cloudPointsList = []
+            parent.pointsList = []
             parent.shapeList = []
+            parent.selectedShape = None
+            parent.selectedSequenceNumber = None
+            parent.faceSequenceNumbers = []
+            parent.faceNormalVectors = []
+            parent.cloudPointsList = []
+            parent.shapeParameter1 = None
+            parent.shapeParameter2 = None
+            parent.shapeParameter3 = None
 
             # Applying an isometric visualization mode:
             parent.canvas._display.View_Iso()
