@@ -78,7 +78,8 @@ class importMenu(QWidget):
             return
 
         # Invoking a File Dialog for selecting the IGES file:
-        fileName = QFileDialog.getOpenFileName(parent, MyStrings.importIgesTitle, parent.lastPath)
+        fileName = QFileDialog.getOpenFileName(parent, MyStrings.importIgesTitle, parent.lastPath,
+                                               MyStrings.importIgesFormat)
 
         # Checking if the informed path is a valid file:
         if not fileName[0]:

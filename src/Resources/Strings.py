@@ -221,6 +221,7 @@ class MyStrings():
     exportScreenshotTitle = 'Export a Screenshot'
     exportScreenshotFormat = 'Image PNG (*.png)'
     importIgesTitle = 'Open an IGES file'
+    importIgesFormat = 'IGES File (*.igs)'
 
     # Specific Side Widget Strings:
     autoDiscretizeDescription = ('The auto discretization method will discretize all model\n' +
