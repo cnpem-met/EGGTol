@@ -61,6 +61,7 @@ class surfaceDiscretizeMenu(QWidget):
         btn1.clicked.connect(lambda: self.selectSolids(parent))
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(130)
+        btn1.setEnabled(False)
         grid.addWidget(btn1, 3, 0)
 
         btn2 = QToolButton()
