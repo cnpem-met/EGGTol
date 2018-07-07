@@ -235,12 +235,15 @@ def discretizeFace(face, objectList, density, precision, gridDiscretization):
     # List to storage all the tuples (x, y, z) due to discretization.
     points = []
 
+    # List to storage all the normal vectors due to discretization.
+    normals = []
+
     # Collecting all the vertices of the planar face.
     currentLoop = objectList[pos(face.LOOPList[0])]
     vertices = discretizeLoop(currentLoop, objectList, precision)
 
     if (len(vertices) < 3):
-        return points
+        return points, normals
 
     # Estabilishing three base vectors for the plane:
     a, b, c = vertices[0], vertices[1], vertices[2]
@@ -248,6 +251,10 @@ def discretizeFace(face, objectList, density, precision, gridDiscretization):
     j = subVec(a, c)
     k = crossProduct(i, j)
     newBasisVector = (i, j, k)
+
+    # Checking if vector k is a zero-length vector:
+    if normVec(k) == 0:
+        return points, normals
 
     # Orthogonalizing the basis vector through the Gram-Schmidt process.
     newBasisVector = orthonormalizeBasis(newBasisVector)
@@ -310,7 +317,6 @@ def discretizeFace(face, objectList, density, precision, gridDiscretization):
     newPoints = returnBasis(points, newBasisVector)
 
     # Creating a vector of normal vectors:
-    normals = []
     for i in range(len(newPoints)):
         normals.append(newBasisVector[2])
     return newPoints, normals

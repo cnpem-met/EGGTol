@@ -6,8 +6,12 @@ a list of generated or loaded point cloud and their properties.
 """
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QTreeView
+from PyQt5.QtWidgets import QTreeView, QMenu
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtCore import Qt
+
+# Local Imports:
+from Actions.ActionList import deletePointAction
 
 class pointsListMenu(QTreeView):
     """
@@ -33,8 +37,20 @@ class pointsListMenu(QTreeView):
         List Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
+        # Defining some properties for the treeView:
+        self.setAnimated(True)
         self.setHeaderHidden(True)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(lambda position : self.openMenu(position, parent))
         self.model = QStandardItemModel()
+        self.model.appendRow(QStandardItem(''))
+        self.model.appendRow(QStandardItem('To delete a point or a group of points,'))
+        self.model.appendRow(QStandardItem('right-click on the corresponding group'))
+        self.model.appendRow(QStandardItem('and select DELETE.'))
+        self.model.appendRow(QStandardItem(''))
+        self.model.appendRow(QStandardItem('ALL POINTS'))
+        self.model.appendRow(QStandardItem(''))
         self.addItems(self.model, parent.pointsList)
         self.setModel(self.model)
 
@@ -52,3 +68,33 @@ class pointsListMenu(QTreeView):
             parent.appendRow(item)
             if children:
                 self.addItems(item, children)
+
+    def openMenu(self, position, parent):
+        """
+        # Method: openMenu.
+        # Description: This method creates a context menu for handling the erasing process of
+        a selected point or a group of points.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        # Checking the current level of the selected line on the list of points:
+        indexes = self.selectedIndexes()
+        currentLevel = 0
+        if len(indexes) > 0:
+            index = indexes[0]
+            while index.parent().isValid():
+                index = index.parent()
+                currentLevel += 1
+
+        # Gathering information about the current selected point or face on the list:
+        if(currentLevel == 0):
+            currentInnerIndex = None
+            currentOuterIndex = self.currentIndex().row()
+        if(currentLevel == 1):
+            currentInnerIndex = self.currentIndex().row()
+            currentOuterIndex = self.currentIndex().parent().row()
+
+        # Generating the menu object and the corresponding action for deleting the points:
+        menu = QMenu()
+        action = deletePointAction(parent, currentLevel, currentInnerIndex, currentOuterIndex)
+        menu.addAction(action)
+        menu.exec_(self.viewport().mapToGlobal(position))

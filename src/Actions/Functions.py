@@ -48,7 +48,7 @@ def buildCloud(parent):
     localContext.Display(pointCloud.GetHandle())
 
     # Sets a new aspect for displaying the points in the point cloud:
-    newAspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_BLACK), 2)
+    newAspect = Prs3d_PointAspect(Aspect_TOM_POINT, Quantity_Color(Quantity_NOC_BLACK), 3)
     pointCloud.SetAspect(newAspect.GetHandle())
     parent.canvas._display.Repaint()
 

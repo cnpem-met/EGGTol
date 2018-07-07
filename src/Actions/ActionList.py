@@ -15,6 +15,7 @@ from PyQt5 import QtCore
 
 # Local Imports:
 from Resources.Strings import MyStrings
+from Actions.Functions import rebuildCloud
 
 def switchLeftPanels(widget, name, prettyName, parent, scroll):
     """
@@ -1130,7 +1131,6 @@ class developerPageAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionDeveloperPrettyName, parent)
         self.setStatusTip(MyStrings.actionDeveloperStatusTip)
         self.setIconText(MyStrings.actionDeveloperIconText)
@@ -1147,8 +1147,55 @@ class emailAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         super().__init__(QIcon('..\\icons\\mail.svg'), MyStrings.actionEmailPrettyName, parent)
         self.setStatusTip(MyStrings.actionEmailStatusTip)
         self.setIconText(MyStrings.actionEmailIconText)
-        self.triggered.connect(lambda: webbrowser.open('mailto:willianhideak@hotmail.com'))
+        self.triggered.connect(lambda: webbrowser.open('mailto:whideak@hotmail.com'))
+
+class deletePointAction(QAction):
+    """
+    # Class: deletePonitAction.
+    # Description: A PyQt5 action that delete selected points or group of points.
+    """
+    def __init__(self, parent, currentLevel, currentInnerIndex, currentOuterIndex):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+                      * Int currentIndex =
+                      * Int currentLevel =
+                      * Int currentInnerIndex =
+                      * Int currentOuterIndex =
+        """
+        super().__init__("Delete this group/point", parent)
+        self.triggered.connect(lambda: self.deletePointActionProcedure(parent))
+        self.currentLevel = currentLevel
+        self.currentInnerIndex = currentInnerIndex
+        self.currentOuterIndex = currentOuterIndex
+
+    def deletePointActionProcedure(self, parent):
+        from Actions.ActionList import pointsListAction
+        """
+        # Method: deletePointActionProcedure.
+        # Description: The procedure for deleting points or a group of points.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        # Checking the current level of the selected item and applying the delete process:
+        if(self.currentLevel == 0):
+            if(self.currentOuterIndex == 5):
+                parent.faceSequenceNumbers = []
+                parent.faceNormalVectors = []
+                parent.cloudPointsList = []
+            elif(self.currentOuterIndex >= 7):
+                del parent.faceSequenceNumbers[self.currentOuterIndex-7]
+                del parent.faceNormalVectors[self.currentOuterIndex-7]
+                del parent.cloudPointsList[self.currentOuterIndex-7]
+        elif(self.currentLevel == 1):
+            del parent.faceNormalVectors[self.currentOuterIndex-7][self.currentInnerIndex]
+            del parent.cloudPointsList[self.currentOuterIndex-7][self.currentInnerIndex]
+
+        # Rebuilding the cloud and updating the Point List Side Widget:
+        rebuildCloud(parent)
+        action = pointsListAction(parent)
+        action.pointsListActionProcedure(parent)
+        action.pointsListActionProcedure(parent)
