@@ -197,9 +197,6 @@ class rotationalDefectsMenu(QWidget):
             newPointsList.append(point)
         parent.cloudPointsList[index] = newPointsList
 
-        print(parent.faceSequenceNumbers)
-        print(parent.cloudPointsList)
-
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
 
