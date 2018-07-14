@@ -13,7 +13,7 @@ class MyStrings():
 
     # Window Title Strings:
     applicationTitle = 'Point Cloud Generator'
-    applicationVersion = 'v0.7.152'
+    applicationVersion = 'v0.7.153'
 
     # MenuBar Strings:
     menuBarFile = 'File'
