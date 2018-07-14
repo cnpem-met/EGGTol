@@ -135,6 +135,8 @@ class MainWindow(QMainWindow):
         devPage = developerPageAction(self)
         email = emailAction(self)
         github = githubAction(self)
+        saveProject = saveProjectAction(self)
+        loadProject = loadProjectAction(self)
 
         # Defining the default Side Widgets:
         welcome.welcomeActionProcedure(self)
@@ -144,6 +146,9 @@ class MainWindow(QMainWindow):
 
         fileMenu = menubar.addMenu(MyStrings.menuBarFile)
         fileMenu.addAction(welcome)
+        fileMenu.addSeparator()
+        fileMenu.addAction(saveProject)
+        fileMenu.addAction(loadProject)
         fileMenu.addSeparator()
         fileMenu.addAction(close)
         fileMenu.addAction(exitApp)

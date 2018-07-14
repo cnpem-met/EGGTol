@@ -1174,12 +1174,12 @@ class deletePointAction(QAction):
         self.currentOuterIndex = currentOuterIndex
 
     def deletePointActionProcedure(self, parent):
-        from Actions.ActionList import pointsListAction
         """
         # Method: deletePointActionProcedure.
         # Description: The procedure for deleting points or a group of points.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+        from Actions.ActionList import pointsListAction
         # Checking the current level of the selected item and applying the delete process:
         if(self.currentLevel == 0):
             if(self.currentOuterIndex == 5):
@@ -1199,3 +1199,118 @@ class deletePointAction(QAction):
         action = pointsListAction(parent)
         action.pointsListActionProcedure(parent)
         action.pointsListActionProcedure(parent)
+
+class saveProjectAction(QAction):
+    """
+    # Class: saveProjectAction.
+    # Description: A PyQt5 action that saves the current point cloud state on the hard drive
+    using serialization provided by an internal library called Pickle.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Save Point Cloud State', parent)
+        self.setStatusTip('Save the current state of the point cloud on the hard drive.')
+        self.setIconText('Save')
+        self.triggered.connect(lambda: self.saveProjectActionProcedure(parent))
+
+    def saveProjectActionProcedure(self, parent):
+        """
+        # Method: saveProjectActionProcedure.
+        # Description: The procedure for saving the current point cloud.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        # System Imports:
+        import pickle
+
+        # PyQt5 Imports:
+        from PyQt5.QtWidgets import QFileDialog
+
+        # Invoking a file dialog for saving the current state of the point cloud:
+        defaultName = (parent.lastPath).split('.')[0:-1]
+        defaultName = '.'.join(defaultName)
+        defaultName = defaultName + '.eggt'
+        if(defaultName == '.eggt'):
+            defaultName = 'Empty.eggt'
+        fileName = QFileDialog.getSaveFileName(parent, 'Save Point Cloud State', defaultName,
+                                               'EGG Tol Project File (*.eggt)')[0]
+
+        # Checking if the provided filename is valid:
+        if not fileName:
+            return
+
+        # Opening a file to save the current project:
+        file = open(fileName, 'wb')
+
+        # Gathering information about the current state of the project:
+        data = [parent.activeCloudFile,
+                parent.pointsList,
+                parent.shapeList,
+                parent.faceSequenceNumbers,
+                parent.faceNormalVectors,
+                parent.cloudPointsList]
+
+        # Dumping all the gathered data to the informed file.
+        pickle.dump(data, file)
+        file.close()
+
+class loadProjectAction(QAction):
+    """
+    # Class: loadProjectAction.
+    # Description: A PyQt5 action that loads a previous saved point cloud state using an
+    internal library called Pickle.
+    """
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Load Point Cloud State', parent)
+        self.setStatusTip('Load a previous saved point cloud state on the project.')
+        self.setIconText('Load')
+        self.triggered.connect(lambda: self.loadProjectActionProcedure(parent))
+
+    def loadProjectActionProcedure(self, parent):
+        """
+        # Method: loadProjectActionProcedure.
+        # Description: The procedure for loading a previous saved project.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        # System Imports:
+        import pickle
+
+        # PyQt5 Imports:
+        from PyQt5.QtWidgets import QFileDialog
+
+        # Local Imports:
+        from Actions.Functions import rebuildCloud
+
+        # Invoking a file dialog for loading the current state of the point cloud:
+        fileName = QFileDialog.getOpenFileName(parent, 'Load Point Cloud State', parent.lastPath,
+                                               'EGG Tol Project File (*.eggt)')[0]
+
+        # Checking if the provided filename is valid:
+        if not fileName:
+            return
+
+        # Opening a file to save the current project:
+        file = open(fileName, 'rb')
+
+        # Restoring the parameters using Pickle:
+        data = pickle.load(file)
+        parent.activeCloudFile = data[0]
+        parent.pointsList = data[1]
+        parent.shapeList = data[2]
+        parent.faceSequenceNumbers = data[3]
+        parent.faceNormalVectors = data[4]
+        parent.cloudPointsList = data[5]
+
+        # Updating the visualization:
+        rebuildCloud(parent)

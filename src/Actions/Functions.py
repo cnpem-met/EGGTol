@@ -19,7 +19,8 @@ def cleanCloud(parent):
     # Description: This function can clean the current pointCloudObject.
     # Parameters: * QMainWindow parent = A reference for the main window object.
     """
-    parent.canvas._display.Context.Erase(parent.pointCloudObject.GetHandle(), True)
+    if(parent.pointCloudObject):
+        parent.canvas._display.Context.Erase(parent.pointCloudObject.GetHandle(), True)
     parent.pointCloudObject = None
     parent.pointAspectObject = None
 
