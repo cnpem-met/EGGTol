@@ -1214,7 +1214,7 @@ class saveProjectAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Save Point Cloud State', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Save Point Cloud State (Low Density Only)', parent)
         self.setStatusTip('Save the current state of the point cloud on the hard drive.')
         self.setIconText('Save')
         self.triggered.connect(lambda: self.saveProjectActionProcedure(parent))
@@ -1272,7 +1272,7 @@ class loadProjectAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Load Point Cloud State', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Load Point Cloud State (Low Density Only)', parent)
         self.setStatusTip('Load a previous saved point cloud state on the project.')
         self.setIconText('Load')
         self.triggered.connect(lambda: self.loadProjectActionProcedure(parent))

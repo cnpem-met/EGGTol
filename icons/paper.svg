@@ -1,32 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
-<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="96px" height="96px"
-	 viewBox="0 0 96 96" enable-background="new 0 0 96 96" xml:space="preserve">
-<switch>
-	<foreignObject requiredExtensions="&ns_ai;" x="0" y="0" width="1" height="1">
-		<i:pgfRef  xlink:href="#adobe_illustrator_pgf">
+
+<svg
+   xmlns:i="&amp;#38;ns_ai;"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="96px"
+   height="96px"
+   viewBox="0 0 96 96"
+   enable-background="new 0 0 96 96"
+   xml:space="preserve"
+   sodipodi:docname="paper.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   id="metadata13"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs11"><linearGradient
+     inkscape:collect="always"
+     id="linearGradient19"><stop
+       style="stop-color:#000000;stop-opacity:1;"
+       offset="0"
+       id="stop15" /><stop
+       style="stop-color:#0000ff;stop-opacity:1"
+       offset="1"
+       id="stop17" /></linearGradient><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient19"
+     id="linearGradient21"
+     x1="10.169492"
+     y1="95.18644"
+     x2="88.271187"
+     y2="0"
+     gradientUnits="userSpaceOnUse" /></defs><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1366"
+   inkscape:window-height="705"
+   id="namedview9"
+   showgrid="false"
+   inkscape:zoom="2.4583333"
+   inkscape:cx="47.999999"
+   inkscape:cy="47.999999"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<switch
+   id="switch6"
+   style="fill-opacity:1;fill:#5599ff">
+	<foreignObject
+   requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
+   x="0"
+   y="0"
+   width="1"
+   height="1"
+   style="fill-opacity:1;fill:url(#linearGradient21)">
+		<i:pgfRef
+   xlink:href="#adobe_illustrator_pgf"
+   style="fill-opacity:1;fill:url(#linearGradient21)">
 		</i:pgfRef>
 	</foreignObject>
-	<g i:extraneous="self">
-		<path d="M76,0H20C13.37,0,8,5.37,8,12v72c0,6.63,5.37,12,12,12h56c6.63,0,12-5.37,12-12V12C88,5.37,82.63,0,76,0z M80,84
-			c0,2.21-1.79,4-4,4H20c-2.21,0-4-1.79-4-4V12c0-2.21,1.79-4,4-4h56c2.21,0,4,1.79,4,4V84z M64,68H32c-2.209,0-4,1.791-4,4
-			s1.791,4,4,4h32c2.209,0,4-1.791,4-4S66.209,68,64,68z M64,52H32c-2.209,0-4,1.791-4,4s1.791,4,4,4h32c2.209,0,4-1.791,4-4
-			S66.209,52,64,52z M64,36H32c-2.209,0-4,1.791-4,4s1.791,4,4,4h32c2.209,0,4-1.791,4-4S66.209,36,64,36z M32,28h16
-			c2.209,0,4-1.791,4-4s-1.791-4-4-4H32c-2.209,0-4,1.791-4,4S29.791,28,32,28z"/>
+	<g
+   i:extraneous="self"
+   id="g4"
+   style="fill-opacity:1;fill:#5599ff">
+		<path
+   d="M76,0H20C13.37,0,8,5.37,8,12v72c0,6.63,5.37,12,12,12h56c6.63,0,12-5.37,12-12V12C88,5.37,82.63,0,76,0z M80,84    c0,2.21-1.79,4-4,4H20c-2.21,0-4-1.79-4-4V12c0-2.21,1.79-4,4-4h56c2.21,0,4,1.79,4,4V84z M64,68H32c-2.209,0-4,1.791-4,4    s1.791,4,4,4h32c2.209,0,4-1.791,4-4S66.209,68,64,68z M64,52H32c-2.209,0-4,1.791-4,4s1.791,4,4,4h32c2.209,0,4-1.791,4-4    S66.209,52,64,52z M64,36H32c-2.209,0-4,1.791-4,4s1.791,4,4,4h32c2.209,0,4-1.791,4-4S66.209,36,64,36z M32,28h16    c2.209,0,4-1.791,4-4s-1.791-4-4-4H32c-2.209,0-4,1.791-4,4S29.791,28,32,28z"
+   id="path2"
+   style="fill-opacity:1;fill:#5599ff" />
 	</g>
 </switch>
-<i:pgf  id="adobe_illustrator_pgf">
+<i:pgf
+   id="adobe_illustrator_pgf">
 	<![CDATA[
 	eJzsvemOJMmRJvgE9g6+PxogB1NBU1PTw7iDBcLj6OEs2V1gsad70RgUsrOiydzOo5CVRS736Ve+
 T0RU1dw9siKPIontCq3KCBdXUzPTQ1SOT0T/7n/78qsvrr95828PX8Sr+TD93d/dvH149u7N218e

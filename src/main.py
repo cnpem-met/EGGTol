@@ -274,6 +274,6 @@ if __name__ == '__main__':
     display = window.canvas._display
     display.DisableAntiAliasing()
     display.SetSelectionModeNeutral()
-    display.set_bg_gradient_color(255, 255, 255, 210, 255, 222)
+    display.set_bg_gradient_color(255, 255, 255, 210, 222, 255)
     display.display_trihedron()
     sys.exit(app.exec_())

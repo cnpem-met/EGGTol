@@ -1,29 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
-<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="96px" height="96px"
-	 viewBox="0 0 96 96" enable-background="new 0 0 96 96" xml:space="preserve">
-<switch>
-	<foreignObject requiredExtensions="&ns_ai;" x="0" y="0" width="1" height="1">
-		<i:pgfRef  xlink:href="#adobe_illustrator_pgf">
+
+<svg
+   xmlns:i="&amp;#38;ns_ai;"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="96px"
+   height="96px"
+   viewBox="0 0 96 96"
+   enable-background="new 0 0 96 96"
+   xml:space="preserve"
+   sodipodi:docname="box.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   id="metadata13"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs11"><linearGradient
+     inkscape:collect="always"
+     id="linearGradient19"><stop
+       style="stop-color:#000000;stop-opacity:1;"
+       offset="0"
+       id="stop15" /><stop
+       style="stop-color:#0000ff;stop-opacity:1"
+       offset="1"
+       id="stop17" /></linearGradient><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient19"
+     id="linearGradient21"
+     x1="7.3220339"
+     y1="95.18644"
+     x2="90.305084"
+     y2="2.0338984"
+     gradientUnits="userSpaceOnUse" /></defs><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1366"
+   inkscape:window-height="705"
+   id="namedview9"
+   showgrid="false"
+   inkscape:zoom="2.4583333"
+   inkscape:cx="47.999999"
+   inkscape:cy="47.999999"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<switch
+   id="switch6"
+   style="fill-opacity:1;fill:#5599ff">
+	<foreignObject
+   requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
+   x="0"
+   y="0"
+   width="1"
+   height="1"
+   style="fill-opacity:1;fill:url(#linearGradient21)">
+		<i:pgfRef
+   xlink:href="#adobe_illustrator_pgf"
+   style="fill-opacity:1;fill:url(#linearGradient21)">
 		</i:pgfRef>
 	</foreignObject>
-	<g i:extraneous="self">
-		<path d="M48,0L4,20v56l44,20l44-20V20L48,0z M48,8.79L77.5,22.2L48,35.609L18.49,22.2L48,8.79z M12,70.85v-42.82L44,42.57v42.82
-			L12,70.85z M84,70.85L52,85.391V42.57l32-14.541V70.85z"/>
+	<g
+   i:extraneous="self"
+   id="g4"
+   style="fill-opacity:1;fill:#5599ff">
+		<path
+   d="M48,0L4,20v56l44,20l44-20V20L48,0z M48,8.79L77.5,22.2L48,35.609L18.49,22.2L48,8.79z M12,70.85v-42.82L44,42.57v42.82    L12,70.85z M84,70.85L52,85.391V42.57l32-14.541V70.85z"
+   id="path2"
+   style="fill-opacity:1;fill:#5599ff" />
 	</g>
 </switch>
-<i:pgf  id="adobe_illustrator_pgf">
+<i:pgf
+   id="adobe_illustrator_pgf">
 	<![CDATA[
 	eJzsvemOJMmRJvgE9g6+PxogB1NBU1PTw7iDBcLj4HCW7C6Q7GPRGBSys6LJnM6jNiuLXO7Tr3yf
 iKiquXtkRR5FEtsViswIF1dTM9NDVI5PRP/uf/vyt19cf/3m3x6+iFfzYfq7v7t5+/Ds3Zu3Pz+Q
