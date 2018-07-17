@@ -118,7 +118,7 @@ class welcomeAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\\icons\\desktopIcons\\main.png'), MyStrings.actionWelcomePrettyName, parent)
+        super().__init__(QIcon('..\\icons\\desktopIcons\\egg.png'), MyStrings.actionWelcomePrettyName, parent)
         self.setStatusTip(MyStrings.actionWelcomeStatusTip)
         self.setIconText(MyStrings.actionWelcomeIconText)
         self.triggered.connect(lambda: self.welcomeActionProcedure(parent))

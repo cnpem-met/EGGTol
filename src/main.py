@@ -9,6 +9,7 @@ and inhirited from the PyQt5 QMainWindow class.
 import sys       # sys module is used to call sys.exit() when the application ends.
 import getpass   # getpass module is used to get the current user name on Windows.
 import os        # os module is used to handle files and directory operations.
+import time      # time module is used to handle the splash screen appearance time.
 
 # Importing the load_backend and get_qt_modules from pythonOCC:
 from OCC.Display.backend import get_qt_modules
@@ -19,8 +20,9 @@ load_backend('qt-pyqt5')
 from OCC.Display.qtDisplay import qtViewer3d
 
 # Loading PyQt5 Modules for the interface:
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSplashScreen
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
 
 # Getting the PyQt5 modules from the PythonOCC lib:
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
@@ -248,11 +250,27 @@ class MainWindow(QMainWindow):
 
 # Setting the exhibition of elements and configuring the screen:
 if __name__ == '__main__':
+
+    # Instantiating the QApplication object:
     app = QApplication(sys.argv)
+
+    # Initializing the splash screen:
+    image = QPixmap('..\\img\\splash.png')
+    splash = QSplashScreen(image, Qt.WindowStaysOnTopHint)
+    splash.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+    splash.setEnabled(False)
+    splash.show()
+    app.processEvents()
+    time.sleep(5)
+    splash.close()
+
+    # Creating the main window:
     window = MainWindow()
     window.showMaximized()
     window.canvas.InitDriver()
     window.canvas.qApp = app
+
+    # Setting some properties for the main window:
     display = window.canvas._display
     display.DisableAntiAliasing()
     display.SetSelectionModeNeutral()

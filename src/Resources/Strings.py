@@ -12,8 +12,8 @@ class MyStrings():
     """
 
     # Window Title Strings:
-    applicationTitle = 'Point Cloud Generator'
-    applicationVersion = 'v0.7.153'
+    applicationTitle = 'EGGTol: Error Generator for Geometric Tolerancing'
+    applicationVersion = 'v1.0.0'
 
     # MenuBar Strings:
     menuBarFile = 'File'
@@ -166,7 +166,7 @@ class MyStrings():
     actionEmailIconText = 'E-mail'
 
     # Pop-up Window Strings:
-    popupExitTitle = 'Quit the ' + applicationTitle
+    popupExitTitle = 'Quit the application'
     popupExitMessage = ('Are you sure you want to close the application?\n' +
                        'Unsaved changes will be lost.')
     popupExitButtonOK = 'Quit'
@@ -178,7 +178,7 @@ class MyStrings():
     popupCloseButtonOK = 'Close'
     popupCloseButtonCancel = 'Cancel'
 
-    popupLoadingTitle = 'Computing...'
+    popupLoadingTitle = 'Processing...'
 
     popupInvalidNTitle = 'Invalid N Value'
     popupInvalidNDescription = ('The chosen N value is invalid.\n' +
@@ -327,8 +327,8 @@ class MyStrings():
     nonImplementedEntity = 'Non-Implemented Entity'
 
     # Welcome Menu Strings:
-    welcomeMenuDescription = ('Welcome to the ' + applicationTitle + '!\n' +
-                              'Version ' + applicationVersion + ' alpha release.\n\n' +
+    welcomeMenuDescription = ('Welcome to the ' + applicationTitle + '!\n\n' +
+                              'Version ' + applicationVersion + '\n\n' +
                               'Basic Functionality\n' +
                               '----------------------\n\n' +
                               '* To get started, make an .IGES file import using the IMPORT side widget.\n\n' +

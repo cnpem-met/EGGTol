@@ -101,7 +101,7 @@ class importMenu(QWidget):
             for i in range(1, Reader.NbShapes()+1):
                 parent.shapeList.append(Reader.Shape(i))
             shape = Reader.Shape(1)
-            parent.loadingWindow.close()
+
         else:
             QMessageBox.information(parent, MyStrings.popupInvalidIgesFileTitle,
                                     MyStrings.popupInvalidIgesFileDescription, QMessageBox.Ok, QMessageBox.Ok)
@@ -125,6 +125,7 @@ class importMenu(QWidget):
                 parent.entitiesList.append(entity.description())
             else:
                 parent.entitiesList.append((MyStrings.nonImplementedEntity, []))
+        parent.loadingWindow.close()
 
     def importPcd(self, parent):
         """
