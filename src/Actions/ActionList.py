@@ -1204,7 +1204,7 @@ class saveProjectAction(QAction):
     """
     # Class: saveProjectAction.
     # Description: A PyQt5 action that saves the current point cloud state on the hard drive
-    using serialization provided by an internal library called Pickle.
+    using a new file specification for the software.
     """
 
     def __init__(self, parent):
@@ -1214,7 +1214,7 @@ class saveProjectAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Save Point Cloud State (Low Density Only)', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Save Point Cloud State', parent)
         self.setStatusTip('Save the current state of the point cloud on the hard drive.')
         self.setIconText('Save')
         self.triggered.connect(lambda: self.saveProjectActionProcedure(parent))
@@ -1226,45 +1226,63 @@ class saveProjectAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # System Imports:
-        import pickle
-
         # PyQt5 Imports:
         from PyQt5.QtWidgets import QFileDialog
 
         # Invoking a file dialog for saving the current state of the point cloud:
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
-        defaultName = defaultName + '.eggt'
-        if(defaultName == '.eggt'):
-            defaultName = 'Empty.eggt'
+        defaultName = defaultName + '.eggproj'
+        if(defaultName == '.eggproj'):
+            defaultName = 'Empty.eggproj'
         fileName = QFileDialog.getSaveFileName(parent, 'Save Point Cloud State', defaultName,
-                                               'EGG Tol Project File (*.eggt)')[0]
+                                               'EGGTol Project File (*.eggproj)')[0]
 
         # Checking if the provided filename is valid:
         if not fileName:
             return
 
         # Opening a file to save the current project:
-        file = open(fileName, 'wb')
+        file = open(fileName, 'w')
 
-        # Gathering information about the current state of the project:
-        data = [parent.activeCloudFile,
-                parent.pointsList,
-                parent.shapeList,
-                parent.faceSequenceNumbers,
-                parent.faceNormalVectors,
-                parent.cloudPointsList]
+        # Preparing the data for being stored:
+        data = '# EGGTol Project File (.eggproj)\n'
+        data += '# File for storing cloud data, normal directions and face sequence numbers\n'
+        data += '# Content marked with a # will be considered as comments on the file\n'
+        data += 'applicationVersion\n'
+        data += str(MyStrings.applicationVersion) + '\n'
+        data += 'activeCloudFile\n'
+        data += str(parent.activeCloudFile) + '\n'
+        data += 'faceSequenceNumbers\n'
+        for element in parent.faceSequenceNumbers:
+            data += str(element) + ','
+        data += '\n'
+        data += 'faceNormalVectors\n'
+        for element in parent.faceNormalVectors:
+            for subelement in element:
+                data += str(subelement[0]) + ' '
+                data += str(subelement[1]) + ' '
+                data += str(subelement[2]) + ','
+            data += ';'
+        data += '\n'
+        data += 'cloudPointsList\n'
+        for element in parent.cloudPointsList:
+            for subelement in element:
+                data += str(subelement[0]) + ' '
+                data += str(subelement[1]) + ' '
+                data += str(subelement[2]) + ','
+            data += ';'
+        data += '\n'
 
         # Dumping all the gathered data to the informed file.
-        pickle.dump(data, file)
+        file.write(data)
         file.close()
 
 class loadProjectAction(QAction):
     """
     # Class: loadProjectAction.
-    # Description: A PyQt5 action that loads a previous saved point cloud state using an
-    internal library called Pickle.
+    # Description: A PyQt5 action that loads a previous saved point cloud state using a
+    new file specification for the software.
     """
     def __init__(self, parent):
         """
@@ -1272,7 +1290,7 @@ class loadProjectAction(QAction):
         # Description: The init method for initializing the inhirited properties.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Load Point Cloud State (Low Density Only)', parent)
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), 'Load Point Cloud State', parent)
         self.setStatusTip('Load a previous saved point cloud state on the project.')
         self.setIconText('Load')
         self.triggered.connect(lambda: self.loadProjectActionProcedure(parent))
@@ -1283,8 +1301,6 @@ class loadProjectAction(QAction):
         # Description: The procedure for loading a previous saved project.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        # System Imports:
-        import pickle
 
         # PyQt5 Imports:
         from PyQt5.QtWidgets import QFileDialog
@@ -1294,23 +1310,46 @@ class loadProjectAction(QAction):
 
         # Invoking a file dialog for loading the current state of the point cloud:
         fileName = QFileDialog.getOpenFileName(parent, 'Load Point Cloud State', parent.lastPath,
-                                               'EGG Tol Project File (*.eggt)')[0]
+                                               'EGG Tol Project File (*.eggproj)')[0]
 
         # Checking if the provided filename is valid:
         if not fileName:
             return
 
         # Opening a file to save the current project:
-        file = open(fileName, 'rb')
+        file = open(fileName, 'r')
 
-        # Restoring the parameters using Pickle:
-        data = pickle.load(file)
-        parent.activeCloudFile = data[0]
-        parent.pointsList = data[1]
-        parent.shapeList = data[2]
-        parent.faceSequenceNumbers = data[3]
-        parent.faceNormalVectors = data[4]
-        parent.cloudPointsList = data[5]
+        # Restoring the parameters:
+        parent.activeCloudFile = ''
+        parent.faceSequenceNumbers = []
+        parent.faceNormalVectors = []
+        parent.cloudPointsList = []
+
+        line = file.readline()
+        while line:
+            if line[0:15] == 'activeCloudFile':
+                line = file.readline()[0:-1]
+                parent.activeCloudFile = line
+            elif line[0:19] == 'faceSequenceNumbers':
+                line = file.readline()[0:-1]
+                line = line.split(',')[0:-1]
+                line = [int(element) for element in line]
+                parent.faceSequenceNumbers = line
+            elif line[0:17] == 'faceNormalVectors':
+                line = file.readline()[0:-1]
+                line = line.split(';')[0:-1]
+                line = [element.split(',')[0:-1] for element in line]
+                line = [[subelement.split(' ') for subelement in element] for element in line]
+                line = [[tuple([float(value) for value in subelement]) for subelement in element] for element in line]
+                parent.faceNormalVectors = line
+            elif line[0:15] == 'cloudPointsList':
+                line = file.readline()[0:-1]
+                line = line.split(';')[0:-1]
+                line = [element.split(',')[0:-1] for element in line]
+                line = [[subelement.split(' ') for subelement in element] for element in line]
+                line = [[tuple([float(value) for value in subelement]) for subelement in element] for element in line]
+                parent.cloudPointsList = line
+            line = file.readline()
 
         # Updating the visualization:
         rebuildCloud(parent)
