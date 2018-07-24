@@ -344,5 +344,5 @@ class MyStrings():
                               'application.\n\n' +
                               'GitHub.com project\n' +
                               '-----------------------\n\n' +
-                              'The full source code can be found through the github.com/hideak/pointCloudGenerator link.\n\n' +
+                              'The full source code can be found through the github.com/hideak/EGGTol link.\n\n' +
                               'The source code is under the GNU free software license, and can be modifyed and distributed.')

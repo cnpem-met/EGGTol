@@ -1117,7 +1117,7 @@ class githubAction(QAction):
         super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionGithubPrettyName, parent)
         self.setStatusTip(MyStrings.actionGithubStatusTip)
         self.setIconText(MyStrings.actionGithubIconText)
-        self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/pointCloudGenerator'))
+        self.triggered.connect(lambda: webbrowser.open('https://github.com/hideak/EGGTol'))
 
 class developerPageAction(QAction):
     """
