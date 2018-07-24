@@ -2,7 +2,7 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 
 <svg
-   xmlns:i="&amp;#38;#38;ns_ai;"
+   xmlns:i="&amp;#38;#38;#38;ns_ai;"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -55,15 +55,15 @@
    id="namedview9"
    showgrid="false"
    inkscape:zoom="2.4583333"
-   inkscape:cx="47.999998"
-   inkscape:cy="47.999998"
+   inkscape:cx="-27.05085"
+   inkscape:cy="47.999997"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_1" />
 <switch
    id="switch6"
-   style="fill-opacity:1;fill:#5599ff">
+   style="fill-opacity:1;fill:#000080">
 	<foreignObject
    requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
    x="0"
@@ -79,11 +79,11 @@
 	<g
    i:extraneous="self"
    id="g4"
-   style="fill-opacity:1;fill:#5599ff">
+   style="fill-opacity:1;fill:#000080">
 		<path
    d="M25.172,30.829c-1.562-1.562-1.562-4.095,0-5.657l20-20c1.562-1.562,4.095-1.562,5.656,0l20,20    c1.562,1.562,1.562,4.095,0,5.657C70.047,31.61,69.023,32,68,32s-2.047-0.39-2.828-1.171L52,17.657V64c0,2.209-1.791,4-4,4    s-4-1.791-4-4V17.657L30.828,30.829C29.267,32.39,26.733,32.39,25.172,30.829z M88,60c-2.209,0-4,1.791-4,4v16    c0,2.205-1.747,4-3.895,4H16c-2.206,0-4-1.795-4-4V64c0-2.209-1.791-4-4-4s-4,1.791-4,4v16c0,1.619,0.317,3.189,0.944,4.672    c0.604,1.43,1.47,2.713,2.57,3.812c1.101,1.102,2.384,1.967,3.813,2.57C12.81,91.682,14.382,92,16,92h64.105    c1.61,0,3.175-0.32,4.648-0.951c1.418-0.609,2.69-1.477,3.781-2.582c1.087-1.102,1.939-2.385,2.536-3.812    C91.688,83.178,92,81.611,92,80V64C92,61.791,90.209,60,88,60z"
    id="path2"
-   style="fill-opacity:1;fill:#5599ff" />
+   style="fill-opacity:1;fill:#000080" />
 	</g>
 </switch>
 <i:pgf

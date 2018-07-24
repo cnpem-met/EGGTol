@@ -2,7 +2,7 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 
 <svg
-   xmlns:i="&amp;#38;ns_ai;"
+   xmlns:i="&amp;#38;#38;ns_ai;"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -55,15 +55,15 @@
    id="namedview9"
    showgrid="false"
    inkscape:zoom="2.4583333"
-   inkscape:cx="47.999999"
-   inkscape:cy="47.999999"
+   inkscape:cx="-27.050849"
+   inkscape:cy="47.999998"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_1" />
 <switch
    id="switch6"
-   style="fill-opacity:1;fill:#5599ff">
+   style="fill-opacity:1;fill:#000080">
 	<foreignObject
    requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
    x="0"
@@ -79,11 +79,11 @@
 	<g
    i:extraneous="self"
    id="g4"
-   style="fill-opacity:1;fill:#5599ff">
+   style="fill-opacity:1;fill:#000080">
 		<path
    d="M94.828,45.171L80.688,31.029c-1.562-1.562-4.096-1.562-5.658,0c-1.562,1.562-1.562,4.096,0,5.657L82.344,44H52V13.658    l7.312,7.312c1.562,1.562,4.096,1.562,5.658,0c1.562-1.562,1.562-4.095,0-5.657L50.828,1.171c-1.562-1.562-4.096-1.562-5.657,0    L31.029,15.314c-1.562,1.562-1.562,4.096,0,5.657c1.562,1.562,4.095,1.562,5.656,0L44,13.658V44H13.657l7.313-7.313    c1.562-1.562,1.562-4.095,0-5.657c-1.562-1.562-4.096-1.562-5.658,0L1.171,45.171c-1.562,1.562-1.562,4.094,0,5.657l14.144,14.143    c1.562,1.562,4.095,1.562,5.656,0c1.562-1.561,1.562-4.094,0-5.656L13.657,52H44v30.344l-7.312-7.314    c-1.562-1.561-4.096-1.561-5.658,0c-1.562,1.562-1.562,4.096,0,5.658L45.172,94.83c1.562,1.561,4.096,1.561,5.657,0l14.144-14.143    c1.562-1.562,1.562-4.096,0-5.658c-1.562-1.561-4.096-1.561-5.658,0L52,82.344V52h30.343l-7.313,7.312    c-1.562,1.562-1.562,4.096,0,5.658c1.562,1.562,4.096,1.562,5.658,0l14.142-14.143C96.391,49.268,96.391,46.733,94.828,45.171z"
    id="path2"
-   style="fill-opacity:1;fill:#5599ff" />
+   style="fill-opacity:1;fill:#000080" />
 	</g>
 </switch>
 <i:pgf
