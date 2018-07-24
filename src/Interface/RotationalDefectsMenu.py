@@ -131,71 +131,72 @@ class rotationalDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Getting information about the selected surface:
-        index = 0
-        seqNumber = None
-        while index < len(parent.faceSequenceNumbers):
-            seqNumber = parent.faceSequenceNumbers[index]
-            if(seqNumber == parent.selectedSequenceNumber):
-                break
-            index += 1
+        # Getting information about the selected surfaces:
+        for i in range(len(parent.selectedSequenceNumber)):
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == parent.selectedSequenceNumber[i]):
+                    break
+                index += 1
 
-        # Getting the rotation parameters:
-        angleX = (float(self.xAngle.displayText())/180) * math.pi
-        angleY = (float(self.yAngle.displayText())/180) * math.pi
-        angleZ = (float(self.zAngle.displayText())/180) * math.pi
+            # Getting the rotation parameters:
+            angleX = (float(self.xAngle.displayText())/180) * math.pi
+            angleY = (float(self.yAngle.displayText())/180) * math.pi
+            angleZ = (float(self.zAngle.displayText())/180) * math.pi
 
-        # Defining the rotation matrix along the three axis:
-        matrixX = array([[1, 0, 0],
-                         [0, math.cos(angleX), -math.sin(angleX)],
-                         [0, math.sin(angleX), math.cos(angleX)]])
-        matrixY = array([[math.cos(angleY), 0, math.sin(angleY)],
-                         [0, 1, 0],
-                         [-math.sin(angleY), 0, math.cos(angleY)]])
-        matrixZ = array([[math.cos(angleZ), -math.sin(angleZ), 0],
-                         [math.sin(angleZ), math.cos(angleZ), 0],
-                         [0, 0, 1]])
+            # Defining the rotation matrix along the three axis:
+            matrixX = array([[1, 0, 0],
+                             [0, math.cos(angleX), -math.sin(angleX)],
+                             [0, math.sin(angleX), math.cos(angleX)]])
+            matrixY = array([[math.cos(angleY), 0, math.sin(angleY)],
+                             [0, 1, 0],
+                             [-math.sin(angleY), 0, math.cos(angleY)]])
+            matrixZ = array([[math.cos(angleZ), -math.sin(angleZ), 0],
+                             [math.sin(angleZ), math.cos(angleZ), 0],
+                             [0, 0, 1]])
 
-        # Apply the boundary box functions to define the center point of a face:
-        boundaryBox = Bnd_Box()
-        brepbndlib_Add(parent.selectedShape, boundaryBox)
-        xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-        deltaX = xMax - xMin
-        deltaY = yMax - yMin
-        deltaZ = zMax - zMin
-        centerX = xMin + deltaX/2
-        centerY = yMin + deltaY/2
-        centerZ = zMin + deltaZ/2
+            # Apply the boundary box functions to define the center point of a face:
+            boundaryBox = Bnd_Box()
+            brepbndlib_Add(parent.selectedShape[i], boundaryBox)
+            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+            deltaX = xMax - xMin
+            deltaY = yMax - yMin
+            deltaZ = zMax - zMin
+            centerX = xMin + deltaX/2
+            centerY = yMin + deltaY/2
+            centerZ = zMin + deltaZ/2
 
-        # Translating the points near to the default basis vector:
-        newPointsList = []
-        for i in range(len(parent.cloudPointsList[index])):
-            point = (parent.cloudPointsList[index][i][0] - centerX,
-                     parent.cloudPointsList[index][i][1] - centerY,
-                     parent.cloudPointsList[index][i][2] - centerZ)
-            newPointsList.append(point)
-        parent.cloudPointsList[index] = newPointsList
+            # Translating the points near to the default basis vector:
+            newPointsList = []
+            for i in range(len(parent.cloudPointsList[index])):
+                point = (parent.cloudPointsList[index][i][0] - centerX,
+                         parent.cloudPointsList[index][i][1] - centerY,
+                         parent.cloudPointsList[index][i][2] - centerZ)
+                newPointsList.append(point)
+            parent.cloudPointsList[index] = newPointsList
 
-        # Rotating all the points on the selected surface based on given parameters:
-        newPointsList = []
-        for i in range(len(parent.cloudPointsList[index])):
-            point = array([[parent.cloudPointsList[index][i][0]],
-                           [parent.cloudPointsList[index][i][1]],
-                           [parent.cloudPointsList[index][i][2]]])
-            point = dot(matrixX, point)
-            point = dot(matrixY, point)
-            point = dot(matrixZ, point)
-            newPointsList.append((point[0][0], point[1][0], point[2][0]))
-        parent.cloudPointsList[index] = newPointsList
+            # Rotating all the points on the selected surface based on given parameters:
+            newPointsList = []
+            for i in range(len(parent.cloudPointsList[index])):
+                point = array([[parent.cloudPointsList[index][i][0]],
+                               [parent.cloudPointsList[index][i][1]],
+                               [parent.cloudPointsList[index][i][2]]])
+                point = dot(matrixX, point)
+                point = dot(matrixY, point)
+                point = dot(matrixZ, point)
+                newPointsList.append((point[0][0], point[1][0], point[2][0]))
+            parent.cloudPointsList[index] = newPointsList
 
-        # Translating the points back to the origianl basis vector:
-        newPointsList = []
-        for i in range(len(parent.cloudPointsList[index])):
-            point = (parent.cloudPointsList[index][i][0] + centerX,
-                     parent.cloudPointsList[index][i][1] + centerY,
-                     parent.cloudPointsList[index][i][2] + centerZ)
-            newPointsList.append(point)
-        parent.cloudPointsList[index] = newPointsList
+            # Translating the points back to the origianl basis vector:
+            newPointsList = []
+            for i in range(len(parent.cloudPointsList[index])):
+                point = (parent.cloudPointsList[index][i][0] + centerX,
+                         parent.cloudPointsList[index][i][1] + centerY,
+                         parent.cloudPointsList[index][i][2] + centerZ)
+                newPointsList.append(point)
+            parent.cloudPointsList[index] = newPointsList
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
@@ -236,17 +237,22 @@ class rotationalDefectsMenu(QWidget):
         """
 
         if parent.canvas._display.GetSelectedShapes():
-            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
+            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:
             return
-        i = 0
-        while i < len(parent.shapeList):
-            if(parent.shapeParameter1.IsPartner(parent.shapeList[i])):
-                break
-            i += 1
-        self.selectedObject.setText(parent.entitiesList[i][0])
-        parent.selectedShape = parent.shapeList[i]
-        parent.selectedSequenceNumber = 2*i + 1
+        parent.selectedShape = []
+        parent.selectedSequenceNumber = []
+        selectedObjectText = ''
+        for shape in parent.shapeParameter1:
+            i = 0
+            while i < len(parent.shapeList):
+                if(shape.IsPartner(parent.shapeList[i])):
+                    break
+                i += 1
+            parent.selectedShape.append(parent.shapeList[i])
+            parent.selectedSequenceNumber.append(2*i+1)
+            selectedObjectText += str(i+1) + ' '
+        self.selectedObject.setText(selectedObjectText)
 
     def getCenterOfMass(self, parent):
         """

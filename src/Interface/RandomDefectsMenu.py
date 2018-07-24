@@ -114,26 +114,26 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Getting information about the selected surface:
-        index = 0
-        seqNumber = None
-        while index < len(parent.faceSequenceNumbers):
-            seqNumber = parent.faceSequenceNumbers[index]
-            if(seqNumber == parent.selectedSequenceNumber):
-                break
-            index += 1
-
-        # Randomizing all the points based on given random parameters:
-        minOffset = float(self.minOffset.displayText())
-        maxOffset = float(self.maxOffset.displayText())
-        newPointsList = []
-        for point in parent.cloudPointsList[index]:
-            direction = self.randomDirection()
-            newPoint = (point[0] + direction[0] * self.randomOffset(minOffset, maxOffset),
-                        point[1] + direction[1] * self.randomOffset(minOffset, maxOffset),
-                        point[2] + direction[2] * self.randomOffset(minOffset, maxOffset))
-            newPointsList.append(newPoint)
-        parent.cloudPointsList[index] = newPointsList
+        # Getting information about the selected surfaces:
+        for sequence in parent.selectedSequenceNumber:
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == sequence):
+                    break
+                index += 1
+            # Randomizing all the points based on given random parameters:
+            minOffset = float(self.minOffset.displayText())
+            maxOffset = float(self.maxOffset.displayText())
+            newPointsList = []
+            for point in parent.cloudPointsList[index]:
+                direction = self.randomDirection()
+                newPoint = (point[0] + direction[0] * self.randomOffset(minOffset, maxOffset),
+                            point[1] + direction[1] * self.randomOffset(minOffset, maxOffset),
+                            point[2] + direction[2] * self.randomOffset(minOffset, maxOffset))
+                newPointsList.append(newPoint)
+            parent.cloudPointsList[index] = newPointsList
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
@@ -171,17 +171,22 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         if parent.canvas._display.GetSelectedShapes():
-            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
+            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:
             return
-        i = 0
-        while i < len(parent.shapeList):
-            if(parent.shapeParameter1.IsPartner(parent.shapeList[i])):
-                break
-            i += 1
-        self.selectedObject.setText(parent.entitiesList[i][0])
-        parent.selectedShape = parent.shapeList[i]
-        parent.selectedSequenceNumber = 2*i + 1
+        parent.selectedShape = []
+        parent.selectedSequenceNumber = []
+        selectedObjectText = ''
+        for shape in parent.shapeParameter1:
+            i = 0
+            while i < len(parent.shapeList):
+                if(shape.IsPartner(parent.shapeList[i])):
+                    break
+                i += 1
+            parent.selectedShape.append(parent.shapeList[i])
+            parent.selectedSequenceNumber.append(2*i+1)
+            selectedObjectText += str(i+1) + ' '
+        self.selectedObject.setText(selectedObjectText)
 
     def randomDirection(self):
         """

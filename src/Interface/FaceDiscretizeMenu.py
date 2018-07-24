@@ -168,12 +168,12 @@ class faceDiscretizeMenu(QWidget):
         parent.loadingWindow.show()
 
         # Performs the faceDiscretization using the Discretization package:
-        sequence = parent.selectedSequenceNumber
-        points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
-                                         density, precision, gridDiscretization)
-        parent.faceSequenceNumbers.append(sequence)
-        parent.faceNormalVectors.append(normals)
-        parent.cloudPointsList.append(points)
+        for sequence in parent.selectedSequenceNumber:
+            points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
+                                             density, precision, gridDiscretization)
+            parent.faceSequenceNumbers.append(sequence)
+            parent.faceNormalVectors.append(normals)
+            parent.cloudPointsList.append(points)
 
         # Builds the generated point cloud:
         buildCloud(parent)
@@ -218,17 +218,22 @@ class faceDiscretizeMenu(QWidget):
         """
 
         if parent.canvas._display.GetSelectedShapes():
-            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
+            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:
             return
-        i = 0
-        while i < len(parent.shapeList):
-            if(parent.shapeParameter1.IsPartner(parent.shapeList[i])):
-                break
-            i += 1
-        self.selectedObject.setText(parent.entitiesList[i][0])
-        parent.selectedShape = parent.shapeList[i]
-        parent.selectedSequenceNumber = 2*i + 1
+        parent.selectedShape = []
+        parent.selectedSequenceNumber = []
+        selectedObjectText = ''
+        for shape in parent.shapeParameter1:
+            i = 0
+            while i < len(parent.shapeList):
+                if(shape.IsPartner(parent.shapeList[i])):
+                    break
+                i += 1
+            parent.selectedShape.append(parent.shapeList[i])
+            parent.selectedSequenceNumber.append(2*i+1)
+            selectedObjectText += str(i+1) + ' '
+        self.selectedObject.setText(selectedObjectText)
 
     def precisionValueChanged(self, value):
         self.precision.setText(str(value))

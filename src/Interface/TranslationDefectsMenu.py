@@ -160,31 +160,32 @@ class translationDefectsMenu(QWidget):
         # Normalizing the given direction:
         self.normalizePoints(parent)
 
-        # Getting information about the selected surface:
-        index = 0
-        seqNumber = None
-        while index < len(parent.faceSequenceNumbers):
-            seqNumber = parent.faceSequenceNumbers[index]
-            if(seqNumber == parent.selectedSequenceNumber):
-                break
-            index += 1
+        # Getting information about the selected surfaces:
+        for sequence in parent.selectedSequenceNumber:
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == sequence):
+                    break
+                index += 1
 
-        # Translating all the points on the selected surface based on given parameters:
-        newPointsList = []
-        offset = float(self.offset.displayText())
-        if(self.xDirection.displayText() == 'Multiple Values'):
-            for i in range(len(parent.cloudPointsList[index])):
-                point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
-                         parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
-                         parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
-                newPointsList.append(point)
-        else:
-            for i in range(len(parent.cloudPointsList[index])):
-                point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
-                         parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
-                         parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
-                newPointsList.append(point)
-        parent.cloudPointsList[index] = newPointsList
+            # Translating all the points on the selected surface based on given parameters:
+            newPointsList = []
+            offset = float(self.offset.displayText())
+            if(self.xDirection.displayText() == 'Multiple Values'):
+                for i in range(len(parent.cloudPointsList[index])):
+                    point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
+                             parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
+                             parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
+                    newPointsList.append(point)
+            else:
+                for i in range(len(parent.cloudPointsList[index])):
+                    point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
+                             parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
+                             parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
+                    newPointsList.append(point)
+            parent.cloudPointsList[index] = newPointsList
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
@@ -225,17 +226,22 @@ class translationDefectsMenu(QWidget):
         """
 
         if parent.canvas._display.GetSelectedShapes():
-            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()[-1]
+            parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:
             return
-        i = 0
-        while i < len(parent.shapeList):
-            if(parent.shapeParameter1.IsPartner(parent.shapeList[i])):
-                break
-            i += 1
-        self.selectedObject.setText(parent.entitiesList[i][0])
-        parent.selectedShape = parent.shapeList[i]
-        parent.selectedSequenceNumber = 2*i + 1
+        parent.selectedShape = []
+        parent.selectedSequenceNumber = []
+        selectedObjectText = ''
+        for shape in parent.shapeParameter1:
+            i = 0
+            while i < len(parent.shapeList):
+                if(shape.IsPartner(parent.shapeList[i])):
+                    break
+                i += 1
+            parent.selectedShape.append(parent.shapeList[i])
+            parent.selectedSequenceNumber.append(2*i+1)
+            selectedObjectText += str(i+1) + ' '
+        self.selectedObject.setText(selectedObjectText)
 
     def setNormalDirection(self, parent):
         """
