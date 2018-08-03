@@ -3,6 +3,7 @@
 # Description: This is the main file of the application. It can provide a full interface written
 and inhirited from the PyQt5 QMainWindow class.
 # Author: Willian Hideak Arita da Silva.
+Colaborator: Rodrigo de Oliveira Neto.
 """
 
 # System Imports:
