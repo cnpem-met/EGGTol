@@ -135,9 +135,9 @@ class translationDefectsMenu(QWidget):
 
         # Getting information from the interface:
         try:
-            x = float(self.xDirection.displayText())
-            y = float(self.yDirection.displayText())
-            z = float(self.zDirection.displayText())
+            x = float(self.xDirection.displayText().replace(',','.'))
+            y = float(self.yDirection.displayText().replace(',','.'))
+            z = float(self.zDirection.displayText().replace(',','.'))
         except:
             return
 
@@ -172,7 +172,7 @@ class translationDefectsMenu(QWidget):
 
             # Translating all the points on the selected surface based on given parameters:
             newPointsList = []
-            offset = float(self.offset.displayText())
+            offset = float(self.offset.displayText().replace(',','.'))
             if(self.xDirection.displayText() == 'Multiple Values'):
                 for i in range(len(parent.cloudPointsList[index])):
                     point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
@@ -181,9 +181,25 @@ class translationDefectsMenu(QWidget):
                     newPointsList.append(point)
             else:
                 for i in range(len(parent.cloudPointsList[index])):
-                    point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
-                             parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
-                             parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
+                    #checking for possible imcompabitilities on the displays
+                    if not self.xDirection.displayText().replace(',','.'):
+                        xDirection = '0'
+                        self.xDirection.setText('0')
+                    else:
+                        xDirection = self.xDirection.displayText().replace(',','.')
+                    if not self.yDirection.displayText().replace(',','.'):
+                        yDirection = '0'
+                        self.yDirection.setText('0')
+                    else:
+                        yDirection = self.yDirection.displayText().replace(',','.')
+                    if not self.zDirection.displayText().replace(',','.'):
+                        zDirection = '0'
+                        self.zDirection.setText('0')
+                    else:
+                        zDirection = self.zDirection.displayText().replace(',','.')
+                    point = (parent.cloudPointsList[index][i][0] + float(xDirection) * offset,
+                             parent.cloudPointsList[index][i][1] + float(yDirection) * offset,
+                             parent.cloudPointsList[index][i][2] + float(zDirection) * offset)
                     newPointsList.append(point)
             parent.cloudPointsList[index] = newPointsList
 

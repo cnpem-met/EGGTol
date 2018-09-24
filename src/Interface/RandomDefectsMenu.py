@@ -124,8 +124,16 @@ class randomDefectsMenu(QWidget):
                     break
                 index += 1
             # Randomizing all the points based on given random parameters:
-            minOffset = float(self.minOffset.displayText())
-            maxOffset = float(self.maxOffset.displayText())
+            if not self.minOffset.displayText().replace(',','.'):
+                minOffset = float('0')
+                self.minOffset.setText('0')
+            else:
+                minOffset = float(self.minOffset.displayText().replace(',','.'))
+            if not self.maxOffset.displayText().replace(',','.'):
+                maxOffset = float('0')
+                self.maxOffset.setText('0')
+            else:
+                maxOffset = float(self.maxOffset.displayText().replace(',','.'))
             newPointsList = []
             for point in parent.cloudPointsList[index]:
                 direction = self.randomDirection()
