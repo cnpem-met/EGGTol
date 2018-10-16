@@ -85,6 +85,10 @@ class MyStrings():
     actionRandomStatusTip = 'Insert artificial random deviations in point clouds'
     actionRandomName = 'randomDefectsMenu'
 
+    actionFlexionPrettyName = 'Flexion Deviation Panel'
+    actionFlexionStatusTip = 'Insert Flexion perfil deviations in point clouds'
+    actionFlexionName = 'FlexionDefectsMenu'
+
     actionClosePrettyName = 'Close File'
     actionCloseStatusTip = 'Close the current CAD model'
     actionCloseIconText = 'Close'
@@ -234,6 +238,7 @@ class MyStrings():
     defectsOptionTranslation = 'Translation of a group of points'
     defectsOptionRotation = 'Rotation of a group of points'
     defectsOptionRandom = 'Generate random errors'
+    defectsOptionFlexion = 'Flexing a perfil of points'
 
     discretizeDescription = ('Select a discretization option.<br><br>' +
                              'The auto discretization will work on all flat surfaces<br>' +
@@ -286,6 +291,10 @@ class MyStrings():
     rotationalDefectsDescription = ('The rotational defects method will apply a specific\n' +
                                     'transformation matrix to rotate a group of points.')
     rotationalDefectsApply = 'Apply rotational defects'
+
+    flexionDefectsDescription = ('The flexion defects method will apply a hyperbolic\n' +
+                                    'perfil to the selected group of points.')
+    flexionDefectsApply = 'Apply flexion defects'
 
     # General Side Widget Strings:
     flatDiscretizationHeader = '<b><br>Discretization mode for flat surfaces:</b>'

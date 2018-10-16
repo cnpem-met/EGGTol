@@ -62,6 +62,13 @@ class defectsMenu(QWidget):
         btn3.setMinimumWidth(266)
         grid.addWidget(btn3, 3, 0)
 
+        btn4 = QToolButton()
+        btn4.setText(MyStrings.defectsOptionFlexion)
+        btn4.clicked.connect(lambda: self.flexionDefectsMenuProcedure(parent))
+        btn4.setMinimumHeight(50)
+        btn4.setMinimumWidth(266)
+        grid.addWidget(btn4, 4, 0)
+
         grid.setColumnStretch(0, 1)
         grid.setRowStretch(4, 1)
 
@@ -94,3 +101,13 @@ class defectsMenu(QWidget):
         """
         random = randomDefectsAction(parent)
         random.randomDefectsActionProcedure(parent)
+
+    def flexionDefectsMenuProcedure(self, parent):
+        """
+        # Method: randomDefectsMenuProcedure.
+        # Description: This method calls the randomDefectsActionProcedure from the
+        Actions package for displaying the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        flexion = flexionDefectsAction(parent)
+        flexion.flexionDefectsActionProcedure(parent)

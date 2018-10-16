@@ -556,6 +556,46 @@ class randomDefectsAction(QAction):
         switchRightPanels(widget, MyStrings.actionRandomName, MyStrings.actionRandomPrettyName,
                           parent, True)
 
+class flexionDefectsAction(QAction):
+    """
+    # Class: flexionDefectsAction.
+    # Description: A PyQt5 action that opens the flexion Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionFlexionPrettyName, parent)
+        self.setStatusTip(MyStrings.actionFlexionStatusTip)
+        self.triggered.connect(lambda: self.flexionDefectsActionProcedure(parent))
+
+    def flexionDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.FlexionDefectsMenu import flexionDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = flexionDefectsMenu(parent)
+        switchRightPanels(widget, MyStrings.actionFlexionName, MyStrings.actionFlexionPrettyName,
+                          parent, True)
+
+
 class closeAction(QAction):
     """
     # Class: closeAction
