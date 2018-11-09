@@ -69,8 +69,29 @@ class defectsMenu(QWidget):
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 4, 0)
 
+        btn4 = QToolButton()
+        btn4.setText("Senoidal Deviation of a round surface")
+        btn4.clicked.connect(lambda: self.senPattDefectsMenuProcedure(parent))
+        btn4.setMinimumHeight(50)
+        btn4.setMinimumWidth(266)
+        grid.addWidget(btn4, 5, 0)
+
+        btn5 = QToolButton()
+        btn5.setText("Ovalization of a round surface")
+        btn5.clicked.connect(lambda: self.ovalDefectsMenuProcedure(parent))
+        btn5.setMinimumHeight(50)
+        btn5.setMinimumWidth(266)
+        grid.addWidget(btn5, 6, 0)
+
+        btn6 = QToolButton()
+        btn6.setText("Twisting a surface")
+        btn6.clicked.connect(lambda: self.torsionDefectsMenuProcedure(parent))
+        btn6.setMinimumHeight(50)
+        btn6.setMinimumWidth(266)
+        grid.addWidget(btn6, 7, 0)
+
         grid.setColumnStretch(0, 1)
-        grid.setRowStretch(4, 1)
+        grid.setRowStretch(8, 1)
 
     def translationDefectsMenuProcedure(self, parent):
         """
@@ -111,3 +132,33 @@ class defectsMenu(QWidget):
         """
         flexion = flexionDefectsAction(parent)
         flexion.flexionDefectsActionProcedure(parent)
+
+    def senPattDefectsMenuProcedure(self, parent):
+        """
+        # Method: randomDefectsMenuProcedure.
+        # Description: This method calls the randomDefectsActionProcedure from the
+        Actions package for displaying the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        senPatt = senPattDefectsAction(parent)
+        senPatt.senPattDefectsActionProcedure(parent)
+
+    def ovalDefectsMenuProcedure(self, parent):
+        """
+        # Method: randomDefectsMenuProcedure.
+        # Description: This method calls the randomDefectsActionProcedure from the
+        Actions package for displaying the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        oval = ovalDefectsAction(parent)
+        oval.ovalDefectsActionProcedure(parent)
+
+    def torsionDefectsMenuProcedure(self, parent):
+        """
+        # Method: randomDefectsMenuProcedure.
+        # Description: This method calls the randomDefectsActionProcedure from the
+        Actions package for displaying the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        torsion = torsionDefectsAction(parent)
+        torsion.torsionDefectsActionProcedure(parent)
