@@ -1,29 +1,32 @@
 """
-# Module: SurfaceDiscretizeMenu.py
-# Description: This module contains the Surface Discretization Side Widget Menu UI
+# Module: RandomDefectsMenu.py
+# Description: This module contains the Random Defects Side Widget Menu UI
 for calling the discretization functions.
-# Author: Willian Hideak Arita da Silva.
+# Author: Rodrigo de Oliveira Neto.
 """
 
 # System Imports:
-import sys
+import math
+import numpy as np
 
 # PyQt5 Imports:
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QMessageBox, QLineEdit, \
-                            QCheckBox, QRadioButton, QSlider
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit, QMessageBox
+
+# OpenCASCADE Imports:
+from OCC.Bnd import Bnd_Box
+from OCC.BRepBndLib import brepbndlib_Add
 
 # Local Imports:
-from Import.IGESImport import *
+from Interface.WaveDefectsMenu import waveDefectsMenu
 from Actions.Functions import *
-from Discretization.DiscretizeModel import *
 from Resources.Strings import MyStrings
 
-class surfaceDiscretizeMenu(QWidget):
+
+class ovalDefectsMenu(QWidget):
     """
-    # Class: surfaceDiscretizeMenu.
-    # Description: This class provides a side menu with some options to configure
-    the Surface Discretization process.
+    # Class: randomDefectsMenu
+    # Description: This class provides a side menu with some options for moving some
+    group of points in a random direction with a displacement provided.
     """
 
     def __init__(self, parent):
@@ -39,21 +42,21 @@ class surfaceDiscretizeMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the
-        Surface Discretize Menu side widget.
+        # Description: This method initializes the User Interface Elements of the Random
+        Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel(MyStrings.surfaceDiscretizeDescription, self)
+        label1 = QLabel("Oval deffects menu", self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
         grid.addWidget(label2, 1, 0, 1, 2)
 
-        label3 = QLabel(MyStrings.askingForSelectionMethod)
+        label3 = QLabel(MyStrings.askingForSelectionMethod, self)
         grid.addWidget(label3, 2, 0, 1, 2)
 
         btn1 = QToolButton()
@@ -71,102 +74,58 @@ class surfaceDiscretizeMenu(QWidget):
         btn2.setMinimumWidth(130)
         grid.addWidget(btn2, 3, 1)
 
-        label4 = QLabel(MyStrings.entitySelectionHeader)
+        label4 = QLabel(MyStrings.askingForEntity, self)
         grid.addWidget(label4, 4, 0, 1, 2)
-
-        label5 = QLabel(MyStrings.askingForEntity, self)
-        grid.addWidget(label5, 5, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
         self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
-        grid.addWidget(self.selectedObject, 6, 0, 1, 2)
+        grid.addWidget(self.selectedObject, 5, 0, 1, 2)
 
         btn3 = QToolButton()
         btn3.setText(MyStrings.addEntityOption)
         btn3.clicked.connect(lambda: self.addSelection(parent))
         btn3.setMinimumHeight(30)
         btn3.setMinimumWidth(266)
-        grid.addWidget(btn3, 7, 0, 1, 2)
+        grid.addWidget(btn3, 6, 0, 1, 2)
 
-        label6 = QLabel(MyStrings.nonFlatDiscretizationHeader, self)
-        grid.addWidget(label6, 8, 0, 1, 2)
+        label15 = QLabel("Maximum deviation [mm]:", self)
+        grid.addWidget(label15, 7, 0, 1, 2)
 
-        label7 = QLabel(MyStrings.askingForUParameter, self)
-        grid.addWidget(label7, 9, 0, 1, 2)
-
-        self.UParameter = QLineEdit()
-        grid.addWidget(self.UParameter, 10, 0, 1, 2)
-
-        label8 = QLabel(MyStrings.askingForVParameter, self)
-        grid.addWidget(label8, 11, 0, 1, 2)
-
-        self.VParameter = QLineEdit()
-        grid.addWidget(self.VParameter, 12, 0, 1, 2)
+        self.maxDev = QLineEdit()
+        grid.addWidget(self.maxDev, 8, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText(MyStrings.surfaceDiscretizeApply)
-        btn4.clicked.connect(lambda: self.surfaceDiscretize(parent))
+        btn4.setText("Apply oval defects")
+        btn4.clicked.connect(lambda: self.ovalPoints(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
-        grid.addWidget(btn4, 13, 0, 1, 2)
+        grid.addWidget(btn4, 9, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(14, 1)
+        grid.setRowStretch(10, 1)
 
-    def surfaceDiscretize(self, parent):
+    def ovalPoints(self, parent):
         """
-        # Method: surfaceDiscretize.
-        # Description: Performs the discretization of a selected surface in the loaded CAD Model.
+        # Method: randomPoints.
+        # Description: This method applies random manufacturing errors in the selected
+        entity. The random errors has some rules to follow, defined by the configuration
+        done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Check if there is a point cloud present:
-        if(parent.pointCloudObject):
-            cleanCloud(parent)
         try:
-            # Gets all the required parameters from the User Interface:
-            Uparam = int(self.UParameter.displayText())
-            Vparam = int(self.VParameter.displayText())
+            maxDev = float(self.maxDev.displayText().replace(',','.'))
+        # Handling input errors
         except ValueError:
-            QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
-                                    MyStrings.popupInvalidUVDescription,
-                                    QMessageBox.Ok, QMessageBox.Ok)
-            return
-        # Loads the loading window:
-        parent.loadingWindow.show()
-
-        # Checks if at least one surface was selected
-        if(parent.selectedSequenceNumber):
-            # Performs the surfaceDiscretization using the Discretization package:
-            for sequence in parent.selectedSequenceNumber:
-                try:
-                    points, normals = discretizeSurface(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
-                                                        Uparam, Vparam)
-                # Handling the error case in which the user inputs a value less than 2
-                except ValueError:
-                    QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
-                                            MyStrings.popupInvalidUVDescription,
-                                            QMessageBox.Ok, QMessageBox.Ok)
-                    return
-                parent.faceSequenceNumbers.append(sequence)
-                parent.faceNormalVectors.append(normals)
-                parent.cloudPointsList.append(points)
-                parent.UVproperty = [Uparam, Vparam]
-        else:
-            QMessageBox.information(parent, "Surface not selected",
-                                    "Surface not selected. Please, select one to generate a point cloud.", QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        # Builds the generated point cloud:
-        buildCloud(parent)
-
-        # Updates some properties from the main window:
-        parent.activeCloudFile = MyStrings.currentSessionGeneratedPoints
-
-        # Building the logbook tupple
+        # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
+
+        # Getting information about the selected surfaces:
         for i in range(len(parent.selectedSequenceNumber)):
             index = 0
             seqNumber = None
@@ -175,12 +134,44 @@ class surfaceDiscretizeMenu(QWidget):
                 if(seqNumber == parent.selectedSequenceNumber[i]):
                     break
                 index += 1
+
             selectedEntityList.append(int(seqNumber/2+0.5))
-        logText = '> [Discretization] Parametric:\n\tEntity list: '+str(selectedEntityList)+'\n\tU Value: '+str(Uparam)+'\n\tV Value: '+str(Vparam)+'\n\n'
+
+            try:
+                # calculating parameters to properly generate a sine wave that flattens the rounded surface
+                freq = int((len(parent.cloudPointsList[index])/(parent.UVproperty[0] - 1))/2)
+                numPointsMainAxis = parent.UVproperty[0] -1
+
+                newPointsList = []
+                for i in range(len(parent.cloudPointsList[index])):
+                    x0 = parent.cloudPointsList[index][i][0]
+                    y0 = parent.cloudPointsList[index][i][1]
+                    z0 = parent.cloudPointsList[index][i][2]
+
+                    # applying the sine function to generate a offset to the points
+                    offset = maxDev * math.sin(int(i/numPointsMainAxis)/freq*2*math.pi)
+                    # shifting points
+                    point = (x0 + parent.faceNormalVectors[index][i][0] * offset,
+                             y0 + parent.faceNormalVectors[index][i][1] * offset,
+                             z0 + parent.faceNormalVectors[index][i][2] * offset)
+                    newPointsList.append(point)
+                parent.cloudPointsList[index] = newPointsList
+            # Handling non-rounded surface error
+            except AttributeError:
+                QMessageBox.information(parent, "Error","Error: the selected surface isn't parametric (rounded).", QMessageBox.Ok, QMessageBox.Ok)
+                return
+            # Handling non-discretized surface error
+            except IndexError:
+                QMessageBox.information(parent, "Invalid selected surface",
+                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+        # Building the logbook tupple
+        logText = '> [Deviation] Ovalization:\n\tEntity list: '+str(selectedEntityList)+'\n\tMax. Offset: '+str(maxDev)+' mm\n\n'
         parent.logbookList.append(logText)
 
-        # Closes the loading window:
-        parent.loadingWindow.close()
+        # Rebuilding the point cloud object in the local context:
+        rebuildCloud(parent)
 
     def selectSolids(self, parent):
         """
@@ -214,7 +205,6 @@ class surfaceDiscretizeMenu(QWidget):
         associated in the IGES file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         if parent.canvas._display.GetSelectedShapes():
             parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:

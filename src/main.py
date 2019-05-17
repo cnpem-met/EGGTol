@@ -3,7 +3,7 @@
 # Description: This is the main file of the application. It can provide a full interface written
 and inhirited from the PyQt5 QMainWindow class.
 # Author: Willian Hideak Arita da Silva.
-Colaborator: Rodrigo de Oliveira Neto.
+# Colaborator: Rodrigo de Oliveira Neto.
 """
 
 # System Imports:
@@ -105,6 +105,9 @@ class MainWindow(QMainWindow):
         self.shapeParameter2 = None
         self.shapeParameter3 = None
 
+        # Information about the actions taken in the actual Session
+        self.logbookList = []
+
         # Defining Actions.
         welcome = welcomeAction(self)
         entities = entitiesAction(self)
@@ -115,6 +118,7 @@ class MainWindow(QMainWindow):
         faceDiscretize = faceDiscretizeAction(self)
         defects = defectsAction(self)
         pointsList = pointsListAction(self)
+        logbook = logAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
         translationDefects = translationDefectsAction(self)
@@ -163,6 +167,7 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(cloud)
         panelsMenu.addAction(defects)
         panelsMenu.addAction(pointsList)
+        panelsMenu.addAction(logbook)
         panelsMenu.addSeparator()
         panelsMenu.addAction(autoDiscretize)
         panelsMenu.addAction(faceDiscretize)
@@ -216,6 +221,7 @@ class MainWindow(QMainWindow):
         self.toolbar.addAction(cloud)
         self.toolbar.addAction(defects)
         self.toolbar.addAction(pointsList)
+        self.toolbar.addAction(logbook)
         self.toolbar.addSeparator()
         self.toolbar.addAction(close)
         self.toolbar.addSeparator()

@@ -9,7 +9,7 @@ for calling the discretization functions.
 import random
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit, QMessageBox
 
 # Local Imports:
 from Actions.Functions import *
@@ -114,6 +114,9 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        # Declaring the list of index of deviated surface(s)
+        selectedEntityList = []
+
         # Getting information about the selected surfaces:
         for sequence in parent.selectedSequenceNumber:
             index = 0
@@ -123,17 +126,36 @@ class randomDefectsMenu(QWidget):
                 if(seqNumber == sequence):
                     break
                 index += 1
-            # Randomizing all the points based on given random parameters:
-            minOffset = float(self.minOffset.displayText())
-            maxOffset = float(self.maxOffset.displayText())
-            newPointsList = []
-            for point in parent.cloudPointsList[index]:
-                direction = self.randomDirection()
-                newPoint = (point[0] + direction[0] * self.randomOffset(minOffset, maxOffset),
-                            point[1] + direction[1] * self.randomOffset(minOffset, maxOffset),
-                            point[2] + direction[2] * self.randomOffset(minOffset, maxOffset))
-                newPointsList.append(newPoint)
-            parent.cloudPointsList[index] = newPointsList
+
+            selectedEntityList.append(int(seqNumber/2+0.5))
+
+            try:
+                minOffset = float(self.minOffset.displayText().replace(',','.'))
+                maxOffset = float(self.maxOffset.displayText().replace(',','.'))
+            # Handling invalid input error
+            except ValueError:
+                QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+            try:
+                # Randomizing all the points based on given random parameters:
+                newPointsList = []
+                for point in parent.cloudPointsList[index]:
+                    direction = self.randomDirection()
+                    newPoint = (point[0] + direction[0] * self.randomOffset(minOffset, maxOffset),
+                                point[1] + direction[1] * self.randomOffset(minOffset, maxOffset),
+                                point[2] + direction[2] * self.randomOffset(minOffset, maxOffset))
+                    newPointsList.append(newPoint)
+                parent.cloudPointsList[index] = newPointsList
+            # Handling non-discretized surface error
+            except IndexError:
+                QMessageBox.information(parent, "Invalid selected surface",
+                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+        # Building the logbook tupple
+        logText = '> [Deviation] Random:\n\tEntity list: '+str(selectedEntityList)+'\n\tMin. Offset: '+str(minOffset)+' mm\n\tMax. Offset: '+str(maxOffset)+' mm\n\n'
+        parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)

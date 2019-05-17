@@ -439,6 +439,34 @@ class pointsListAction(QAction):
         switchLeftPanels(widget, MyStrings.actionPointsListName, MyStrings.actionPointsListPrettyName,
                          parent, False)
 
+class logAction(QAction):
+    """
+    # Class: welcomeAction
+    # Description: A PyQt5 action that opens the Welcome Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        super().__init__(QIcon('..\\icons\\log.svg'), "Logbook", parent)
+        self.setStatusTip("List of actions")
+        self.setIconText("Logbook")
+        self.triggered.connect(lambda: self.logActionProcedure(parent))
+
+    def logActionProcedure(self, parent):
+        """
+        # Method: welcomeActionProcedure.
+        # Description: A procedure for opening the Welcome Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        from Interface.logMenu import logMenu
+        widget = logMenu(parent)
+        switchLeftPanels(widget, "Logbook!", "Log panel",
+                         parent, False)
+
 class translationDefectsAction(QAction):
     """
     # Class: translationalDefectsAction.
@@ -556,6 +584,166 @@ class randomDefectsAction(QAction):
         switchRightPanels(widget, MyStrings.actionRandomName, MyStrings.actionRandomPrettyName,
                           parent, True)
 
+
+class flexionDefectsAction(QAction):
+    """
+    # Class: flexionDefectsAction.
+    # Description: A PyQt5 action that opens the flexion Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), MyStrings.actionFlexionPrettyName, parent)
+        self.setStatusTip(MyStrings.actionFlexionStatusTip)
+        self.triggered.connect(lambda: self.flexionDefectsActionProcedure(parent))
+
+    def flexionDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.FlexionDefectsMenu import flexionDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = flexionDefectsMenu(parent)
+        switchRightPanels(widget, MyStrings.actionFlexionName, MyStrings.actionFlexionPrettyName,
+                          parent, True)
+
+
+class waveDefectsAction(QAction):
+    """
+    # Class: flexionDefectsAction.
+    # Description: A PyQt5 action that opens the flexion Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Wave Pattern", parent)
+        self.setStatusTip(MyStrings.actionFlexionStatusTip)
+        self.triggered.connect(lambda: self.waveDefectsActionProcedure(parent))
+
+    def waveDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.WaveDefectsMenu import waveDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = waveDefectsMenu(parent)
+        switchRightPanels(widget, "Wave", "Wave Pattern Deviation Panel",
+                          parent, True)
+
+class ovalDefectsAction(QAction):
+    """
+    # Class: flexionDefectsAction.
+    # Description: A PyQt5 action that opens the flexion Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Oval defection", parent)
+        self.setStatusTip(MyStrings.actionFlexionStatusTip)
+        self.triggered.connect(lambda: self.ovalDefectsActionProcedure(parent))
+
+    def ovalDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.OvalDefectsMenu import ovalDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = ovalDefectsMenu(parent)
+        switchRightPanels(widget, "Oval", "Oval Deviation Panel",
+                          parent, True)
+
+
+class torsionDefectsAction(QAction):
+    """
+    # Class: flexionDefectsAction.
+    # Description: A PyQt5 action that opens the flexion Defects Menu side widget.
+    """
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Torsional defection", parent)
+        self.setStatusTip(MyStrings.actionFlexionStatusTip)
+        self.triggered.connect(lambda: self.torsionDefectsActionProcedure(parent))
+
+    def torsionDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.TorsionDefectsMenu import torsionDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = torsionDefectsMenu(parent)
+        switchRightPanels(widget, "Torsion", "Torsional Deviation Panel",
+                          parent, True)
+
+
 class closeAction(QAction):
     """
     # Class: closeAction
@@ -645,6 +833,7 @@ class closeAction(QAction):
             parent.shapeParameter1 = None
             parent.shapeParameter2 = None
             parent.shapeParameter3 = None
+            parent.logbookList = []
 
             # Applying an isometric visualization mode:
             parent.canvas._display.View_Iso()

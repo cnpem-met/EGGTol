@@ -166,18 +166,34 @@ class autoDiscretizeMenu(QWidget):
         # Loads the loading window:
         parent.loadingWindow.show()
 
-        # Performs the autoDiscretization using the Discretization package:
-        sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision,
-                                                    Uparam, Vparam, useParametric, gridDiscretization)
+        try:
+            # Performs the autoDiscretization using the Discretization package:
+            sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision,
+                                                        Uparam, Vparam, useParametric, gridDiscretization)
+        # Handling the error case in which the user inputs a value less than 2
+        except ValueError:
+            QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
+                                    MyStrings.popupInvalidUVDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
         parent.faceSequenceNumbers += sequence
         parent.faceNormalVectors += normals
         parent.cloudPointsList += points
+        parent.UVproperty = [Uparam, Vparam]
 
-        # Builds the generated point cloud:
+        # Builds the generated point cloud
         buildCloud(parent)
 
         # Updates some properties from the main window:
         parent.activeCloudFile = MyStrings.currentSessionGeneratedPoints
+
+        # Building the logbook tupple
+        if(gridDiscretization):
+            discrMode = "N x N"
+        else:
+            discrMode = "N points/mm"
+        logText = '> [Discretization] Automatic:\n\tMode: '+discrMode+'\n\tN Value: '+str(density)+'\n\tPrecision: '+str(precision)+'\n\tU Value: '+str(Uparam)+'\n\tV Value: '+str(Vparam)+'\n\n'
+        parent.logbookList.append(logText)
 
         # Closes the loading window:
         parent.loadingWindow.close()

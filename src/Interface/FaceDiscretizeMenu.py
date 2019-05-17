@@ -167,19 +167,44 @@ class faceDiscretizeMenu(QWidget):
         # Loads the loading window:
         parent.loadingWindow.show()
 
-        # Performs the faceDiscretization using the Discretization package:
-        for sequence in parent.selectedSequenceNumber:
-            points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
-                                             density, precision, gridDiscretization)
-            parent.faceSequenceNumbers.append(sequence)
-            parent.faceNormalVectors.append(normals)
-            parent.cloudPointsList.append(points)
+        # Checks if at least one surface was selected
+        if(parent.selectedSequenceNumber):
+            # Performs the faceDiscretization using the Discretization package:
+            for sequence in parent.selectedSequenceNumber:
+                points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
+                                                 density, precision, gridDiscretization)
+                parent.faceSequenceNumbers.append(sequence)
+                parent.faceNormalVectors.append(normals)
+                parent.cloudPointsList.append(points)
+        else:
+            QMessageBox.information(parent, "Surface not selected",
+                                    "Surface not selected. Please, select one to generate a point cloud.", QMessageBox.Ok, QMessageBox.Ok)
+            return
 
         # Builds the generated point cloud:
         buildCloud(parent)
 
         # Updates some properties from the main window:
         parent.activeCloudFile = MyStrings.currentSessionGeneratedPoints
+
+        # Building the logbook tupple
+        selectedEntityList = []
+        for i in range(len(parent.selectedSequenceNumber)):
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == parent.selectedSequenceNumber[i]):
+                    break
+                index += 1
+            selectedEntityList.append(int(seqNumber/2+0.5))
+
+        if(gridDiscretization):
+            discrMode = "N x N"
+        else:
+            discrMode = "N points/mm"
+        logText = '> [Discretization] Flat:\n\tEntity list: '+str(selectedEntityList)+'\n\tMode: '+discrMode+'\n\tN Value: '+str(density)+'\n\tPrecision: '+str(precision)+'\n\n'
+        parent.logbookList.append(logText)
 
         # Closes the loading window:
         parent.loadingWindow.close()

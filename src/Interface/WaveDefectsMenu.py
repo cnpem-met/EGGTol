@@ -1,15 +1,16 @@
 """
-# Module: RotationalnDefectsMenu.py
-# Description: This module contains the Translation Defects Side Widget Menu UI
+# Module: RandomDefectsMenu.py
+# Description: This module contains the Random Defects Side Widget Menu UI
 for calling the discretization functions.
-# Author: Willian Hideak Arita da Silva.
+# Author: Rodrigo de Oliveira Neto.
 """
 
-# Numpy Imports:
-from numpy import array, dot
+# System Imports:
+import math
+import numpy as np
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit, QMessageBox, QCheckBox
 
 # OpenCASCADE Imports:
 from OCC.Bnd import Bnd_Box
@@ -19,15 +20,11 @@ from OCC.BRepBndLib import brepbndlib_Add
 from Actions.Functions import *
 from Resources.Strings import MyStrings
 
-# System Imports:
-import math
-
-class rotationalDefectsMenu(QWidget):
+class waveDefectsMenu(QWidget):
     """
-    # Class: rotationalDefectsMenu
-    # Description: This class provides a side menu with some options for rotating some
-    group of points in an specific direction that can be defined relative to some basis
-    axis, usually located at the face's center of mass.
+    # Class: randomDefectsMenu
+    # Description: This class provides a side menu with some options for moving some
+    group of points in a random direction with a displacement provided.
     """
 
     def __init__(self, parent):
@@ -43,7 +40,7 @@ class rotationalDefectsMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Rotational
+        # Description: This method initializes the User Interface Elements of the Random
         Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
@@ -51,7 +48,7 @@ class rotationalDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel(MyStrings.rotationalDefectsDescription)
+        label1 = QLabel("", self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -83,51 +80,48 @@ class rotationalDefectsMenu(QWidget):
         self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
         grid.addWidget(self.selectedObject, 5, 0, 1, 2)
 
-        btn5 = QToolButton()
-        btn5.setText(MyStrings.addEntityOption)
-        btn5.clicked.connect(lambda: self.addSelection(parent))
-        btn5.setMinimumHeight(30)
-        btn5.setMinimumWidth(266)
-        grid.addWidget(btn5, 6, 0, 1, 2)
+        btn3 = QToolButton()
+        btn3.setText(MyStrings.addEntityOption)
+        btn3.clicked.connect(lambda: self.addSelection(parent))
+        btn3.setMinimumHeight(30)
+        btn3.setMinimumWidth(266)
+        grid.addWidget(btn3, 6, 0, 1, 2)
 
-        label5 = QLabel(MyStrings.askingForAngles, self)
-        grid.addWidget(label5, 7, 0, 1, 2)
+        self.drillAxisCheckBox = QCheckBox()
+        grid.addWidget(self.drillAxisCheckBox, 7, 0, 1, 2)
+        self.drillAxisCheckBox.setText("Wave pattern along drill axis")
+        self.drillAxisCheckBox.setCheckState(0)
+        self.drillAxisCheckBox.setToolTip("[Circular surface]\nChecked: the points will be deflected in a wave pattern along the drill axis\nNot checked: the points will be deflected in a wave pattern perpendicular to the drill axis\n\n[Not circular surface]\nThis option has no effect")
 
-        label6 = QLabel(MyStrings.askingForXValue, self)
-        grid.addWidget(label6, 8, 0, 1, 1)
+        label5 = QLabel("Amplitude [mm]:", self)
+        grid.addWidget(label5, 8, 0, 1, 2)
 
-        self.xAngle = QLineEdit()
-        grid.addWidget(self.xAngle, 9, 0, 1, 2)
+        self.amp = QLineEdit()
+        grid.addWidget(self.amp, 9, 0, 1, 2)
 
-        label7 = QLabel(MyStrings.askingForYValue, self)
-        grid.addWidget(label7, 10, 0, 1, 1)
+        label7 = QLabel("Frequency [points/cycle]:", self)
+        grid.addWidget(label7, 10, 0, 1, 2)
 
-        self.yAngle = QLineEdit()
-        grid.addWidget(self.yAngle, 11, 0, 1, 2)
+        self.freq = QLineEdit()
+        grid.addWidget(self.freq, 11, 0, 1, 2)
 
-        label8 = QLabel(MyStrings.askingForZValue, self)
-        grid.addWidget(label8, 12, 0, 1, 1)
-
-        self.zAngle = QLineEdit()
-        grid.addWidget(self.zAngle, 13, 0, 1, 2)
-
-        btn6 = QToolButton()
-        btn6.setText(MyStrings.rotationalDefectsApply)
-        btn6.clicked.connect(lambda: self.rotatePoints(parent))
-        btn6.setMinimumHeight(30)
-        btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 14, 0, 1, 2)
+        btn4 = QToolButton()
+        btn4.setText("Apply wave pattern defects")
+        btn4.clicked.connect(lambda: self.wavePoints(parent, 0, 0, True))
+        btn4.setMinimumHeight(30)
+        btn4.setMinimumWidth(266)
+        grid.addWidget(btn4, 12, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(15, 1)
+        grid.setRowStretch(13, 1)
 
-    def rotatePoints(self, parent):
+    def wavePoints(self, parent, amp, freq, internalCall):
         """
-        # Method: rotatePoints.
-        # Description: This method applies a rotational defect in the selected
-        entity. The parameters of the defect is defined by the configuration done
-        at the Rotational Defects Menu side widget.
+        # Method: randomPoints.
+        # Description: This method applies random manufacturing errors in the selected
+        entity. The random errors has some rules to follow, defined by the configuration
+        done at the Random Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
@@ -146,81 +140,51 @@ class rotationalDefectsMenu(QWidget):
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
-            # Getting the rotation parameters:
             try:
-                xAngle = float(self.xAngle.displayText().replace(',','.'))
-                yAngle = float(self.yAngle.displayText().replace(',','.'))
-                zAngle = float(self.zAngle.displayText().replace(',','.'))
+                amp = float(self.amp.displayText().replace(',','.'))
+                freq = float(self.freq.displayText().replace(',','.'))
             # Handling input errors
             except ValueError:
                 QMessageBox.information(parent, "Invalid input",
                                         "Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
                 return
 
-            angleX = (xAngle/180) * math.pi
-            angleY = (yAngle/180) * math.pi
-            angleZ = (zAngle/180) * math.pi
-
-            # Defining the rotation matrix along the three axis:
-            matrixX = array([[1, 0, 0],
-                             [0, math.cos(angleX), -math.sin(angleX)],
-                             [0, math.sin(angleX), math.cos(angleX)]])
-            matrixY = array([[math.cos(angleY), 0, math.sin(angleY)],
-                             [0, 1, 0],
-                             [-math.sin(angleY), 0, math.cos(angleY)]])
-            matrixZ = array([[math.cos(angleZ), -math.sin(angleZ), 0],
-                             [math.sin(angleZ), math.cos(angleZ), 0],
-                             [0, 0, 1]])
-
-            # Apply the boundary box functions to define the center point of a face:
-            boundaryBox = Bnd_Box()
-            brepbndlib_Add(parent.selectedShape[i], boundaryBox)
-            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            deltaX = xMax - xMin
-            deltaY = yMax - yMin
-            deltaZ = zMax - zMin
-            centerX = xMin + deltaX/2
-            centerY = yMin + deltaY/2
-            centerZ = zMin + deltaZ/2
+            if(not self.drillAxisCheckBox.isChecked()):
+                try:
+                    drillAxisLength = parent.UVproperty[0] - 1
+                # case in which the surface isn't rounded (aka doesn't have UV properties)
+                except:
+                    drillAxisLength = 1
+                    pass
+            else:
+                drillAxisLength = 1
 
             try:
-                # Translating the points near to the default basis vector:
                 newPointsList = []
                 for i in range(len(parent.cloudPointsList[index])):
-                    point = (parent.cloudPointsList[index][i][0] - centerX,
-                             parent.cloudPointsList[index][i][1] - centerY,
-                             parent.cloudPointsList[index][i][2] - centerZ)
+                    x0 = parent.cloudPointsList[index][i][0]
+                    y0 = parent.cloudPointsList[index][i][1]
+                    z0 = parent.cloudPointsList[index][i][2]
+
+                    offset = amp * math.sin(int(i/drillAxisLength)/freq*2*math.pi)
+
+                    point = (x0 + parent.faceNormalVectors[index][i][0] * offset,
+                             y0 + parent.faceNormalVectors[index][i][1] * offset,
+                             z0 + parent.faceNormalVectors[index][i][2] * offset)
                     newPointsList.append(point)
                 parent.cloudPointsList[index] = newPointsList
-
-                # Rotating all the points on the selected surface based on given parameters:
-                newPointsList = []
-                for i in range(len(parent.cloudPointsList[index])):
-                    point = array([[parent.cloudPointsList[index][i][0]],
-                                   [parent.cloudPointsList[index][i][1]],
-                                   [parent.cloudPointsList[index][i][2]]])
-                    point = dot(matrixX, point)
-                    point = dot(matrixY, point)
-                    point = dot(matrixZ, point)
-                    newPointsList.append((point[0][0], point[1][0], point[2][0]))
-                parent.cloudPointsList[index] = newPointsList
-
-                # Translating the points back to the origianl basis vector:
-                newPointsList = []
-                for i in range(len(parent.cloudPointsList[index])):
-                    point = (parent.cloudPointsList[index][i][0] + centerX,
-                             parent.cloudPointsList[index][i][1] + centerY,
-                             parent.cloudPointsList[index][i][2] + centerZ)
-                    newPointsList.append(point)
-                parent.cloudPointsList[index] = newPointsList
-            # Non-discretized surface error handling
+            except ZeroDivisionError:
+                QMessageBox.information(parent, "Invalid frequency value",
+                                        "Invalid frequency value. Please, input a value different from 0.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+            # Handling non-discretized surface error
             except IndexError:
                 QMessageBox.information(parent, "Invalid selected surface",
                                         "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
                 return
 
         # Building the logbook tupple
-        logText = '> [Deviation] Rotation:\n\tEntity list: '+str(selectedEntityList)+'\n\tX Value: '+str(xAngle)+'°\n\tY Value: '+str(yAngle)+'°\n\tZ Value: '+str(zAngle)+'°\n\n'
+        logText = '> [Deviation] Wave Pattern:\n\tEntity list: '+str(selectedEntityList)+'\n\tMax. Offset: '+str(amp)+' mm\n\tFrequency: '+str(freq)+'\n\n'
         parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:
@@ -233,7 +197,6 @@ class rotationalDefectsMenu(QWidget):
         The Neutral Selection Mode allows the selection of whole solid CAD models.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeNeutral()
         if(parent.pointCloudObject):
             restoreCloud(parent)
@@ -245,7 +208,6 @@ class rotationalDefectsMenu(QWidget):
         The Face Selection Mode allows the selection of each separated face of the CAD model.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        # Setting the mode and restoring the point cloud:
         parent.canvas._display.SetSelectionModeFace()
         if(parent.pointCloudObject):
             restoreCloud(parent)
@@ -260,7 +222,6 @@ class rotationalDefectsMenu(QWidget):
         associated in the IGES file.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-
         if parent.canvas._display.GetSelectedShapes():
             parent.shapeParameter1 = parent.canvas._display.GetSelectedShapes()
         else:
@@ -278,11 +239,3 @@ class rotationalDefectsMenu(QWidget):
             parent.selectedSequenceNumber.append(2*i+1)
             selectedObjectText += str(i+1) + ' '
         self.selectedObject.setText(selectedObjectText)
-
-    def getCenterOfMass(self, parent):
-        """
-        # Method: getCenterOfMass.
-        # Description: This method gets the center of mass of a shape as a tuple of
-        coordinates x, y, z of a shape.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """

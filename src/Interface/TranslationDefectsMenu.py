@@ -6,11 +6,13 @@ for calling the discretization functions.
 """
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox
 
 # Local Imports:
 from Actions.Functions import *
 from Resources.Strings import MyStrings
+
+from OCC.gp import gp_Pnt, gp_Vec
 
 class translationDefectsMenu(QWidget):
     """
@@ -135,15 +137,15 @@ class translationDefectsMenu(QWidget):
 
         # Getting information from the interface:
         try:
-            x = float(self.xDirection.displayText())
-            y = float(self.yDirection.displayText())
-            z = float(self.zDirection.displayText())
+            x = float(self.xDirection.displayText().replace(',','.'))
+            y = float(self.yDirection.displayText().replace(',','.'))
+            z = float(self.zDirection.displayText().replace(',','.'))
         except:
             return
 
         # Evaluating the module value:
         module = (x**2 + y**2 + z**2)**(1/2)
-        x, y, z = x/module, y/module, z/module
+        x, y, z = round(x/module, 3), round(y/module, 3), round(z/module, 3)
         self.xDirection.setText(str(x))
         self.yDirection.setText(str(y))
         self.zDirection.setText(str(z))
@@ -160,6 +162,20 @@ class translationDefectsMenu(QWidget):
         # Normalizing the given direction:
         self.normalizePoints(parent)
 
+        # Acquiring input data
+        try:
+            offset = float(self.offset.displayText().replace(',','.'))
+            xDirection = self.xDirection.displayText().replace(',','.')
+            yDirection = self.yDirection.displayText().replace(',','.')
+            zDirection = self.zDirection.displayText().replace(',','.')
+        # Handling input errors
+        except ValueError:
+            QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
+            return
+
+        # Declaring the list of index of deviated surface(s)
+        selectedEntityList = []
+
         # Getting information about the selected surfaces:
         for sequence in parent.selectedSequenceNumber:
             index = 0
@@ -170,22 +186,33 @@ class translationDefectsMenu(QWidget):
                     break
                 index += 1
 
+            selectedEntityList.append(int(seqNumber/2+0.5))
+
             # Translating all the points on the selected surface based on given parameters:
             newPointsList = []
-            offset = float(self.offset.displayText())
-            if(self.xDirection.displayText() == 'Multiple Values'):
-                for i in range(len(parent.cloudPointsList[index])):
-                    point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
-                             parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
-                             parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
-                    newPointsList.append(point)
-            else:
-                for i in range(len(parent.cloudPointsList[index])):
-                    point = (parent.cloudPointsList[index][i][0] + float(self.xDirection.displayText()) * offset,
-                             parent.cloudPointsList[index][i][1] + float(self.yDirection.displayText()) * offset,
-                             parent.cloudPointsList[index][i][2] + float(self.zDirection.displayText()) * offset)
-                    newPointsList.append(point)
+            try:
+                if(xDirection == 'Multiple Values'):
+                    for i in range(len(parent.cloudPointsList[index])):
+                        point = (parent.cloudPointsList[index][i][0] + parent.faceNormalVectors[index][i][0] * offset,
+                                 parent.cloudPointsList[index][i][1] + parent.faceNormalVectors[index][i][1] * offset,
+                                 parent.cloudPointsList[index][i][2] + parent.faceNormalVectors[index][i][2] * offset)
+                        newPointsList.append(point)
+                else:
+                    for i in range(len(parent.cloudPointsList[index])):
+                        point = (parent.cloudPointsList[index][i][0] + float(xDirection) * offset,
+                                 parent.cloudPointsList[index][i][1] + float(yDirection) * offset,
+                                 parent.cloudPointsList[index][i][2] + float(zDirection) * offset)
+                        newPointsList.append(point)
+            # Handling non-discretized surface error
+            except IndexError:
+                QMessageBox.information(parent, "Invalid selected surface",
+                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                return
             parent.cloudPointsList[index] = newPointsList
+
+        # Building the logbook tupple
+        logText = '> [Deviation] Translational:\n\tEntity list: '+str(selectedEntityList)+'\n\tX Value: '+xDirection+'\n\tY Value: '+yDirection+'\n\tZ Value: '+zDirection+'\n\tOffset: '+str(offset)+' mm\n\n'
+        parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
