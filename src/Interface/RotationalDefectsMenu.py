@@ -147,6 +147,7 @@ class rotationalDefectsMenu(QWidget):
             selectedEntityList.append(int(seqNumber/2+0.5))
 
             # Getting the rotation parameters:
+<<<<<<< HEAD
             try:
                 xAngle = float(self.xAngle.displayText().replace(',','.'))
                 yAngle = float(self.yAngle.displayText().replace(',','.'))
@@ -160,6 +161,24 @@ class rotationalDefectsMenu(QWidget):
             angleX = (xAngle/180) * math.pi
             angleY = (yAngle/180) * math.pi
             angleZ = (zAngle/180) * math.pi
+=======
+            # Now supporting ',' float separator and empty display (default: 0)
+            xAngle = self.xAngle.displayText().replace(',','.')
+            yAngle = self.yAngle.displayText().replace(',','.')
+            zAngle = self.zAngle.displayText().replace(',','.')
+            if not xAngle:
+                xAngle = 0
+                self.xAngle.setText('0')
+            if not yAngle:
+                yAngle = 0
+                self.yAngle.setText('0')
+            if not zAngle:
+                zAngle = 0
+                self.zAngle.setText('0')
+            angleX = (float(xAngle)/180) * math.pi
+            angleY = (float(yAngle)/180) * math.pi
+            angleZ = (float(zAngle)/180) * math.pi
+>>>>>>> 6bc0146589ce9d0f5fc78cf6e8f44e40818ea59e
 
             # Defining the rotation matrix along the three axis:
             matrixX = array([[1, 0, 0],

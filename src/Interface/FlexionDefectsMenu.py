@@ -281,8 +281,8 @@ class flexionDefectsMenu(QWidget):
                 if(shape.IsPartner(parent.shapeList[i])):
                     break
                 i += 1
-            print("i: "+str(i))
-            print(shape.ShapeType())
+            #print("i: "+str(i))
+            #print(shape.ShapeType())
             parent.selectedShape.append(parent.shapeList[i])
             parent.selectedSequenceNumber.append(2*i+1)
             selectedObjectText += str(i+1) + ' '
