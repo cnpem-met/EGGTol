@@ -104,7 +104,7 @@ class autoDiscretizeMenu(QWidget):
 
         btn1 = QToolButton()
         btn1.setText(MyStrings.autoDiscretizeApply)
-        btn1.clicked.connect(lambda: self.autoDiscretize(parent))
+        btn1.clicked.connect(lambda: self.autoDiscretize(parent, False, None))
         btn1.setMinimumHeight(30)
         btn1.setMinimumWidth(266)
         grid.addWidget(btn1, 15, 0, 1, 2)
@@ -113,7 +113,7 @@ class autoDiscretizeMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(16, 1)
 
-    def autoDiscretize(self, parent):
+    def autoDiscretize(self, parent, isInternalCall, paramList):
         """
         # Method: autoDiscretize.
         # Description: Performs the discretization process of a loaded CAD Model.
@@ -124,53 +124,68 @@ class autoDiscretizeMenu(QWidget):
         if(parent.pointCloudObject):
             cleanCloud(parent)
 
-        # Gets all the required parameters from the User Interface:
-        gridDiscretization = self.gridDiscretization.isChecked()
-        densityDiscretization = self.densityDiscretization.isChecked()
-        useParametric = self.UVParametric.isChecked()
+        if(isInternalCall):
+            if(paramList[0] == "N x N"):
+                gridDiscretization = True
+            else:
+                gridDiscretization = False
 
-        # Check if the density parameter is OK:
-        try:
-            density = float(self.density.displayText())
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidNTitle,
-                                    MyStrings.popupInvalidNDescription,
-                                    QMessageBox.Ok, QMessageBox.Ok)
-            return
+            density = paramList[1]
+            precision = paramList[2]
+            Uparam = paramList[3]
+            Vparam = paramList[4]
+            if(Uparam == None):
+                useParametric = False
+            else:
+                useParametric = True
+        else:
+            # Gets all the required parameters from the User Interface:
+            gridDiscretization = self.gridDiscretization.isChecked()
+            densityDiscretization = self.densityDiscretization.isChecked()
+            useParametric = self.UVParametric.isChecked()
 
-        # Check if the precision parameter is OK:
-        try:
-            precision = float(self.precision.displayText())
-            if(precision > 50 or precision < 10):
-                raise
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
-                                    MyStrings.popupInvalidPrecisionDescription,
-                                    QMessageBox.Ok, QMessageBox.Ok)
-            return
-
-        # Check if the UParameter and VParameter are OK:
-        if(useParametric):
+            # Check if the density parameter is OK:
             try:
-                Uparam = int(self.UParameter.displayText())
-                Vparam = int(self.VParameter.displayText())
+                density = float(self.density.displayText())
             except:
-                QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
-                                        MyStrings.popupInvalidUVDescription,
+                QMessageBox.information(parent, MyStrings.popupInvalidNTitle,
+                                        MyStrings.popupInvalidNDescription,
                                         QMessageBox.Ok, QMessageBox.Ok)
                 return
-        else:
-            Uparam = None
-            Vparam = None
+
+            # Check if the precision parameter is OK:
+            try:
+                precision = float(self.precision.displayText())
+                if(precision > 50 or precision < 10):
+                    raise
+            except:
+                QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
+                                        MyStrings.popupInvalidPrecisionDescription,
+                                        QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+            # Check if the UParameter and VParameter are OK:
+            if(useParametric):
+                try:
+                    Uparam = int(self.UParameter.displayText())
+                    Vparam = int(self.VParameter.displayText())
+                except:
+                    QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
+                                            MyStrings.popupInvalidUVDescription,
+                                            QMessageBox.Ok, QMessageBox.Ok)
+                    return
+            else:
+                Uparam = None
+                Vparam = None
 
         # Loads the loading window:
         parent.loadingWindow.show()
 
         try:
             # Performs the autoDiscretization using the Discretization package:
-            sequence, normals, points = discretizeModel(parent.entitiesObject, density, precision,
+            sequence, normals, points = discretizeModel(parent, parent.entitiesObject, density, precision,
                                                         Uparam, Vparam, useParametric, gridDiscretization)
-        # Handling the error case in which the user inputs a value less than 2
+        # Handling the error case in which the user inputs a value for U or V less than 2
         except ValueError:
             QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,
                                     MyStrings.popupInvalidUVDescription,
@@ -179,7 +194,6 @@ class autoDiscretizeMenu(QWidget):
         parent.faceSequenceNumbers += sequence
         parent.faceNormalVectors += normals
         parent.cloudPointsList += points
-        parent.UVproperty = [Uparam, Vparam]
 
         # Builds the generated point cloud
         buildCloud(parent)

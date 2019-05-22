@@ -118,7 +118,7 @@ class translationDefectsMenu(QWidget):
 
         btn7 = QToolButton()
         btn7.setText(MyStrings.translationDefectsApply)
-        btn7.clicked.connect(lambda: self.translatePoints(parent))
+        btn7.clicked.connect(lambda: self.translatePoints(parent, False, None))
         btn7.setMinimumHeight(30)
         btn7.setMinimumWidth(266)
         grid.addWidget(btn7, 17, 0, 1, 2)
@@ -150,7 +150,7 @@ class translationDefectsMenu(QWidget):
         self.yDirection.setText(str(y))
         self.zDirection.setText(str(z))
 
-    def translatePoints(self, parent):
+    def translatePoints(self, parent, isInternalCall, paramList):
         """
         # Method: translatePoints.
         # Description: This method applies a translational defect in the selected
@@ -158,26 +158,33 @@ class translationDefectsMenu(QWidget):
         at the Translation Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+        if(isInternalCall):
+            selectedFaces = [2*i - 1 for i in paramList[0]]
+            xDirection = paramList[1]
+            yDirection = paramList[2]
+            zDirection = paramList[3]
+            offset = paramList[4]
+        else:
+            # Normalizing the given direction:
+            self.normalizePoints(parent)
 
-        # Normalizing the given direction:
-        self.normalizePoints(parent)
-
-        # Acquiring input data
-        try:
-            offset = float(self.offset.displayText().replace(',','.'))
-            xDirection = self.xDirection.displayText().replace(',','.')
-            yDirection = self.yDirection.displayText().replace(',','.')
-            zDirection = self.zDirection.displayText().replace(',','.')
-        # Handling input errors
-        except ValueError:
-            QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
-            return
+            # Acquiring input data
+            try:
+                offset = float(self.offset.displayText().replace(',','.'))
+                xDirection = self.xDirection.displayText().replace(',','.')
+                yDirection = self.yDirection.displayText().replace(',','.')
+                zDirection = self.zDirection.displayText().replace(',','.')
+            # Handling input errors
+            except ValueError:
+                QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+            selectedFaces = parent.selectedSequenceNumber
 
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
         # Getting information about the selected surfaces:
-        for sequence in parent.selectedSequenceNumber:
+        for sequence in selectedFaces:
             index = 0
             seqNumber = None
             while index < len(parent.faceSequenceNumbers):

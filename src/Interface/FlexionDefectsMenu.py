@@ -116,7 +116,7 @@ class flexionDefectsMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText(MyStrings.flexionDefectsApply)
-        btn4.clicked.connect(lambda: self.flexionPoints(parent))
+        btn4.clicked.connect(lambda: self.flexionPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 12, 0, 1, 2)
@@ -125,7 +125,7 @@ class flexionDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(13, 1)
 
-    def flexionPoints(self, parent):
+    def flexionPoints(self, parent, isInternalCall, paramList):
         """
         # Method: flexionPoints.
         # Description: This method applies flexion manufacturing errors in the selected
@@ -134,33 +134,13 @@ class flexionDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Declaring the list of index of deviated surface(s)
-        selectedEntityList = []
-
-        # Getting information about the selected surfaces:
-        for i in range(len(parent.selectedSequenceNumber)):
-            index = 0
-            seqNumber = None
-
-            while index < len(parent.faceSequenceNumbers):
-                seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
-                    break
-                index += 1
-
-            selectedEntityList.append(int(seqNumber/2+0.5))
-
-            # Apply the boundary box functions to define the center point of a face:
-            boundaryBox = Bnd_Box()
-            brepbndlib_Add(parent.selectedShape[i], boundaryBox)
-            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            deltaX = xMax - xMin
-            deltaY = yMax - yMin
-            deltaZ = zMax - zMin
-            centerX = xMin + deltaX/2
-            centerY = yMin + deltaY/2
-            centerZ = zMin + deltaZ/2
-
+        if(isInternalCall):
+            selectedFacesNumber = [2*i - 1 for i in paramList[0]]
+            selectedShapes = [parent.shapeList[int(i - 1)] for i in paramList[0]]
+            long_axis = paramList[1]
+            perp_axis = paramList[2]
+            max_def = paramList[3]
+        else:
             # Getting flexion parameters
             long_axis = self.longAxisBox.currentText()
             perp_axis = self.perpAxisBox.currentText()
@@ -172,10 +152,40 @@ class flexionDefectsMenu(QWidget):
                 QMessageBox.information(parent, "Invalid deflection value",
                                         "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
                 return
-            if(long_axis == perp_axis):
-                QMessageBox.information(parent, "Invalid Axis combination",
-                                        "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
-                return
+            selectedFacesNumber = parent.selectedSequenceNumber
+            selectedShapes = parent.selectedShape
+
+        if(long_axis == perp_axis):
+            QMessageBox.information(parent, "Invalid Axis combination",
+                                    "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
+            return
+
+        # Declaring the list of index of deviated surface(s)
+        selectedEntityList = []
+
+        # Getting information about the selected surfaces:
+        for i in range(len(selectedFacesNumber)):
+            index = 0
+            seqNumber = None
+
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == selectedFacesNumber[i]):
+                    break
+                index += 1
+
+            selectedEntityList.append(int(seqNumber/2+0.5))
+
+            # Apply the boundary box functions to define the center point of a face:
+            boundaryBox = Bnd_Box()
+            brepbndlib_Add(selectedShapes[i], boundaryBox)
+            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+            deltaX = xMax - xMin
+            deltaY = yMax - yMin
+            deltaZ = zMax - zMin
+            centerX = xMin + deltaX/2
+            centerY = yMin + deltaY/2
+            centerZ = zMin + deltaZ/2
 
             try:
                 # Flexioning all the points on the selected surface based on given parameters:

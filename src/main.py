@@ -99,6 +99,7 @@ class MainWindow(QMainWindow):
         self.faceSequenceNumbers = []
         self.faceNormalVectors = []
         self.cloudPointsList = []
+        self.UVproperty = []
 
         # Information about selected parameters:
         self.shapeParameter1 = None

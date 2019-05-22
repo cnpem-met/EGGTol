@@ -113,7 +113,7 @@ class rotationalDefectsMenu(QWidget):
 
         btn6 = QToolButton()
         btn6.setText(MyStrings.rotationalDefectsApply)
-        btn6.clicked.connect(lambda: self.rotatePoints(parent))
+        btn6.clicked.connect(lambda: self.rotatePoints(parent, False, None))
         btn6.setMinimumHeight(30)
         btn6.setMinimumWidth(266)
         grid.addWidget(btn6, 14, 0, 1, 2)
@@ -122,7 +122,7 @@ class rotationalDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(15, 1)
 
-    def rotatePoints(self, parent):
+    def rotatePoints(self, parent, isInternalCall, paramList):
         """
         # Method: rotatePoints.
         # Description: This method applies a rotational defect in the selected
@@ -131,23 +131,14 @@ class rotationalDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        # Declaring the list of index of deviated surface(s)
-        selectedEntityList = []
-
-        # Getting information about the selected surfaces:
-        for i in range(len(parent.selectedSequenceNumber)):
-            index = 0
-            seqNumber = None
-            while index < len(parent.faceSequenceNumbers):
-                seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
-                    break
-                index += 1
-
-            selectedEntityList.append(int(seqNumber/2+0.5))
-
+        if(isInternalCall):
+            selectedFacesNumber = [2*i - 1 for i in paramList[0]]
+            selectedShapes = [parent.shapeList[int(i - 1)] for i in paramList[0]]
+            xAngle = paramList[1]
+            yAngle = paramList[2]
+            zAngle = paramList[3]
+        else:
             # Getting the rotation parameters:
-<<<<<<< HEAD
             try:
                 xAngle = float(self.xAngle.displayText().replace(',','.'))
                 yAngle = float(self.yAngle.displayText().replace(',','.'))
@@ -157,28 +148,27 @@ class rotationalDefectsMenu(QWidget):
                 QMessageBox.information(parent, "Invalid input",
                                         "Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
                 return
+            selectedFacesNumber = parent.selectedSequenceNumber
+            selectedShapes = parent.selectedShape
+
+        # Declaring the list of index of deviated surface(s)
+        selectedEntityList = []
+
+        # Getting information about the selected surfaces:
+        for i in range(len(selectedFacesNumber)):
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == selectedFacesNumber[i]):
+                    break
+                index += 1
+
+            selectedEntityList.append(int(seqNumber/2+0.5))
 
             angleX = (xAngle/180) * math.pi
             angleY = (yAngle/180) * math.pi
             angleZ = (zAngle/180) * math.pi
-=======
-            # Now supporting ',' float separator and empty display (default: 0)
-            xAngle = self.xAngle.displayText().replace(',','.')
-            yAngle = self.yAngle.displayText().replace(',','.')
-            zAngle = self.zAngle.displayText().replace(',','.')
-            if not xAngle:
-                xAngle = 0
-                self.xAngle.setText('0')
-            if not yAngle:
-                yAngle = 0
-                self.yAngle.setText('0')
-            if not zAngle:
-                zAngle = 0
-                self.zAngle.setText('0')
-            angleX = (float(xAngle)/180) * math.pi
-            angleY = (float(yAngle)/180) * math.pi
-            angleZ = (float(zAngle)/180) * math.pi
->>>>>>> 6bc0146589ce9d0f5fc78cf6e8f44e40818ea59e
 
             # Defining the rotation matrix along the three axis:
             matrixX = array([[1, 0, 0],
@@ -193,7 +183,7 @@ class rotationalDefectsMenu(QWidget):
 
             # Apply the boundary box functions to define the center point of a face:
             boundaryBox = Bnd_Box()
-            brepbndlib_Add(parent.selectedShape[i], boundaryBox)
+            brepbndlib_Add(selectedShapes[i], boundaryBox)
             xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
             deltaX = xMax - xMin
             deltaY = yMax - yMin

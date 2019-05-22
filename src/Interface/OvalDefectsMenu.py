@@ -137,10 +137,12 @@ class ovalDefectsMenu(QWidget):
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
+            print('index:'+str(index))
+            print(parent.UVproperty)
             try:
                 # calculating parameters to properly generate a sine wave that flattens the rounded surface
-                freq = int((len(parent.cloudPointsList[index])/(parent.UVproperty[0] - 1))/2)
-                numPointsMainAxis = parent.UVproperty[0] -1
+                numPointsMainAxis = parent.UVproperty[index][0] -1
+                freq = int((len(parent.cloudPointsList[index])/(numPointsMainAxis))/2)
 
                 newPointsList = []
                 for i in range(len(parent.cloudPointsList[index])):

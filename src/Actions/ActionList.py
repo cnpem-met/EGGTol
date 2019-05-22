@@ -834,6 +834,7 @@ class closeAction(QAction):
             parent.shapeParameter2 = None
             parent.shapeParameter3 = None
             parent.logbookList = []
+            parent.UVproperty = []
 
             # Applying an isometric visualization mode:
             parent.canvas._display.View_Iso()
@@ -1375,10 +1376,12 @@ class deletePointAction(QAction):
                 parent.faceSequenceNumbers = []
                 parent.faceNormalVectors = []
                 parent.cloudPointsList = []
+                parent.UVproperty = []
             elif(self.currentOuterIndex >= 7):
                 del parent.faceSequenceNumbers[self.currentOuterIndex-7]
                 del parent.faceNormalVectors[self.currentOuterIndex-7]
                 del parent.cloudPointsList[self.currentOuterIndex-7]
+                del parent.UVproperty[self.currentOuterIndex-7]
         elif(self.currentLevel == 1):
             del parent.faceNormalVectors[self.currentOuterIndex-7][self.currentInnerIndex]
             del parent.cloudPointsList[self.currentOuterIndex-7][self.currentInnerIndex]

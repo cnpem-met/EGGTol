@@ -122,7 +122,7 @@ class faceDiscretizeMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText(MyStrings.faceDiscretizeApply)
-        btn4.clicked.connect(lambda: self.faceDiscretize(parent))
+        btn4.clicked.connect(lambda: self.faceDiscretize(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 16, 0, 1, 2)
@@ -131,7 +131,7 @@ class faceDiscretizeMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(17, 1)
 
-    def faceDiscretize(self, parent):
+    def faceDiscretize(self, parent, isInternalCall, paramList):
         """
         # Method: faceDiscretize.
         # Description: Performs the discretization of a selected face in the loaded CAD Model.
@@ -142,40 +142,53 @@ class faceDiscretizeMenu(QWidget):
         if(parent.pointCloudObject):
             cleanCloud(parent)
 
-        # Gets all the required parameters from the User Interface:
-        gridDiscretization = self.gridDiscretization.isChecked()
-        densityDiscretization = self.densityDiscretization.isChecked()
+        if(isInternalCall):
+            selectedFaces = [2*i - 1 for i in paramList[0]]
+            if(paramList[1] == "N x N"):
+                gridDiscretization = True
+            else:
+                gridDiscretization = False
 
-        # Check if the density parameter is OK:
-        try:
-            density = float(self.density.displayText())
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidNTitle, MyStrings.popupInvalidNDescription,
-                                    QMessageBox.Ok, QMessageBox.Ok)
-            return
+            density = paramList[2]
+            precision = paramList[3]
+        else:
+            # Gets all the required parameters from the User Interface:
+            gridDiscretization = self.gridDiscretization.isChecked()
+            densityDiscretization = self.densityDiscretization.isChecked()
 
-        # Check if the precision parameter is OK:
-        try:
-            precision = float(self.precision.displayText())
-            if(precision > 50 or precision < 10):
-                raise
-        except:
-            QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
-                                    MyStrings.popupInvalidPrecisionDescription, QMessageBox.Ok, QMessageBox.Ok)
-            return
+            # Check if the density parameter is OK:
+            try:
+                density = float(self.density.displayText())
+            except:
+                QMessageBox.information(parent, MyStrings.popupInvalidNTitle, MyStrings.popupInvalidNDescription,
+                                        QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+            # Check if the precision parameter is OK:
+            try:
+                precision = float(self.precision.displayText())
+                if(precision > 50 or precision < 10):
+                    raise
+            except:
+                QMessageBox.information(parent, MyStrings.popupInvalidPrecisionTitle,
+                                        MyStrings.popupInvalidPrecisionDescription, QMessageBox.Ok, QMessageBox.Ok)
+                return
+
+            selectedFaces = parent.selectedSequenceNumber
 
         # Loads the loading window:
         parent.loadingWindow.show()
 
         # Checks if at least one surface was selected
-        if(parent.selectedSequenceNumber):
+        if(selectedFaces):
             # Performs the faceDiscretization using the Discretization package:
-            for sequence in parent.selectedSequenceNumber:
+            for sequence in selectedFaces:
                 points, normals = discretizeFace(parent.entitiesObject[pos(sequence)], parent.entitiesObject,
                                                  density, precision, gridDiscretization)
                 parent.faceSequenceNumbers.append(sequence)
                 parent.faceNormalVectors.append(normals)
                 parent.cloudPointsList.append(points)
+                parent.UVproperty.append([None, None])
         else:
             QMessageBox.information(parent, "Surface not selected",
                                     "Surface not selected. Please, select one to generate a point cloud.", QMessageBox.Ok, QMessageBox.Ok)
@@ -189,12 +202,12 @@ class faceDiscretizeMenu(QWidget):
 
         # Building the logbook tupple
         selectedEntityList = []
-        for i in range(len(parent.selectedSequenceNumber)):
+        for i in range(len(selectedFaces)):
             index = 0
             seqNumber = None
             while index < len(parent.faceSequenceNumbers):
                 seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
+                if(seqNumber == selectedFaces[i]):
                     break
                 index += 1
             selectedEntityList.append(int(seqNumber/2+0.5))

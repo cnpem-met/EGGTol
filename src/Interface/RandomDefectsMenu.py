@@ -96,7 +96,7 @@ class randomDefectsMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText(MyStrings.randomDefectsApply)
-        btn4.clicked.connect(lambda: self.randomPoints(parent))
+        btn4.clicked.connect(lambda: self.randomPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 11, 0, 1, 2)
@@ -105,7 +105,7 @@ class randomDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(12, 1)
 
-    def randomPoints(self, parent):
+    def randomPoints(self, parent, isInternalCall, paramList):
         """
         # Method: randomPoints.
         # Description: This method applies random manufacturing errors in the selected
@@ -114,11 +114,25 @@ class randomDefectsMenu(QWidget):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
+        if(isInternalCall):
+            selectedFaces = [2*i - 1 for i in paramList[0]]
+            minOffset = paramList[1]
+            maxOffset = paramList[2]
+        else:
+            try:
+                minOffset = float(self.minOffset.displayText().replace(',','.'))
+                maxOffset = float(self.maxOffset.displayText().replace(',','.'))
+            # Handling invalid input error
+            except ValueError:
+                QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+            selectedFaces = parent.selectedSequenceNumber
+
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
         # Getting information about the selected surfaces:
-        for sequence in parent.selectedSequenceNumber:
+        for sequence in selectedFaces:
             index = 0
             seqNumber = None
             while index < len(parent.faceSequenceNumbers):
@@ -128,14 +142,6 @@ class randomDefectsMenu(QWidget):
                 index += 1
 
             selectedEntityList.append(int(seqNumber/2+0.5))
-
-            try:
-                minOffset = float(self.minOffset.displayText().replace(',','.'))
-                maxOffset = float(self.maxOffset.displayText().replace(',','.'))
-            # Handling invalid input error
-            except ValueError:
-                QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
-                return
 
             try:
                 # Randomizing all the points based on given random parameters:

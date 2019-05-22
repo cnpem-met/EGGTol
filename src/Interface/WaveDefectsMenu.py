@@ -107,7 +107,7 @@ class waveDefectsMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText("Apply wave pattern defects")
-        btn4.clicked.connect(lambda: self.wavePoints(parent, 0, 0, True))
+        btn4.clicked.connect(lambda: self.wavePoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 12, 0, 1, 2)
@@ -116,7 +116,7 @@ class waveDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(13, 1)
 
-    def wavePoints(self, parent, amp, freq, internalCall):
+    def wavePoints(self, parent, isInternalCall, paramList):
         """
         # Method: randomPoints.
         # Description: This method applies random manufacturing errors in the selected
@@ -128,18 +128,12 @@ class waveDefectsMenu(QWidget):
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
-        # Getting information about the selected surfaces:
-        for i in range(len(parent.selectedSequenceNumber)):
-            index = 0
-            seqNumber = None
-            while index < len(parent.faceSequenceNumbers):
-                seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
-                    break
-                index += 1
-
-            selectedEntityList.append(int(seqNumber/2+0.5))
-
+        if(isInternalCall):
+            selectedFacesNumber = [2*i - 1 for i in paramList[0]]
+            drillAxisCheck = paramList[1]
+            amp = paramList[2]
+            freq = paramList[3]
+        else:
             try:
                 amp = float(self.amp.displayText().replace(',','.'))
                 freq = float(self.freq.displayText().replace(',','.'))
@@ -148,16 +142,33 @@ class waveDefectsMenu(QWidget):
                 QMessageBox.information(parent, "Invalid input",
                                         "Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
                 return
+            drillAxisCheck = self.drillAxisCheckBox.isChecked()
+            selectedFacesNumber = parent.selectedSequenceNumber
 
-            if(not self.drillAxisCheckBox.isChecked()):
-                try:
-                    drillAxisLength = parent.UVproperty[0] - 1
-                # case in which the surface isn't rounded (aka doesn't have UV properties)
-                except:
-                    drillAxisLength = 1
-                    pass
-            else:
+        #print(parent.UVproperty)
+        # Getting information about the selected surfaces:
+        for i in range(len(selectedFacesNumber)):
+            index = 0
+            seqNumber = None
+            while index < len(parent.faceSequenceNumbers):
+                seqNumber = parent.faceSequenceNumbers[index]
+                if(seqNumber == selectedFacesNumber[i]):
+                    break
+                index += 1
+
+            selectedEntityList.append(int(seqNumber/2+0.5))
+            #print(index)
+            if(drillAxisCheck):
                 drillAxisLength = 1
+            else:
+                try:
+                    drillAxisLength = parent.UVproperty[index][0] - 1
+                # case in which the surface isn't rounded (U property = None)
+                except TypeError:
+                        drillAxisLength = 1
+                        pass
+
+            print(drillAxisLength)
 
             try:
                 newPointsList = []
@@ -166,7 +177,7 @@ class waveDefectsMenu(QWidget):
                     y0 = parent.cloudPointsList[index][i][1]
                     z0 = parent.cloudPointsList[index][i][2]
 
-                    offset = amp * math.sin(int(i/drillAxisLength)/freq*2*math.pi)
+                    offset = amp * math.sin((int(i/drillAxisLength)/freq)*2*math.pi)
 
                     point = (x0 + parent.faceNormalVectors[index][i][0] * offset,
                              y0 + parent.faceNormalVectors[index][i][1] * offset,
@@ -184,7 +195,7 @@ class waveDefectsMenu(QWidget):
                 return
 
         # Building the logbook tupple
-        logText = '> [Deviation] Wave Pattern:\n\tEntity list: '+str(selectedEntityList)+'\n\tMax. Offset: '+str(amp)+' mm\n\tFrequency: '+str(freq)+'\n\n'
+        logText = '> [Deviation] Wave Pattern:\n\tEntity list: '+str(selectedEntityList)+'\n\tAlong drill axis: '+str(self.drillAxisCheckBox.isChecked())+'\n\tAmplitude: '+str(amp)+' mm\n\tFrequency: '+str(freq)+'\n\n'
         parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:
