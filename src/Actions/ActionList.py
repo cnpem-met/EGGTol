@@ -440,31 +440,33 @@ class pointsListAction(QAction):
                          parent, False)
 
 class logAction(QAction):
-    """
-    # Class: welcomeAction
-    # Description: A PyQt5 action that opens the Welcome Menu side widget.
-    """
 
     def __init__(self, parent):
-        """
-        # Method: __init__.
-        # Description: The init method for initializing the inhirited properties.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         super().__init__(QIcon('..\\icons\\log.svg'), "Logbook", parent)
         self.setStatusTip("List of actions")
         self.setIconText("Logbook")
         self.triggered.connect(lambda: self.logActionProcedure(parent))
 
     def logActionProcedure(self, parent):
-        """
-        # Method: welcomeActionProcedure.
-        # Description: A procedure for opening the Welcome Menu side widget.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         from Interface.logMenu import logMenu
         widget = logMenu(parent)
         switchLeftPanels(widget, "Logbook!", "Log panel",
+                         parent, False)
+
+class fN3DAction(QAction):
+
+    def __init__(self, parent):
+        super().__init__(QIcon('..\\icons\\normal.svg'), "Normal", parent)
+        self.setStatusTip("Manipulate Face-normal Vectors")
+        self.setIconText("Normal Vectors")
+        self.triggered.connect(lambda: self.fN3DActionProcedure(parent))
+
+    def fN3DActionProcedure(self, parent):
+        from Interface.FaceNormal3DVecMenu import faceNormal3DVecMenu
+        widget = faceNormal3DVecMenu(parent)
+        switchLeftPanels(widget, "3D Vectors!", "3D Vectors Panel",
                          parent, False)
 
 class translationDefectsAction(QAction):

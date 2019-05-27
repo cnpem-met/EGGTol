@@ -101,6 +101,9 @@ class MainWindow(QMainWindow):
         self.cloudPointsList = []
         self.UVproperty = []
 
+        # Information about the face-normal Shape Vectors
+        self.normalArrowsShapeList = []
+
         # Information about selected parameters:
         self.shapeParameter1 = None
         self.shapeParameter2 = None
@@ -120,6 +123,7 @@ class MainWindow(QMainWindow):
         defects = defectsAction(self)
         pointsList = pointsListAction(self)
         logbook = logAction(self)
+        faceNorm3DVec = fN3DAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
         translationDefects = translationDefectsAction(self)
@@ -169,6 +173,8 @@ class MainWindow(QMainWindow):
         panelsMenu.addAction(defects)
         panelsMenu.addAction(pointsList)
         panelsMenu.addAction(logbook)
+        panelsMenu.addAction(faceNorm3DVec)
+
         panelsMenu.addSeparator()
         panelsMenu.addAction(autoDiscretize)
         panelsMenu.addAction(faceDiscretize)
@@ -223,6 +229,7 @@ class MainWindow(QMainWindow):
         self.toolbar.addAction(defects)
         self.toolbar.addAction(pointsList)
         self.toolbar.addAction(logbook)
+        self.toolbar.addAction(faceNorm3DVec)
         self.toolbar.addSeparator()
         self.toolbar.addAction(close)
         self.toolbar.addSeparator()

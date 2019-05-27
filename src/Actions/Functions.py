@@ -13,6 +13,7 @@ from OCC.Quantity import Quantity_Color, Quantity_NOC_WHITE, Quantity_NOC_BLACK
 from OCC.Aspect import Aspect_TOM_POINT
 from OCC.Prs3d import Prs3d_PointAspect
 
+
 def cleanCloud(parent):
     """
     # Function: cleanCloud.
@@ -23,6 +24,7 @@ def cleanCloud(parent):
         parent.canvas._display.Context.Erase(parent.pointCloudObject.GetHandle(), True)
     parent.pointCloudObject = None
     parent.pointAspectObject = None
+
 
 def buildCloud(parent):
     """
