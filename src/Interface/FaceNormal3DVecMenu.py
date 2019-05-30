@@ -142,15 +142,6 @@ class faceNormal3DVecMenu(QWidget):
                     div = 0
                 else:
                     div = 4
-                # elif(totPoints >=5 and totPoints <10):
-                #     div = 2
-                # elif(totPoints >=10 and totPoints <20):
-                #     div = 3
-                # else:
-                #     div = 4
-                # print(parent.cloudPointsList[index])
-                # print(totPoints)
-                # print(div)
                 for i in range(div+1):
                     print(i)
                     # xyz = parent.cloudPointsList[index][int((totPoints-1)/i)]
@@ -166,25 +157,7 @@ class faceNormal3DVecMenu(QWidget):
                     AIScone = AIS_Shape(cone)
                     AIScone.SetColor(colBlue)
                     parent.normalArrowsShapeList.append(AIScone)
-            # if(totPoints > 0):
-            #     xyz = parent.cloudPointsList[index][int(totPoints/2)]
-            #     normal = parent.faceNormalVectors[index][int(totPoints/2)]
-            #     p1 = gp_Pnt(xyz[0], xyz[1], xyz[2])
-            #     pntList.append(p1)
-            #     dir = gp_Dir(normal[0], normal[1], normal[2])
-            #     vec = gp_Vec(dir)
-            #     vecList.append(vec)
-            #     ax1 = gp_Ax2(p1, dir)
-            #     cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
-            #     AIScone = AIS_Shape(cone)
-            #     AIScone.SetColor(colBlue)
-            #     parent.normalArrowsShapeList.append(AIScone)
-
         self.show3DNormalVectors(parent)
-        # for i in range(len(pntList)):
-        #     parent.canvas._display.DisplayVector(vecList[i], pntList[i], update=True)
-        # parent.canvas._display.DisplayShape(color_cil)
-        # parent.canvas._display.DisplayShape(color_cone, update=True)
 
     def reverse3DNormalVectors(self, parent):
         for i in range(len(parent.selectedSequenceNumber)):

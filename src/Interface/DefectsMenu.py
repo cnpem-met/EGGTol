@@ -6,7 +6,8 @@ for calling the defects functions.
 """
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QSpacerItem
+from PyQt5.QtCore import QRect
 
 # Local Imports:
 from Actions.ActionList import *
@@ -90,8 +91,22 @@ class defectsMenu(QWidget):
         btn6.setMinimumWidth(266)
         grid.addWidget(btn6, 7, 0)
 
+        # spacer = QSpacerItem(250, 50)
+        # # super(spacer).__init__()
+        # # rect = QRect()
+        # # rect.setHeigh(100)
+        # # spacer.setGeometry(rect)
+        # grid.addWidget(spacer, 8, 0)
+
+        btn7 = QToolButton()
+        btn7.setText("Turning defects")
+        btn7.clicked.connect(lambda: self.turningDefectsMenuProcedure(parent))
+        btn7.setMinimumHeight(50)
+        btn7.setMinimumWidth(266)
+        grid.addWidget(btn7, 8, 0)
+
         grid.setColumnStretch(0, 1)
-        grid.setRowStretch(8, 1)
+        grid.setRowStretch(9, 1)
 
     def translationDefectsMenuProcedure(self, parent):
         """
@@ -124,41 +139,26 @@ class defectsMenu(QWidget):
         random.randomDefectsActionProcedure(parent)
 
     def flexionDefectsMenuProcedure(self, parent):
-        """
-        # Method: randomDefectsMenuProcedure.
-        # Description: This method calls the randomDefectsActionProcedure from the
-        Actions package for displaying the Random Defects Menu side widget.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         flexion = flexionDefectsAction(parent)
         flexion.flexionDefectsActionProcedure(parent)
 
     def waveDefectsMenuProcedure(self, parent):
-        """
-        # Method: randomDefectsMenuProcedure.
-        # Description: This method calls the randomDefectsActionProcedure from the
-        Actions package for displaying the Random Defects Menu side widget.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         wave = waveDefectsAction(parent)
         wave.waveDefectsActionProcedure(parent)
 
     def ovalDefectsMenuProcedure(self, parent):
-        """
-        # Method: randomDefectsMenuProcedure.
-        # Description: This method calls the randomDefectsActionProcedure from the
-        Actions package for displaying the Random Defects Menu side widget.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         oval = ovalDefectsAction(parent)
         oval.ovalDefectsActionProcedure(parent)
 
     def torsionDefectsMenuProcedure(self, parent):
-        """
-        # Method: randomDefectsMenuProcedure.
-        # Description: This method calls the randomDefectsActionProcedure from the
-        Actions package for displaying the Random Defects Menu side widget.
-        # Parameters: * MainWindow parent = A reference for the main window object.
-        """
+
         torsion = torsionDefectsAction(parent)
         torsion.torsionDefectsActionProcedure(parent)
+
+    def turningDefectsMenuProcedure(self, parent):
+
+        turning = turningDefectsAction(parent)
+        turning.turningDefectsActionProcedure(parent)

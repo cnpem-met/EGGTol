@@ -12,8 +12,6 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit
 from Actions.Functions import *
 from Resources.Strings import MyStrings
 
-from OCC.gp import gp_Pnt, gp_Vec
-
 class translationDefectsMenu(QWidget):
     """
     # Class: translationDefectsMenu

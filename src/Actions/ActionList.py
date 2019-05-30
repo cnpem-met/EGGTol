@@ -745,6 +745,41 @@ class torsionDefectsAction(QAction):
         switchRightPanels(widget, "Torsion", "Torsional Deviation Panel",
                           parent, True)
 
+class turningDefectsAction(QAction):
+
+    def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Turning defection", parent)
+        self.setStatusTip("Apply a turning pattern deflection to a round surface")
+        self.triggered.connect(lambda: self.turningDefectsActionProcedure(parent))
+
+    def turningDefectsActionProcedure(self, parent):
+        """
+        # Method: randomDefectsActionProcedure.
+        # Description: The procedure for opening the Random Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
+        from Interface.TurningDefectsMenu import turningDefectsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        if not parent.activeCloudFile:
+            QMessageBox.information(parent, MyStrings.popupNoCloudTitle,
+                                    MyStrings.popupNoCloudDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
+        widget = turningDefectsMenu(parent)
+        switchRightPanels(widget, "Turning", "Turning Deviation Panel",
+                          parent, True)
+
 
 class closeAction(QAction):
     """
