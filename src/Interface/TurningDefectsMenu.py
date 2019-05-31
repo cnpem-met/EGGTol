@@ -259,6 +259,8 @@ class turningDefectsMenu(QWidget):
             sprindle = self.interval_mapping(sprindle, normVec[3][0], normVec[3][1], 0, 1)
             LDratio = self.interval_mapping(LDratio, normVec[4][0], normVec[4][1], 0, 1)
 
+            aux = [toolCond, depth, feed, sprindle, LDratio]
+            #print(aux)
 
             # Loading the Trained Neural Network, according to some geometrical specifications
             NN = nl.load("..\\neural networks\\trainedNN_3.net")
@@ -276,16 +278,16 @@ class turningDefectsMenu(QWidget):
                     # Creating LiLratio parameter, and normalizing it
                     LiLratio = dist/length
                     LiLratio = self.interval_mapping(LiLratio, normVec[5][0], normVec[5][1], 0, 1)
-
+                    print('LiLratio Norm: '+str(LiLratio))
                     # Creating the vector with every parameter (normalized) needed to compose the input of the NN model
                     normInput = [[toolCond, depth, feed, sprindle, LDratio, LiLratio]]
 
                     # Obtaining the output (normalized) from the NN model
                     nnOutput = NN.sim(normInput)
-
+                    print('NNout Norm: '+str(nnOutput))
                     # Desnormalizing the output
-                    nnOutput = self.interval_mapping(nnOutput, 0, 1, normVec[5][0], normVec[5][1])
-                    #print('NNout: '+str(nnOutput))
+                    nnOutput = self.interval_mapping(nnOutput, 0, 1, normVec[6][0], normVec[6][1])
+                    print('NNout: '+str(nnOutput)+'\n')
 
                     offset = nnOutput[0][0]
 
