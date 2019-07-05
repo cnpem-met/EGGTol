@@ -99,7 +99,7 @@ class defectsMenu(QWidget):
         # grid.addWidget(spacer, 8, 0)
 
         btn7 = QToolButton()
-        btn7.setText("Turning defects")
+        btn7.setText("Spindle deviation")
         btn7.clicked.connect(lambda: self.turningDefectsMenuProcedure(parent))
         btn7.setMinimumHeight(50)
         btn7.setMinimumWidth(266)

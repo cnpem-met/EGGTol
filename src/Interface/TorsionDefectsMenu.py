@@ -120,7 +120,7 @@ class torsionDefectsMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText("Apply torsional defect")
-        btn4.clicked.connect(lambda: self.torsionPoints(parent))
+        btn4.clicked.connect(lambda: self.torsionPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 12, 0, 1, 2)
@@ -129,7 +129,7 @@ class torsionDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(13, 1)
 
-    def torsionPoints(self, parent):
+    def torsionPoints(self, parent, isInternalCall, paramList):
         """
         # Method: flexionPoints.
         # Description: This method applies flexion manufacturing errors in the selected
@@ -137,47 +137,86 @@ class torsionDefectsMenu(QWidget):
         done at the flexion Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
+
+        if(isInternalCall):
+            selectedFacesNumber = [2*i - 1 for i in paramList[0]]
+            selectedShapes = [parent.shapeList[int(i - 1)] for i in paramList[0]]
+            long_axis = paramList[1]
+            perp_axis = paramList[2]
+            max_def = paramList[3]
+        else:
+            # Getting flexion parameters
+            long_axis = self.longAxisBox.currentText()
+            perp_axis = self.perpAxisBox.currentText()
+
+            # Handling input errors
+            try:
+                max_def = float(self.maxDef.displayText().replace(',','.'))
+            except ValueError:
+                QMessageBox.information(parent, "Invalid deflection value",
+                                        "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
+                return
+            selectedFacesNumber = parent.selectedSequenceNumber
+            selectedShapes = parent.selectedShape
+
+        if(long_axis == perp_axis):
+            QMessageBox.information(parent, "Invalid Axis combination",
+                                    "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
+            return
+
+        # New BoundBox Test
+        boundaryBox = Bnd_Box()
+        for i in range(len(selectedFacesNumber)):
+            brepbndlib_Add(selectedShapes[i], boundaryBox)
+        xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+        deltaX = xMax - xMin
+        deltaY = yMax - yMin
+        deltaZ = zMax - zMin
+        self.centerX = xMin + deltaX/2
+        self.centerY = yMin + deltaY/2
+        self.centerZ = zMin + deltaZ/2
+
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
         # Getting information about the selected surfaces:
-        for i in range(len(parent.selectedSequenceNumber)):
+        for i in range(len(selectedFacesNumber)):
             index = 0
             seqNumber = None
             while index < len(parent.faceSequenceNumbers):
                 seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
+                if(seqNumber == selectedFacesNumber[i]):
                     break
                 index += 1
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
-            # Apply the boundary box functions to define the center point of a face:
-            boundaryBox = Bnd_Box()
-            brepbndlib_Add(parent.selectedShape[i], boundaryBox)
-            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            deltaX = xMax - xMin
-            deltaY = yMax - yMin
-            deltaZ = zMax - zMin
-            self.centerX = xMin + deltaX/2
-            self.centerY = yMin + deltaY/2
-            self.centerZ = zMin + deltaZ/2
+            # # Apply the boundary box functions to define the center point of a face:
+            # boundaryBox = Bnd_Box()
+            # brepbndlib_Add(parent.selectedShape[i], boundaryBox)
+            # xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+            # deltaX = xMax - xMin
+            # deltaY = yMax - yMin
+            # deltaZ = zMax - zMin
+            # self.centerX = xMin + deltaX/2
+            # self.centerY = yMin + deltaY/2
+            # self.centerZ = zMin + deltaZ/2
 
-            # Getting torsion parameters
-            long_axis = self.longAxisBox.currentText()
-            perp_axis = self.perpAxisBox.currentText()
-
-            try:
-                max_def = float(self.maxDef.displayText().replace(',','.'))
-            # Handling input errors
-            except ValueError:
-                QMessageBox.information(parent, "Invalid deflection value",
-                                        "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
-                return
-            if(long_axis == perp_axis):
-                QMessageBox.information(parent, "Invalid Axis combination",
-                                        "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
-                return
+            # # Getting torsion parameters
+            # long_axis = self.longAxisBox.currentText()
+            # perp_axis = self.perpAxisBox.currentText()
+            #
+            # try:
+            #     max_def = float(self.maxDef.displayText().replace(',','.'))
+            # # Handling input errors
+            # except ValueError:
+            #     QMessageBox.information(parent, "Invalid deflection value",
+            #                             "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
+            #     return
+            # if(long_axis == perp_axis):
+            #     QMessageBox.information(parent, "Invalid Axis combination",
+            #                             "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
+            #     return
 
             #G = 77*10**9
             #EI = 204.8 # Young's module times the Inertia moment of an arbitrary solid
@@ -261,7 +300,7 @@ class torsionDefectsMenu(QWidget):
                 return
 
         # Building the logbook tupple
-        logText = '> [Deviation] Torsion:\n\tEntity list: '+str(selectedEntityList)+'\n\tMax. Deviation: '+str(max_def)+' mm\n\tLong. axis: '+long_axis+'\n\tPerp. axis: '+perp_axis+'\n\n'
+        logText = '> [Deviation] Torsion:\n\tEntity list: '+str(selectedEntityList)+'\n\tLong. axis: '+long_axis+'\n\tPerp. axis: '+perp_axis+'\n\tMax. deflection: '+str(max_def)+' mm\n\n'
         parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:

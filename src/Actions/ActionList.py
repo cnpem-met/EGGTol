@@ -754,8 +754,8 @@ class turningDefectsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Turning defection", parent)
-        self.setStatusTip("Apply a turning pattern deflection to a round surface")
+        super().__init__(QIcon('..\\icons\\arrow-right.svg'), "Spindle deviation", parent)
+        self.setStatusTip("Simulate a spindle deviation over a round surface")
         self.triggered.connect(lambda: self.turningDefectsActionProcedure(parent))
 
     def turningDefectsActionProcedure(self, parent):
@@ -777,7 +777,7 @@ class turningDefectsAction(QAction):
                                     QMessageBox.Ok, QMessageBox.Ok)
             return
         widget = turningDefectsMenu(parent)
-        switchRightPanels(widget, "Turning", "Turning Deviation Panel",
+        switchRightPanels(widget, "Spindle", "Spindle Deviation Panel",
                           parent, True)
 
 

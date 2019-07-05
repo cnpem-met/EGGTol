@@ -160,6 +160,21 @@ class flexionDefectsMenu(QWidget):
                                     "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
             return
 
+        # New BoundBox Test
+        boundaryBox = Bnd_Box()
+        for i in range(len(selectedFacesNumber)):
+            brepbndlib_Add(selectedShapes[i], boundaryBox)
+        xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+        deltaX = xMax - xMin
+        deltaY = yMax - yMin
+        deltaZ = zMax - zMin
+        centerX = xMin + deltaX/2
+        centerY = yMin + deltaY/2
+        centerZ = zMin + deltaZ/2
+        # print(deltaX)
+        # print(deltaY)
+        # print(deltaZ)
+
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
@@ -176,16 +191,16 @@ class flexionDefectsMenu(QWidget):
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
-            # Apply the boundary box functions to define the center point of a face:
-            boundaryBox = Bnd_Box()
-            brepbndlib_Add(selectedShapes[i], boundaryBox)
-            xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            deltaX = xMax - xMin
-            deltaY = yMax - yMin
-            deltaZ = zMax - zMin
-            centerX = xMin + deltaX/2
-            centerY = yMin + deltaY/2
-            centerZ = zMin + deltaZ/2
+            # # Apply the boundary box functions to define the center point of a face:
+            # boundaryBox = Bnd_Box()
+            # brepbndlib_Add(selectedShapes[i], boundaryBox)
+            # xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
+            # deltaX = xMax - xMin
+            # deltaY = yMax - yMin
+            # deltaZ = zMax - zMin
+            # centerX = xMin + deltaX/2
+            # centerY = yMin + deltaY/2
+            # centerZ = zMin + deltaZ/2
 
             try:
                 # Flexioning all the points on the selected surface based on given parameters:

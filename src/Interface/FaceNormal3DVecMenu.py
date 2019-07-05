@@ -2,7 +2,7 @@
 import numpy
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox, QSpacerItem
 
 # OpenCASCADE imports:
 from OCC.Geom import Geom_Point
@@ -29,7 +29,7 @@ class faceNormal3DVecMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Show and manipulate the normal vectors of\n the 3D model.", self)
+        label1 = QLabel("Show and manipulate the normal vectors of\n the 3D model.\n", self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         btn1 = QToolButton()
@@ -47,34 +47,40 @@ class faceNormal3DVecMenu(QWidget):
         #btn2.setEnabled(False)
         btn2.clicked.connect(lambda: self.hide3DNormalVectors(parent))
 
+        verticalSpacer = QSpacerItem(20,30)
+        grid.addItem(verticalSpacer, 2, 0)
+
+        label4 = QLabel("Select an entity to manipulate its normal vectors:", self)
+        grid.addWidget(label4, 3, 0, 1, 2)
+
+        self.selectedObject = QLineEdit()
+        self.selectedObject.setReadOnly(True)
+        self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
+        grid.addWidget(self.selectedObject, 4, 0, 1, 2)
+
         btn3 = QToolButton()
         btn3.setText(MyStrings.selectionModeSurfaces)
         btn3.clicked.connect(lambda: self.selectSurfaces(parent))
         btn3.setMinimumHeight(50)
-        btn3.setMinimumWidth(130)
-        grid.addWidget(btn3, 3, 0, 1, 2)
+        btn3.setMinimumWidth(115)
+        grid.addWidget(btn3, 5, 0, 1, 2)
 
         btn5 = QToolButton()
         btn5.setText(MyStrings.addEntityOption)
         btn5.clicked.connect(lambda: self.addSelection(parent))
         btn5.setMinimumHeight(50)
-        btn5.setMinimumWidth(130)
-        grid.addWidget(btn5, 3, 1, 1, 2)
+        btn5.setMinimumWidth(115)
+        grid.addWidget(btn5, 5, 1, 1, 2)
 
-        label4 = QLabel(MyStrings.askingForEntity, self)
-        grid.addWidget(label4, 4, 0, 1, 2)
-
-        self.selectedObject = QLineEdit()
-        self.selectedObject.setReadOnly(True)
-        self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
-        grid.addWidget(self.selectedObject, 5, 0, 1, 2)
+        verticalSpacer = QSpacerItem(20,30)
+        grid.addItem(verticalSpacer, 6, 0)
 
         btn6 = QToolButton()
         btn6.setText("Reverse Normal Vectors")
         btn6.clicked.connect(lambda: self.reverse3DNormalVectors(parent))
         btn6.setMinimumHeight(30)
         btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 6, 0, 1, 2)
+        grid.addWidget(btn6, 7, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
@@ -139,7 +145,7 @@ class faceNormal3DVecMenu(QWidget):
             totPoints = len(parent.cloudPointsList[index])
             if(totPoints > 0):
                 if(totPoints <5):
-                    div = 0
+                    div = 4
                 else:
                     div = 4
                 for i in range(div+1):

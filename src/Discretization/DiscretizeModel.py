@@ -416,7 +416,8 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
     newSurface.degree_v = int(currentSurface.M2)
     newSurface.knotvector_u = list(currentSurface.SList)
     newSurface.knotvector_v = list(currentSurface.TList)
-    surfData = open('..\\tmp\\SurfaceData.txt', 'w')
+    #surfData = open('..\\tmp\\SurfaceData.txt', 'w')
+    surfData = open('SurfaceData.txt', 'w')
     surfText = ''
     for j in range(len(currentSurface.XList[0])):
         for i in range(len(currentSurface.XList)):
@@ -430,7 +431,8 @@ def discretizeSurface(face, objectList, Uparam, Vparam):
                 surfText += ';'
     surfData.write(surfText)
     surfData.close()
-    newSurface.read_ctrlptsw('..\\tmp\\SurfaceData.txt')
+    #newSurface.read_ctrlptsw('..\\tmp\\SurfaceData.txt')
+    newSurface.read_ctrlptsw('SurfaceData.txt')
     newSurface.evaluate_rational()
     return list(newSurface.surfpts), list(newSurface.normal_direct)
 

@@ -206,7 +206,19 @@ class logMenu(QWidget):
                 from Interface.WaveDefectsMenu import waveDefectsMenu
                 waveDefectsCall = waveDefectsMenu(parent)
                 waveDefectsCall.wavePoints(parent, True, paramList)
-            elif line == '> [Deviation] Flexion:\n':
+            # elif line == '> [Deviation] Ovalization:\n':
+            #     entList = file.readline()[15:-2]
+            #     entList = entList.split(',')
+            #     entList = [float(element) for element in entList]
+            #     longAxis = file.readline()[13:-1]
+            #     perpAxis = file.readline()[13:-1]
+            #     maxDef = float(file.readline()[18:-4])
+            #     paramList = [entList, longAxis, perpAxis, maxDef]
+            #
+            #     from Interface.FlexionDefectsMenu import flexionDefectsMenu
+            #     flexionDefectsCall = flexionDefectsMenu(parent)
+            #     flexionDefectsCall.flexionPoints(parent, True, paramList)
+            elif line == '> [Deviation] Torsion:\n':
                 entList = file.readline()[15:-2]
                 entList = entList.split(',')
                 entList = [float(element) for element in entList]
@@ -215,21 +227,9 @@ class logMenu(QWidget):
                 maxDef = float(file.readline()[18:-4])
                 paramList = [entList, longAxis, perpAxis, maxDef]
 
-                from Interface.FlexionDefectsMenu import flexionDefectsMenu
-                flexionDefectsCall = flexionDefectsMenu(parent)
-                flexionDefectsCall.flexionPoints(parent, True, paramList)
-            elif line == '> [Deviation] Flexion:\n':
-                entList = file.readline()[15:-2]
-                entList = entList.split(',')
-                entList = [float(element) for element in entList]
-                longAxis = file.readline()[13:-1]
-                perpAxis = file.readline()[13:-1]
-                maxDef = float(file.readline()[18:-4])
-                paramList = [entList, longAxis, perpAxis, maxDef]
-
-                from Interface.FlexionDefectsMenu import flexionDefectsMenu
-                flexionDefectsCall = flexionDefectsMenu(parent)
-                flexionDefectsCall.flexionPoints(parent, True, paramList)
+                from Interface.TorsionDefectsMenu import torsionDefectsMenu
+                torsionDefectsCall = torsionDefectsMenu(parent)
+                torsionDefectsCall.torsionPoints(parent, True, paramList)
             line = file.readline()
 
     def str2bool(self, v):

@@ -13,7 +13,8 @@ import numpy
 import math
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit, QComboBox, QMessageBox, QCheckBox, QFrame, QDoubleSpinBox
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QToolButton, QLineEdit, QComboBox, QMessageBox, QCheckBox, QFrame, QDoubleSpinBox, QSpacerItem
+from PyQt5.QtCore import QRect
 
 # OpenCASCADE Imports:
 from OCC.Bnd import Bnd_Box
@@ -51,7 +52,7 @@ class turningDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Turning defects mode!", self)
+        label1 = QLabel("Spindle deviation mode.\n\nBefore applying the spindle deviation, follow these steps:\n    1. Go to the 'Normal Vectors' menu\n    2. Click in 'Show 3D vectors'\n    3. If the normal vectors of the analyzed surface are\n        pointing torwards inside the volume, reverse then\n    4. You can hide the vectors and apply the deflection now", self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -87,7 +88,7 @@ class turningDefectsMenu(QWidget):
         btn3.setText(MyStrings.addEntityOption)
         btn3.clicked.connect(lambda: self.addSelection(parent))
         btn3.setMinimumHeight(30)
-        btn3.setMinimumWidth(266)
+        btn3.setMinimumWidth(350)
         grid.addWidget(btn3, 6, 0, 1, 2)
 
         frame = QFrame()
@@ -144,19 +145,22 @@ class turningDefectsMenu(QWidget):
         btn4.setText("Set Fixture Face Reference")
         btn4.clicked.connect(lambda: self.addSelectedFixFace(parent))
         btn4.setMinimumHeight(30)
-        btn4.setMinimumWidth(266)
+        btn4.setMinimumWidth(350)
         grid.addWidget(btn4, 14, 0, 1, 2)
 
+        verticalSpacer = QSpacerItem(20,30)
+        grid.addItem(verticalSpacer, 15, 0)
+
         btn5 = QToolButton()
-        btn5.setText("Apply turning defects")
+        btn5.setText("Apply spindle deviation")
         btn5.clicked.connect(lambda: self.turningDefects(parent))
         btn5.setMinimumHeight(30)
-        btn5.setMinimumWidth(266)
-        grid.addWidget(btn5, 15, 0, 1, 2)
+        btn5.setMinimumWidth(350)
+        grid.addWidget(btn5, 16, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(16, 1)
+        grid.setRowStretch(17, 1)
 
     def interval_mapping(self, image, from_min, from_max, to_min, to_max):
         # map values from [from_min, from_max] to [to_min, to_max]
