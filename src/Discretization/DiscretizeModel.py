@@ -210,6 +210,7 @@ def discretizeModel(parent, objectList, density, precision, Uparam, Vparam, useP
         faceNormalVectors.append(normals)
         cloudPointsList.append(points)
         parent.UVproperty.append([None, None])
+        parent.normVectorsToggle.append(1)
     # Discretize each non-planar face:
     for i in nonPlanarFacePointers:
         points, normals = discretizeSurface(objectList[pos(i)], objectList, Uparam, Vparam)
@@ -217,6 +218,7 @@ def discretizeModel(parent, objectList, density, precision, Uparam, Vparam, useP
         faceNormalVectors.append(normals)
         cloudPointsList.append(points)
         parent.UVproperty.append([Uparam, Vparam])
+        parent.normVectorsToggle.append(1)
     return faceSequenceNumbers, faceNormalVectors, cloudPointsList
 
 def discretizeFace(face, objectList, density, precision, gridDiscretization):

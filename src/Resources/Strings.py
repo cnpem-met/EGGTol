@@ -73,6 +73,16 @@ class MyStrings():
     actionPointsListIconText = 'List of Points'
     actionPointsListName = 'pointsMenu'
 
+    actionLogPrettyName = 'Log Panel'
+    actionLogStatusTip = 'Visualize and apply predefine actions'
+    actionLogIconText = 'Log of Actions'
+    actionLogName = 'logMenu'
+
+    actionNormalVectorsPrettyName = 'Normal Vectors Panel'
+    actionNormalVectorsStatusTip = "Show and manipulate the normal vectors of model's surfaces"
+    actionNormalVectorsIconText = 'Normal Vectors'
+    actionNormalVectorsName = 'normalVectorsMenu'
+
     actionTranslationPrettyName = 'Translational Deviation Panel'
     actionTranslationStatusTip = 'Insert artificial translational deviations in point clouds'
     actionTranslationName = 'translationDefectsMenu'
@@ -88,6 +98,22 @@ class MyStrings():
     actionFlexionPrettyName = 'Flexion Deviation Panel'
     actionFlexionStatusTip = 'Insert Flexion perfil deviations in point clouds'
     actionFlexionName = 'FlexionDefectsMenu'
+
+    actionPeriodicPrettyName = 'Periodic Deviation Panel'
+    actionPeriodicStatusTip = 'Insert artificial periodic deviations in point clouds'
+    actionPeriodicName = 'PeriodicDefectsMenu'
+
+    actionOvalPrettyName = 'Oval Deviation Panel'
+    actionOvalStatusTip = 'Insert artificial oval deviations in point clouds'
+    actionOvalName = 'OvalDefectsMenu'
+
+    actionTorsionPrettyName = 'Torsion Deviation Panel'
+    actionTorsionStatusTip = 'Insert artificial torsion deviations in point clouds'
+    actionTorsionName = 'TorsionDefectsMenu'
+
+    actionSpindlePrettyName = 'Spindle Deviation Panel'
+    actionSpindleStatusTip = 'Simulate a spindle deviation over a round surface'
+    actionSpindleName = 'SpindleDefectsMenu'
 
     actionClosePrettyName = 'Close File'
     actionCloseStatusTip = 'Close the current CAD model'
@@ -217,6 +243,17 @@ class MyStrings():
                                'Please, use the GENERATE CLOUD side widget to generate a new cloud file\n' +
                                'or use the IMPORT side widget to import an existing one.')
 
+    popupInvalidGenericInput = 'Invalid input'
+    popupInvalidGenericInputDescription = 'Invalid input value. Please, enter a valid number.'
+    popupInvalidAxisComb = 'Invalid Axis combination'
+    popupInvalidAxisCombDescription = 'Invalid axis combination. Please, try again with another combination.'
+    popupNotRoundedSurf = 'Not rounded surface selected'
+    popupNotRoundedSurfDescription = "Error: the selected surface isn't parametric (rounded)."
+    popupInvalidSurf = 'Invalid selected surface'
+    popupInvalidSurfDescription = 'Invalid selected surface. Please, select a discretized one to apply a deviation.'
+    popupInvalidFreq = 'Invalid frequency value'
+    popupInvalidFreqDescription = 'Invalid frequency value. Please, input a value different from 0.'
+
     # File Dialog Windows Strings:
     exportPcdTitle = 'Export .pcd file'
     exportPcdFormat = 'Point Cloud Data (*.pcd)'
@@ -235,10 +272,14 @@ class MyStrings():
     defectsDescription = ('Select the desired transformation.<br><br>' +
                           'The translation and rotation operations can be applied<br>' +
                           'to a flat or curved surface.<br>')
-    defectsOptionTranslation = 'Translation of a group of points'
-    defectsOptionRotation = 'Rotation of a group of points'
-    defectsOptionRandom = 'Generate random errors'
-    defectsOptionFlexion = 'Flexing a perfil of points'
+    defectsOptionTranslation = 'Translation deviation'
+    defectsOptionRotation = 'Rotation deviation'
+    defectsOptionRandom = 'Randomic deviation'
+    defectsOptionFlexion = 'Bending deviation'
+    defectsOptionPeriodic = 'Periodic deviation'
+    defectsOptionOval = 'Oval deviation'
+    defectsOptionTorsion = 'Torsion deviation'
+    defectsOptionSpindle = 'Spindle simulated deviation'
 
     discretizeDescription = ('Select a discretization option.<br><br>' +
                              'The auto discretization will work on all flat surfaces<br>' +
@@ -296,6 +337,38 @@ class MyStrings():
                                     'perfil to the selected group of points.')
     flexionDefectsApply = 'Apply flexion defects'
 
+    ovalDefectsDescription = ('The oval defects method will cause a flattening\n' +
+                                'in a rounded discretized surface.')
+    ovalDefectsApply = 'Apply oval defects'
+
+    periodicDefectsDescription = ('The periodic defects method will apply a senoinal\n' +
+                                'pattern to a discretized rounded or not rounded surface.')
+    periodicDefectsApply = 'Apply periodic pattern defects'
+
+    torsionDefectsDescription = ('The torsion defects method will cause a twist\n' +
+                                'in a discretized rounded or not rounded surface.')
+    torsionDefectsApply = 'Apply torsion defects'
+
+    spindleDefectsDescription = ('Spindle deviation mode.\n\n'+
+                                'Before applying the spindle deviation, follow these steps:\n'+
+                                '    1. Go to the "Normal Vectors" menu\n    2. Click in "Show 3D vectors"\n'+
+                                '    3. If the normal vectors of the analyzed surface are\n'+
+                                '        pointing torwards inside the volume, reverse then\n'+
+                                '    4. You can hide the vectors and apply the deflection now')
+    spindleDefectsApply = 'Apply spindle defects'
+
+    normalVectorsDescription = 'Show and manipulate the normal vectors of\n the 3D model.\n'
+    normalVectorsShow = 'Show 3D vectors'
+    normalVectorsHide = 'Hide 3D vectors'
+    normalVectorsReverse = 'Reverse Normal Vectors'
+    normalVectorsEntitySel = 'Select an entity to manipulate its normal vectors:'
+
+    logDescription = 'All actions, including discretization\nand deviation, showed here.'
+    logSave = 'Save Log'
+    logLoad = 'Load Log'
+    logSaveMsg = 'Save log in .txt format'
+    logLoadMsg = 'Load and apply actions from a saved log file'
+
     # General Side Widget Strings:
     flatDiscretizationHeader = '<b><br>Discretization mode for flat surfaces:</b>'
     nonFlatDiscretizationHeader = '<b><br>Discretization mode for non-flat surfaces:</b>'
@@ -330,6 +403,22 @@ class MyStrings():
     addEntityOption = 'Add selected entity'
     useNormalDirectionOption = 'Use point-specific normal direction'
     entityPlaceholder = 'Select an entity'
+
+    askingForLongAxis = 'Longitudional axis:'
+    askingForNormalAxis = 'Normal axis:'
+    askingForMaxDev = 'Maximum deviation (mm):'
+    askingForDrillAxisName = 'Periodic pattern along drill axis'
+    askingForDrillAxisStatusTip = '[Circular surface]\nChecked: the points will be deflected in a periodic pattern along the drill axis\nNot checked: the points will be deflected in a periodic pattern perpendicular to the drill axis\n\n[Not circular surface]\nThis option has no effect'
+    askingForAmplitude = 'Amplitude (mm):'
+    askingForFrequency = 'Frequency (points/cycle):'
+    askingForToolCond = 'Tool conditions:'
+    askingForDepth = 'Depth of cut (mm):'
+    askingForFeed = 'Feed (mm/rev):'
+    askingForRPM = 'Spindle speed (RPM):'
+    askingForFixtureName = 'Select the reference face of fixture'
+    askingForFixtureText = 'Select the reference for fixture'
+    FixtureApplyText = 'Set Fixture Face Reference'
+    askingForPerpAxis = 'Perpendicular axis:'
 
     # Other Properties Strings:
     currentSessionGeneratedPoints = 'Current Session Generated Points'

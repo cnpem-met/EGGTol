@@ -100,6 +100,7 @@ class MainWindow(QMainWindow):
         self.faceNormalVectors = []
         self.cloudPointsList = []
         self.UVproperty = []
+        self.normVectorsToggle = []
 
         # Information about the face-normal Shape Vectors
         self.normalArrowsShapeList = []
@@ -123,7 +124,7 @@ class MainWindow(QMainWindow):
         defects = defectsAction(self)
         pointsList = pointsListAction(self)
         logbook = logAction(self)
-        faceNorm3DVec = fN3DAction(self)
+        faceNorm3DVec = normalVectorsAction(self)
         close = closeAction(self)
         exitApp = exitAction(self)
         translationDefects = translationDefectsAction(self)

@@ -189,6 +189,7 @@ class faceDiscretizeMenu(QWidget):
                 parent.faceNormalVectors.append(normals)
                 parent.cloudPointsList.append(points)
                 parent.UVproperty.append([None, None])
+                parent.normVectorsToggle.append(1)
         else:
             QMessageBox.information(parent, "Surface not selected",
                                     "Surface not selected. Please, select one to generate a point cloud.", QMessageBox.Ok, QMessageBox.Ok)

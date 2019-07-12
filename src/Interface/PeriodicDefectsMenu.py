@@ -1,7 +1,6 @@
 """
-# Module: RandomDefectsMenu.py
-# Description: This module contains the Random Defects Side Widget Menu UI
-for calling the discretization functions.
+# Module: PeriodicDefectsMenu.py
+# Description: This module contains the Periodic Defects Side Widget Menu UI
 # Author: Rodrigo de Oliveira Neto.
 """
 
@@ -20,11 +19,11 @@ from OCC.BRepBndLib import brepbndlib_Add
 from Actions.Functions import *
 from Resources.Strings import MyStrings
 
-class waveDefectsMenu(QWidget):
+class periodicDefectsMenu(QWidget):
     """
-    # Class: randomDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in a random direction with a displacement provided.
+    # Class: periodicDefectsMenu
+    # Description: This class provides a side menu with some options for applying
+                   a senoidal pattern on a surface.
     """
 
     def __init__(self, parent):
@@ -48,7 +47,7 @@ class waveDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("", self)
+        label1 = QLabel(MyStrings.periodicDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -89,25 +88,25 @@ class waveDefectsMenu(QWidget):
 
         self.drillAxisCheckBox = QCheckBox()
         grid.addWidget(self.drillAxisCheckBox, 7, 0, 1, 2)
-        self.drillAxisCheckBox.setText("Wave pattern along drill axis")
+        self.drillAxisCheckBox.setText(MyStrings.askingForDrillAxisName)
         self.drillAxisCheckBox.setCheckState(0)
-        self.drillAxisCheckBox.setToolTip("[Circular surface]\nChecked: the points will be deflected in a wave pattern along the drill axis\nNot checked: the points will be deflected in a wave pattern perpendicular to the drill axis\n\n[Not circular surface]\nThis option has no effect")
+        self.drillAxisCheckBox.setToolTip(MyStrings.askingForDrillAxisStatusTip)
 
-        label5 = QLabel("Amplitude [mm]:", self)
+        label5 = QLabel(MyStrings.askingForAmplitude, self)
         grid.addWidget(label5, 8, 0, 1, 2)
 
         self.amp = QLineEdit()
         grid.addWidget(self.amp, 9, 0, 1, 2)
 
-        label7 = QLabel("Frequency [points/cycle]:", self)
+        label7 = QLabel(MyStrings.askingForFrequency, self)
         grid.addWidget(label7, 10, 0, 1, 2)
 
         self.freq = QLineEdit()
         grid.addWidget(self.freq, 11, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText("Apply wave pattern defects")
-        btn4.clicked.connect(lambda: self.wavePoints(parent, False, None))
+        btn4.setText(MyStrings.periodicDefectsApply)
+        btn4.clicked.connect(lambda: self.periodicPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 12, 0, 1, 2)
@@ -116,13 +115,17 @@ class waveDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(13, 1)
 
-    def wavePoints(self, parent, isInternalCall, paramList):
+    def periodicPoints(self, parent, isInternalCall, paramList):
         """
-        # Method: randomPoints.
-        # Description: This method applies random manufacturing errors in the selected
-        entity. The random errors has some rules to follow, defined by the configuration
-        done at the Random Defects Menu side widget.
+        # Method: periodicPoints.
+        # Description: This method applies a senoidal pattern in a group of points of
+                       a selected discretized surface.
         # Parameters: * MainWindow parent = A reference for the main window object.
+                      * Bool isInternalCall = A flag used to inform if the defects function
+                                              is called from UI side widget (external) or from
+                                              loadLog method of LogMenu class (internal).
+                      * List paramList = A list containing all the information required for
+                                         applying the deflection (used only in internal calls).
         """
 
         # Declaring the list of index of deviated surface(s)
@@ -139,13 +142,11 @@ class waveDefectsMenu(QWidget):
                 freq = float(self.freq.displayText().replace(',','.'))
             # Handling input errors
             except ValueError:
-                QMessageBox.information(parent, "Invalid input",
-                                        "Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidGenericInput, MyStrings.popupInvalidGenericInputDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
             drillAxisCheck = self.drillAxisCheckBox.isChecked()
             selectedFacesNumber = parent.selectedSequenceNumber
 
-        #print(parent.UVproperty)
         # Getting information about the selected surfaces:
         for i in range(len(selectedFacesNumber)):
             index = 0
@@ -157,7 +158,6 @@ class waveDefectsMenu(QWidget):
                 index += 1
 
             selectedEntityList.append(int(seqNumber/2+0.5))
-            #print(index)
             if(drillAxisCheck):
                 drillAxisLength = 1
             else:
@@ -167,8 +167,6 @@ class waveDefectsMenu(QWidget):
                 except TypeError:
                         drillAxisLength = 1
                         pass
-
-            print(drillAxisLength)
 
             try:
                 newPointsList = []
@@ -185,17 +183,15 @@ class waveDefectsMenu(QWidget):
                     newPointsList.append(point)
                 parent.cloudPointsList[index] = newPointsList
             except ZeroDivisionError:
-                QMessageBox.information(parent, "Invalid frequency value",
-                                        "Invalid frequency value. Please, input a value different from 0.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidFreq, MyStrings.popupInvalidFreqDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
             # Handling non-discretized surface error
             except IndexError:
-                QMessageBox.information(parent, "Invalid selected surface",
-                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidSurf, MyStrings.popupInvalidSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
 
         # Building the logbook tupple
-        logText = '> [Deviation] Wave Pattern:\n\tEntity list: '+str(selectedEntityList)+'\n\tAlong drill axis: '+str(self.drillAxisCheckBox.isChecked())+'\n\tAmplitude: '+str(amp)+' mm\n\tFrequency: '+str(freq)+'\n\n'
+        logText = '> [Deviation] Periodic Pattern:\n\tEntity list: '+str(selectedEntityList)+'\n\tAlong drill axis: '+str(self.drillAxisCheckBox.isChecked())+'\n\tAmplitude: '+str(amp)+' mm\n\tFrequency: '+str(freq)+'\n\n'
         parent.logbookList.append(logText)
 
         # Rebuilding the point cloud object in the local context:

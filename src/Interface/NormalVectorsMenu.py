@@ -1,4 +1,11 @@
+"""
+# Module: NormalVectorsMenu.py
+# Description: This module contains the Normal Vectors side widget menu UI for
+               manipulation of the normal vectors of model's surfaces.
+# Author: Rodrigo de Oliveira Neto.
+"""
 
+# Numpy imports:
 import numpy
 
 # PyQt5 Imports:
@@ -17,40 +24,53 @@ from OCC.AIS import AIS_PointCloud, AIS_Line, AIS_Shape, AIS_ColoredShape
 # Local Imports:
 from Actions.Functions import *
 from Resources.Strings import MyStrings
+from Discretization.DiscretizeModel import *
 
-class faceNormal3DVecMenu(QWidget):
+class normalVectorsMenu(QWidget):
+    """
+    # Class: normalVectorsMenu.
+    # Description: This class implements functions associated with the normalVectors panel
+    """
 
     def __init__(self, parent):
+        """
+        # Method: __init__.
+        # Description: The init method for initializing the inhirited properties.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         super().__init__()
         self.initUI(parent)
 
     def initUI(self, parent):
-
+        """
+        # Method: initUI.
+        # Description: This method initializes the User Interface Elements of the Log Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Show and manipulate the normal vectors of\n the 3D model.\n", self)
+        label1 = QLabel(MyStrings.normalVectorsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         btn1 = QToolButton()
-        btn1.setText("Show 3D vectors")
+        btn1.setText(MyStrings.normalVectorsShow)
         grid.addWidget(btn1, 1, 0, 1, 2)
         btn1.setMinimumHeight(30)
         btn1.setMinimumWidth(100)
         btn1.clicked.connect(lambda: self.create3DNormalVectors(parent))
 
         btn2 = QToolButton()
-        btn2.setText("Hide 3D vectors")
+        btn2.setText(MyStrings.normalVectorsHide)
         grid.addWidget(btn2, 1, 1, 1, 2)
         btn2.setMinimumHeight(30)
         btn2.setMinimumWidth(100)
-        #btn2.setEnabled(False)
         btn2.clicked.connect(lambda: self.hide3DNormalVectors(parent))
 
         verticalSpacer = QSpacerItem(20,30)
         grid.addItem(verticalSpacer, 2, 0)
 
-        label4 = QLabel("Select an entity to manipulate its normal vectors:", self)
+        label4 = QLabel(MyStrings.normalVectorsEntitySel, self)
         grid.addWidget(label4, 3, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
@@ -76,7 +96,7 @@ class faceNormal3DVecMenu(QWidget):
         grid.addItem(verticalSpacer, 6, 0)
 
         btn6 = QToolButton()
-        btn6.setText("Reverse Normal Vectors")
+        btn6.setText(MyStrings.normalVectorsReverse)
         btn6.clicked.connect(lambda: self.reverse3DNormalVectors(parent))
         btn6.setMinimumHeight(30)
         btn6.setMinimumWidth(266)
@@ -87,13 +107,22 @@ class faceNormal3DVecMenu(QWidget):
         grid.setRowStretch(8, 1)
 
     def show3DNormalVectors(self, parent):
+        """
+        # Method: show3DNormalVectors.
+        # Description: This complementary method shows the 3D normal vectors of model's surfaces.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         if(parent.normalArrowsShapeList):
             localContext = parent.canvas._display.GetContext().GetObject()
             for i in parent.normalArrowsShapeList:
-                # localContext.Display(shapeListCil[i].GetHandle())
                 localContext.Display(i.GetHandle())
 
     def hide3DNormalVectors(self, parent):
+        """
+        # Method: hide3DNormalVectors.
+        # Description: This complementary method hides the 3D normal vectors.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         parent.canvas._display.SetSelectionModeNeutral()
         if(parent.normalArrowsShapeList):
             for i in parent.normalArrowsShapeList:
@@ -105,13 +134,23 @@ class faceNormal3DVecMenu(QWidget):
             restoreCloud(parent)
 
     def delete3DNormalVectors(self, parent):
+        """
+        # Method: delete3DNormalVectors.
+        # Description: This method deletes the 3D normal vectors of model's surfaces.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         if(parent.normalArrowsShapeList):
-            # Deleting every face-normal 3D vectors
+            # Deleting every 3D normal vectors
             self.hide3DNormalVectors(parent)
             parent.normalArrowsShapeList = []
 
 
     def create3DNormalVectors(self, parent):
+        """
+        # Method: create3DNormalVectors.
+        # Description: This method creates the 3D normal vectors of model's surfaces.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         # Checking if there are 3D arrows in the tupple. If so, they get removed, and then they can get refreshed
         if(parent.normalArrowsShapeList):
             self.delete3DNormalVectors(parent)
@@ -141,31 +180,89 @@ class faceNormal3DVecMenu(QWidget):
         vecList = []
         pntList = []
 
-        for index in range(len(parent.faceSequenceNumbers)):
-            totPoints = len(parent.cloudPointsList[index])
-            if(totPoints > 0):
-                if(totPoints <5):
-                    div = 4
+        # Performs the autoDiscretization using the Discretization package:
+        sequence, normals, points = discretizeModel(parent, parent.entitiesObject, 2, 10,
+                                                    2, 4, True, True)
+
+        indexDiscSurf = []
+        pnts = []
+        nmls = []
+        for k in range(len(sequence)):
+            index = 0
+            while index < len(parent.faceSequenceNumbers):
+                if (sequence[k] == parent.faceSequenceNumbers[index]):
+                    indexDiscSurf.append(k)
+                index +=1
+
+        # print(indexDiscSurf)
+        # print(parent.faceSequenceNumbers)
+        # print(parent.faceNormalVectors)
+        for i in range (len(points)):
+            index = 0
+            inverseVector = False
+            for j in range (len(points[i])):
+                pnts.append(points[i][j])
+                while index < len(indexDiscSurf):
+                    if(i == indexDiscSurf[index]):
+                        if(not parent.normVectorsToggle[index]):
+                            inverseVector = True
+                    index += 1
+                if(not inverseVector):
+                    nmls.append(normals[i][j])
                 else:
-                    div = 4
-                for i in range(div+1):
-                    print(i)
-                    # xyz = parent.cloudPointsList[index][int((totPoints-1)/i)]
-                    xyz = parent.cloudPointsList[index][int((i/4)*(totPoints-1))]
-                    normal = parent.faceNormalVectors[index][int((i/4)*(totPoints-1))]
-                    p1 = gp_Pnt(xyz[0], xyz[1], xyz[2])
-                    pntList.append(p1)
-                    dir = gp_Dir(normal[0], normal[1], normal[2])
-                    vec = gp_Vec(dir)
-                    vecList.append(vec)
-                    ax1 = gp_Ax2(p1, dir)
-                    cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
-                    AIScone = AIS_Shape(cone)
-                    AIScone.SetColor(colBlue)
-                    parent.normalArrowsShapeList.append(AIScone)
+                    newNormalVec = [numpy.negative(x) for x in normals[i][j]]
+                    # newNormalVec = [p for p in [(l[0], l[1], l[2]) for l in aux]]
+                    nmls.append(newNormalVec)
+
+        #print(sequence)
+        # print(normals)
+        # print(points)
+        # print(len(points))
+
+        for i in range (len(pnts)):
+            p1 = gp_Pnt(pnts[i][0], pnts[i][1], pnts[i][2])
+            pntList.append(p1)
+            dir = gp_Dir(nmls[i][0], nmls[i][1], nmls[i][2])
+            vec = gp_Vec(dir)
+            vecList.append(vec)
+            ax1 = gp_Ax2(p1, dir)
+            cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
+            AIScone = AIS_Shape(cone)
+            AIScone.SetColor(colBlue)
+            parent.normalArrowsShapeList.append(AIScone)
         self.show3DNormalVectors(parent)
 
+        # for index in range(len(parent.faceSequenceNumbers)):
+        #     totPoints = len(parent.cloudPointsList[index])
+        #     if(totPoints > 0):
+        #         if(totPoints <5):
+        #             div = 4
+        #         else:
+        #             div = 4
+        #         for i in range(div+1):
+        #             xyz = parent.cloudPointsList[index][int((i/4)*(totPoints-1))]
+        #             normal = parent.faceNormalVectors[index][int((i/4)*(totPoints-1))]
+        #             p1 = gp_Pnt(xyz[0], xyz[1], xyz[2])
+        #             pntList.append(p1)
+        #             dir = gp_Dir(normal[0], normal[1], normal[2])
+        #             vec = gp_Vec(dir)
+        #             vecList.append(vec)
+        #             ax1 = gp_Ax2(p1, dir)
+        #             cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
+        #             AIScone = AIS_Shape(cone)
+        #             AIScone.SetColor(colBlue)
+        #             parent.normalArrowsShapeList.append(AIScone)
+        # self.show3DNormalVectors(parent)
+
+    def toggle(self, a):
+        return not a
+
     def reverse3DNormalVectors(self, parent):
+        """
+        # Method: reverse3DNormalVectors.
+        # Description: This method reverses the 3D normal vectors of model's surfaces.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         for i in range(len(parent.selectedSequenceNumber)):
             index = 0
             seqNumber = None
@@ -178,7 +275,7 @@ class faceNormal3DVecMenu(QWidget):
             aux = [numpy.negative(x) for x in parent.faceNormalVectors[index]]
             newNormalVec = [p for p in [(l[0], l[1], l[2]) for l in aux]]
             parent.faceNormalVectors[index] = newNormalVec
-
+            parent.normVectorsToggle[index] = self.toggle(parent.normVectorsToggle[index])
         self.delete3DNormalVectors(parent)
         self.create3DNormalVectors(parent)
 

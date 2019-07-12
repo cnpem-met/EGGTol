@@ -1,11 +1,10 @@
 """
-# Module: flexionDefectsMenu.py
+# Module: FlexionDefectsMenu.py
 # Description: This module contains the flexion Defects Side Widget Menu UI
-for calling the discretization functions.
-# Author: Willian Hideak Arita da Silva.
+# Author: Rodrigo de Oliveira Neto.
 """
 
-from numpy import linspace
+# System imports:
 import math
 
 # PyQt5 Imports:
@@ -22,8 +21,8 @@ from Resources.Strings import MyStrings
 class flexionDefectsMenu(QWidget):
     """
     # Class: flexionDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in a flexion direction with a displacement provided.
+    # Description: This class provides a side menu with some options for flexing
+                   a group of points.
     """
 
     def __init__(self, parent):
@@ -40,7 +39,7 @@ class flexionDefectsMenu(QWidget):
         """
         # Method: initUI.
         # Description: This method initializes the User Interface Elements of the flexion
-        Defects Menu side widget.
+                       Defects Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
@@ -89,13 +88,13 @@ class flexionDefectsMenu(QWidget):
         frame = QFrame()
         grid.addWidget(frame, 7, 0)
 
-        label5 = QLabel("Longitudional axis:", self)
+        label5 = QLabel(MyStrings.askingForLongAxis, self)
         grid.addWidget(label5, 8, 0, 1, 1)
 
         self.longAxisBox = QComboBox()
         grid.addWidget(self.longAxisBox, 8, 1, 1, 2)
 
-        label6 = QLabel("Normal axis:", self)
+        label6 = QLabel(MyStrings.askingForNormalAxis, self)
         grid.addWidget(label6, 9, 0, 1, 1)
 
         self.perpAxisBox = QComboBox()
@@ -108,7 +107,7 @@ class flexionDefectsMenu(QWidget):
 
         self.perpAxisBox.setCurrentIndex(1)
 
-        label7 = QLabel("Maximum deflection (mm):", self)
+        label7 = QLabel(MyStrings.askingForMaxDev, self)
         grid.addWidget(label7, 10, 0, 1, 1)
 
         self.maxDef = QLineEdit()
@@ -128,12 +127,16 @@ class flexionDefectsMenu(QWidget):
     def flexionPoints(self, parent, isInternalCall, paramList):
         """
         # Method: flexionPoints.
-        # Description: This method applies flexion manufacturing errors in the selected
-        entity. The flexion errors has some rules to follow, defined by the configuration
-        done at the flexion Defects Menu side widget.
+        # Description: This method applies a flexed perfil to a group of points
         # Parameters: * MainWindow parent = A reference for the main window object.
+                      * Bool isInternalCall = A flag used to inform if the defects function
+                                              is called from UI side widget (external) or from
+                                              loadLog method of LogMenu class (internal).
+                      * List paramList = A list containing all the information required for
+                                         applying the deflection (used only in internal calls).
         """
 
+        # Checking if it is a UI defects side widget call (external) or a load log call (internal)
         if(isInternalCall):
             selectedFacesNumber = [2*i - 1 for i in paramList[0]]
             selectedShapes = [parent.shapeList[int(i - 1)] for i in paramList[0]]
@@ -149,18 +152,17 @@ class flexionDefectsMenu(QWidget):
             try:
                 max_def = float(self.maxDef.displayText().replace(',','.'))
             except ValueError:
-                QMessageBox.information(parent, "Invalid deflection value",
-                                        "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidGenericInput, MyStrings.popupInvalidGenericInputDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
             selectedFacesNumber = parent.selectedSequenceNumber
             selectedShapes = parent.selectedShape
 
+        # Handling invalid axis combination
         if(long_axis == perp_axis):
-            QMessageBox.information(parent, "Invalid Axis combination",
-                                    "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupInvalidAxisComb, MyStrings.popupInvalidAxisCombDescription, QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        # New BoundBox Test
+        # Apply the boundary box functions to acquire face dimensions and position
         boundaryBox = Bnd_Box()
         for i in range(len(selectedFacesNumber)):
             brepbndlib_Add(selectedShapes[i], boundaryBox)
@@ -171,9 +173,6 @@ class flexionDefectsMenu(QWidget):
         centerX = xMin + deltaX/2
         centerY = yMin + deltaY/2
         centerZ = zMin + deltaZ/2
-        # print(deltaX)
-        # print(deltaY)
-        # print(deltaZ)
 
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
@@ -191,17 +190,6 @@ class flexionDefectsMenu(QWidget):
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
-            # # Apply the boundary box functions to define the center point of a face:
-            # boundaryBox = Bnd_Box()
-            # brepbndlib_Add(selectedShapes[i], boundaryBox)
-            # xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            # deltaX = xMax - xMin
-            # deltaY = yMax - yMin
-            # deltaZ = zMax - zMin
-            # centerX = xMin + deltaX/2
-            # centerY = yMin + deltaY/2
-            # centerZ = zMin + deltaZ/2
-
             try:
                 # Flexioning all the points on the selected surface based on given parameters:
                 newPointsList = []
@@ -213,7 +201,7 @@ class flexionDefectsMenu(QWidget):
                     if(long_axis == "x"):
                         # associating the parameter maximum deformation to the homogeneos load applied
                         q = -(384*max_def)/(5*deltaX**4)
-                        # applying deflection formula to the points of selected face
+                        # applying the deflection formula to the points of selected face
                         v = -(q/24)*(x0-xMin)**4 + (q/12)*deltaX*(x0-xMin)**3 -0.0417*(deltaX**3)*q*(x0-xMin)
                         if(perp_axis == "y"):
                                 point = (x0,
@@ -250,8 +238,7 @@ class flexionDefectsMenu(QWidget):
                 parent.cloudPointsList[index] = newPointsList
             # Non-discretized surface error handling
             except IndexError:
-                QMessageBox.information(parent, "Invalid selected surface",
-                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidSurf, MyStrings.popupInvalidSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
 
         # Building the logbook tupple
@@ -306,8 +293,6 @@ class flexionDefectsMenu(QWidget):
                 if(shape.IsPartner(parent.shapeList[i])):
                     break
                 i += 1
-            #print("i: "+str(i))
-            #print(shape.ShapeType())
             parent.selectedShape.append(parent.shapeList[i])
             parent.selectedSequenceNumber.append(2*i+1)
             selectedObjectText += str(i+1) + ' '

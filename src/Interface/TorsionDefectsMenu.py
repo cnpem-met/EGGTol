@@ -1,7 +1,6 @@
 """
-# Module: RandomDefectsMenu.py
-# Description: This module contains the Random Defects Side Widget Menu UI
-for calling the discretization functions.
+# Module: TorsionDefectsMenu.py
+# Description: This module contains the Torsion Defects Side Widget Menu UI
 # Author: Rodrigo de Oliveira Neto.
 """
 
@@ -25,9 +24,9 @@ from Resources.Strings import MyStrings
 
 class torsionDefectsMenu(QWidget):
     """
-    # Class: randomDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in a random direction with a displacement provided.
+    # Class: torsionDefectsMenu
+    # Description: This class provides a side menu with some options for twisting
+                   a group of points.
     """
 
     def __init__(self, parent):
@@ -51,7 +50,7 @@ class torsionDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Oval deffects menu", self)
+        label1 = QLabel(MyStrings.torsionDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -93,13 +92,13 @@ class torsionDefectsMenu(QWidget):
         frame = QFrame()
         grid.addWidget(frame, 7, 0)
 
-        label5 = QLabel("Longitudional axis:", self)
+        label5 = QLabel(MyStrings.askingForLongAxis, self)
         grid.addWidget(label5, 8, 0, 1, 1)
 
         self.longAxisBox = QComboBox()
         grid.addWidget(self.longAxisBox, 8, 1, 1, 2)
 
-        label6 = QLabel("Perpendicular axis:", self)
+        label6 = QLabel(MyStrings.askingForPerpAxis, self)
         grid.addWidget(label6, 9, 0, 1, 1)
 
         self.perpAxisBox = QComboBox()
@@ -112,14 +111,14 @@ class torsionDefectsMenu(QWidget):
 
         self.perpAxisBox.setCurrentIndex(1)
 
-        label7 = QLabel("Maximum deflection [mm]:", self)
+        label7 = QLabel(MyStrings.askingForMaxDev, self)
         grid.addWidget(label7, 10, 0, 1, 1)
 
         self.maxDef = QLineEdit()
         grid.addWidget(self.maxDef, 11, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText("Apply torsional defect")
+        btn4.setText(MyStrings.torsionDefectsApply)
         btn4.clicked.connect(lambda: self.torsionPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
@@ -131,11 +130,15 @@ class torsionDefectsMenu(QWidget):
 
     def torsionPoints(self, parent, isInternalCall, paramList):
         """
-        # Method: flexionPoints.
-        # Description: This method applies flexion manufacturing errors in the selected
-        entity. The flexion errors has some rules to follow, defined by the configuration
-        done at the flexion Defects Menu side widget.
+        # Method: torsionPoints.
+        # Description: This method applies a torsion deviation on a discretized
+                       selected surface.
         # Parameters: * MainWindow parent = A reference for the main window object.
+                      * Bool isInternalCall = A flag used to inform if the defects function
+                                              is called from UI side widget (external) or from
+                                              loadLog method of LogMenu class (internal).
+                      * List paramList = A list containing all the information required for
+                                         applying the deflection (used only in internal calls).
         """
 
         if(isInternalCall):
@@ -153,15 +156,13 @@ class torsionDefectsMenu(QWidget):
             try:
                 max_def = float(self.maxDef.displayText().replace(',','.'))
             except ValueError:
-                QMessageBox.information(parent, "Invalid deflection value",
-                                        "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidGenericInput, MyStrings.popupInvalidGenericInputDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
             selectedFacesNumber = parent.selectedSequenceNumber
             selectedShapes = parent.selectedShape
 
         if(long_axis == perp_axis):
-            QMessageBox.information(parent, "Invalid Axis combination",
-                                    "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.information(parent, MyStrings.popupInvalidAxisComb, MyStrings.popupInvalidAxisCombDescription, QMessageBox.Ok, QMessageBox.Ok)
             return
 
         # New BoundBox Test
@@ -190,36 +191,6 @@ class torsionDefectsMenu(QWidget):
                 index += 1
 
             selectedEntityList.append(int(seqNumber/2+0.5))
-
-            # # Apply the boundary box functions to define the center point of a face:
-            # boundaryBox = Bnd_Box()
-            # brepbndlib_Add(parent.selectedShape[i], boundaryBox)
-            # xMin, yMin, zMin, xMax, yMax, zMax = boundaryBox.Get()
-            # deltaX = xMax - xMin
-            # deltaY = yMax - yMin
-            # deltaZ = zMax - zMin
-            # self.centerX = xMin + deltaX/2
-            # self.centerY = yMin + deltaY/2
-            # self.centerZ = zMin + deltaZ/2
-
-            # # Getting torsion parameters
-            # long_axis = self.longAxisBox.currentText()
-            # perp_axis = self.perpAxisBox.currentText()
-            #
-            # try:
-            #     max_def = float(self.maxDef.displayText().replace(',','.'))
-            # # Handling input errors
-            # except ValueError:
-            #     QMessageBox.information(parent, "Invalid deflection value",
-            #                             "Invalid deflection value. Please, try again by inputting a number.", QMessageBox.Ok, QMessageBox.Ok)
-            #     return
-            # if(long_axis == perp_axis):
-            #     QMessageBox.information(parent, "Invalid Axis combination",
-            #                             "Invalid axis combination. Please, try again with another combination.", QMessageBox.Ok, QMessageBox.Ok)
-            #     return
-
-            #G = 77*10**9
-            #EI = 204.8 # Young's module times the Inertia moment of an arbitrary solid
 
             # Identifying the longitudional axis and verifying if it is a circular beam or not
             if(long_axis == 'z'):
@@ -272,8 +243,6 @@ class torsionDefectsMenu(QWidget):
                 J = c2*a*b**3
 
             theta_max = math.atan(max_def/r)
-            # estimation of the corresponding torque, according to the especificated Max Deviation
-            #T = theta_max*J*G/Li_max
 
             try:
                 # Flexioning all the points on the selected surface based on given parameters:
@@ -289,14 +258,11 @@ class torsionDefectsMenu(QWidget):
                         L = (z0 - self.centerZ)*10**(-3)
 
                     torsionAngle = theta_max*L/Li_max
-                    #torsionAngle = T*L/(J*G)
-                    #torsionAngle = 180*torsionAngle/math.pi
-                    print(torsionAngle)
+
                     self.rotatePoints(parent, torsionAngle, index, i, long_axis)
             # Handling non-discretized surface error
             except IndexError:
-                QMessageBox.information(parent, "Invalid selected surface",
-                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidSurf, MyStrings.popupInvalidSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
 
         # Building the logbook tupple
@@ -358,8 +324,19 @@ class torsionDefectsMenu(QWidget):
         self.selectedObject.setText(selectedObjectText)
 
     def rotatePoints(self, parent, torsionAngle, index, i, long_axis):
+        """
+        # Method: rotatePoints.
+        # Description: This complementary method applies a rotational defect in the
+                       surface with angles varying according to the current discrete posisition.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+                      * Float torsionAngle = Angle value to rotate.
+                      * Int index = A index used in the discretized surfaces list.
+                      # Int i = A index used in the selected faces list.
+                      * Char long_axis = Longitudional axis.
+
+        """
+        # Defining the rotation matrix along the three axis:
         if(long_axis == 'x'):
-            # Defining the rotation matrix along the three axis:
             rotMatrixX = array([[1, 0, 0],
                              [0, math.cos(torsionAngle), -math.sin(torsionAngle)],
                              [0, math.sin(torsionAngle), math.cos(torsionAngle)]])
@@ -382,8 +359,8 @@ class torsionDefectsMenu(QWidget):
         point = (parent.cloudPointsList[index][i][0] - self.centerX,
                  parent.cloudPointsList[index][i][1] - self.centerY,
                  parent.cloudPointsList[index][i][2] - self.centerZ)
-        #newPointsList.append(point)
-        parent.cloudPointsList[index][i] = point # newPointsList
+
+        parent.cloudPointsList[index][i] = point
 
         # Rotating all the points on the selected surface based on given parameters:
         point = array([[parent.cloudPointsList[index][i][0]],
@@ -392,12 +369,12 @@ class torsionDefectsMenu(QWidget):
         point = dot(rotMatrixX, point)
         point = dot(rotMatrixY, point)
         point = dot(rotMatrixZ, point)
-        #newPointsList.append((point[0][0], point[1][0], point[2][0]))
+
         parent.cloudPointsList[index][i] = (point[0][0], point[1][0], point[2][0]) # newPointsList
 
         # Translating the points back to the origianl basis vector:
         point = (parent.cloudPointsList[index][i][0] + self.centerX,
                  parent.cloudPointsList[index][i][1] + self.centerY,
                  parent.cloudPointsList[index][i][2] + self.centerZ)
-        # newPointsList.append(point)
+
         parent.cloudPointsList[index][i] = point # newPointsList

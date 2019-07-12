@@ -1,7 +1,6 @@
 """
-# Module: RandomDefectsMenu.py
-# Description: This module contains the Random Defects Side Widget Menu UI
-for calling the discretization functions.
+# Module: OvalDefectsMenu.py
+# Description: This module contains the Oval Defects Side Widget Menu UI
 # Author: Rodrigo de Oliveira Neto.
 """
 
@@ -17,16 +16,16 @@ from OCC.Bnd import Bnd_Box
 from OCC.BRepBndLib import brepbndlib_Add
 
 # Local Imports:
-from Interface.WaveDefectsMenu import waveDefectsMenu
+from Interface.PeriodicDefectsMenu import periodicDefectsMenu
 from Actions.Functions import *
 from Resources.Strings import MyStrings
 
 
 class ovalDefectsMenu(QWidget):
     """
-    # Class: randomDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in a random direction with a displacement provided.
+    # Class: ovalDefectsMenu
+    # Description: This class provides a side menu with some options for flattening
+                   a curved profile.
     """
 
     def __init__(self, parent):
@@ -50,7 +49,7 @@ class ovalDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Oval deffects menu", self)
+        label1 = QLabel(MyStrings.ovalDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -89,14 +88,14 @@ class ovalDefectsMenu(QWidget):
         btn3.setMinimumWidth(266)
         grid.addWidget(btn3, 6, 0, 1, 2)
 
-        label15 = QLabel("Maximum deviation [mm]:", self)
+        label15 = QLabel(MyStrings.askingForMaxDev, self)
         grid.addWidget(label15, 7, 0, 1, 2)
 
         self.maxDev = QLineEdit()
         grid.addWidget(self.maxDev, 8, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText("Apply oval defects")
+        btn4.setText(MyStrings.ovalDefectsApply)
         btn4.clicked.connect(lambda: self.ovalPoints(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
@@ -106,39 +105,39 @@ class ovalDefectsMenu(QWidget):
         grid.setColumnStretch(1, 1)
         grid.setRowStretch(10, 1)
 
-    def ovalPoints(self, parent):
+    def ovalPoints(self, parent, isInternalCall, paramList):
         """
-        # Method: randomPoints.
-        # Description: This method applies random manufacturing errors in the selected
-        entity. The random errors has some rules to follow, defined by the configuration
-        done at the Random Defects Menu side widget.
+        # Method: ovalPoints.
+        # Description: This method applies flattening to a curved discretized surface.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
-        try:
-            maxDev = float(self.maxDev.displayText().replace(',','.'))
-        # Handling input errors
-        except ValueError:
-            QMessageBox.information(parent, "Invalid input","Invalid input value. Please, enter a valid number.", QMessageBox.Ok, QMessageBox.Ok)
-            return
+        if(isInternalCall):
+            selectedFacesNumber = [2*i - 1 for i in paramList[0]]
+            maxDev = paramList[1]
+        else:
+            try:
+                maxDev = float(self.maxDev.displayText().replace(',','.'))
+            # Handling input errors
+            except ValueError:
+                QMessageBox.information(parent, MyStrings.popupInvalidGenericInput, MyStrings.popupInvalidGenericInputDescription, QMessageBox.Ok, QMessageBox.Ok)
+                return
 
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
         # Getting information about the selected surfaces:
-        for i in range(len(parent.selectedSequenceNumber)):
+        for i in range(len(selectedFacesNumber)):
             index = 0
             seqNumber = None
             while index < len(parent.faceSequenceNumbers):
                 seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
+                if(seqNumber == selectedFacesNumber[i]):
                     break
                 index += 1
 
             selectedEntityList.append(int(seqNumber/2+0.5))
 
-            print('index:'+str(index))
-            print(parent.UVproperty)
             try:
                 # calculating parameters to properly generate a sine wave that flattens the rounded surface
                 numPointsMainAxis = parent.UVproperty[index][0] -1
@@ -160,12 +159,11 @@ class ovalDefectsMenu(QWidget):
                 parent.cloudPointsList[index] = newPointsList
             # Handling non-rounded surface error
             except AttributeError:
-                QMessageBox.information(parent, "Error","Error: the selected surface isn't parametric (rounded).", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupNotRoundedSurf,MyStrings.popupNotRoundedSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
             # Handling non-discretized surface error
             except IndexError:
-                QMessageBox.information(parent, "Invalid selected surface",
-                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidSurf, MyStrings.popupInvalidSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
 
         # Building the logbook tupple

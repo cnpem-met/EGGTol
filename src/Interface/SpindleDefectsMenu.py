@@ -1,13 +1,12 @@
 """
-# Module: flexionDefectsMenu.py
-# Description: This module contains the flexion Defects Side Widget Menu UI
-for calling the discretization functions.
-# Author: Willian Hideak Arita da Silva.
+# Module: SpindleDefectsMenu.py
+# Description: This module contains the Spindle Defects Side Widget Menu UI, based
+               on a Artificial Neural Network Model of diameters deviation in a
+               real turning operation.
+# Author: Rodrigo de Oliveira Neto.
 """
 
 import neurolab as nl
-
-from Discretization.DiscretizeModel import *
 
 import numpy
 import math
@@ -23,12 +22,13 @@ from OCC.BRepBndLib import brepbndlib_Add
 # Local Imports:
 from Actions.Functions import *
 from Resources.Strings import MyStrings
+from Discretization.DiscretizeModel import *
 
-class turningDefectsMenu(QWidget):
+class spindleDefectsMenu(QWidget):
     """
-    # Class: flexionDefectsMenu
-    # Description: This class provides a side menu with some options for moving some
-    group of points in a flexion direction with a displacement provided.
+    # Class: spindlenDefectsMenu
+    # Description: This class provides a side menu with some options for simualting
+                   a spindle deflection to a curved profile.
     """
 
     def __init__(self, parent):
@@ -52,7 +52,7 @@ class turningDefectsMenu(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("Spindle deviation mode.\n\nBefore applying the spindle deviation, follow these steps:\n    1. Go to the 'Normal Vectors' menu\n    2. Click in 'Show 3D vectors'\n    3. If the normal vectors of the analyzed surface are\n        pointing torwards inside the volume, reverse then\n    4. You can hide the vectors and apply the deflection now", self)
+        label1 = QLabel(MyStrings.spindleDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         label2 = QLabel(MyStrings.selectionModeHeader, self)
@@ -94,7 +94,7 @@ class turningDefectsMenu(QWidget):
         frame = QFrame()
         grid.addWidget(frame, 7, 0)
 
-        label5 = QLabel("Tool conditions:", self)
+        label5 = QLabel(MyStrings.askingForToolCond, self)
         grid.addWidget(label5, 8, 0, 1, 1)
 
         self.toolCondBox = QComboBox()
@@ -106,7 +106,7 @@ class turningDefectsMenu(QWidget):
 
         self.toolCondBox.setCurrentIndex(1)
 
-        label6 = QLabel("Depth of cut [mm]:", self)
+        label6 = QLabel(MyStrings.askingForDepth, self)
         grid.addWidget(label6, 9, 0, 1, 1)
 
         self.depth = QDoubleSpinBox()
@@ -115,7 +115,7 @@ class turningDefectsMenu(QWidget):
         self.depth.setSingleStep(0.1)
         self.depth.setValue(1)
 
-        label7 = QLabel("Feed [mm/rev]:", self)
+        label7 = QLabel(MyStrings.askingForFeed, self)
         grid.addWidget(label7, 10, 0, 1, 1)
 
         self.feed = QDoubleSpinBox()
@@ -124,25 +124,25 @@ class turningDefectsMenu(QWidget):
         self.feed.setSingleStep(0.01)
         self.feed.setValue(0.15)
 
-        label8 = QLabel("Sprindle speed [RPM]:", self)
+        label8 = QLabel(MyStrings.askingForRPM, self)
         grid.addWidget(label8, 11, 0, 1, 1)
 
-        self.sprindle = QDoubleSpinBox()
-        grid.addWidget(self.sprindle, 11, 1, 1, 2)
-        self.sprindle.setRange(800, 1400)
-        self.sprindle.setSingleStep(10)
-        self.sprindle.setValue(1000)
+        self.spindle = QDoubleSpinBox()
+        grid.addWidget(self.spindle, 11, 1, 1, 2)
+        self.spindle.setRange(800, 1400)
+        self.spindle.setSingleStep(10)
+        self.spindle.setValue(1000)
 
-        label9 = QLabel("Select the reference face of fixture", self)
+        label9 = QLabel(MyStrings.askingForFixtureName, self)
         grid.addWidget(label9, 12, 0, 1, 2)
 
         self.fixFaceEdit = QLineEdit()
         self.fixFaceEdit.setReadOnly(True)
-        self.fixFaceEdit.setPlaceholderText("Select the reference for fixture")
+        self.fixFaceEdit.setPlaceholderText(MyStrings.askingForFixtureText)
         grid.addWidget(self.fixFaceEdit, 13, 0, 1, 2)
 
         btn4 = QToolButton()
-        btn4.setText("Set Fixture Face Reference")
+        btn4.setText(MyStrings.FixtureApplyText)
         btn4.clicked.connect(lambda: self.addSelectedFixFace(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(350)
@@ -152,8 +152,8 @@ class turningDefectsMenu(QWidget):
         grid.addItem(verticalSpacer, 15, 0)
 
         btn5 = QToolButton()
-        btn5.setText("Apply spindle deviation")
-        btn5.clicked.connect(lambda: self.turningDefects(parent))
+        btn5.setText(MyStrings.spindleDefectsApply)
+        btn5.clicked.connect(lambda: self.spindleDefects(parent))
         btn5.setMinimumHeight(30)
         btn5.setMinimumWidth(350)
         grid.addWidget(btn5, 16, 0, 1, 2)
@@ -163,19 +163,23 @@ class turningDefectsMenu(QWidget):
         grid.setRowStretch(17, 1)
 
     def interval_mapping(self, image, from_min, from_max, to_min, to_max):
-        # map values from [from_min, from_max] to [to_min, to_max]
-        # image: input array
+        """
+        # Method: interval_mapping.
+        # Description: This method maps a list of numbers from a range to another.
+        # Parameters: * List image = input array.
+                      * Float from_min, from_max = limits of the range of the input array
+                      * Float to_min, to_max = limits of the desired range
+        """
         from_range = from_max - from_min
         to_range = to_max - to_min
         scaled = numpy.array((image - from_min) / float(from_range), dtype=float)
         return to_min + (scaled * to_range)
 
-    def turningDefects(self, parent):
+    def spindleDefects(self, parent):
         """
-        # Method: flexionPoints.
-        # Description: This method applies flexion manufacturing errors in the selected
-        entity. The flexion errors has some rules to follow, defined by the configuration
-        done at the flexion Defects Menu side widget.
+        # Method: spindleDefects.
+        # Description: This method applies diameters deviations from a turning operation
+                       on a curved discretized surface.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
@@ -183,10 +187,13 @@ class turningDefectsMenu(QWidget):
         tool = self.toolCondBox.currentText()
         depth = self.depth.value()
         feed = self.feed.value()
-        sprindle = self.sprindle.value()
+        spindle = self.spindle.value()
 
         selectedFacesNumber = parent.selectedSequenceNumber
         selectedShapes = parent.selectedShape
+
+        # Loads the loading window:
+        parent.loadingWindow.show()
 
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
@@ -204,10 +211,9 @@ class turningDefectsMenu(QWidget):
 
             selectedEntityList.append(int(seqNumber/2+0.5))
             U, V = 160, 120
-            points1, normals1 = discretizeSurface(parent.entitiesObject[pos(parent.faceSequenceNumbers[i])], parent.entitiesObject,
-                                                U, V)
+            points1, normals1 = discretizeSurface(parent.entitiesObject[pos(parent.faceSequenceNumbers[i])], parent.entitiesObject, U, V)
 
-            # Calculating the aproximated diameter and length of the surface
+            # Calculating the aproximated diameter and length of the curved profile
             numPointsPerim = V-1
             numPointsLength = U-2
             x1,y1,z1 = points1[0]
@@ -216,12 +222,11 @@ class turningDefectsMenu(QWidget):
 
             diam = ((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2)**0.5
             length = ((x3-x1)**2 + (y3-y1)**2 + (z3-z1)**2)**0.5
-            print('diam: '+str(diam))
-            print('length: '+str(length))
 
             # Extracting the plane equation from the selected referency face
 
             # First creating a discretized surface with 3 points
+            seqFixNumber = self.selectedFixFaceSeqNumber[0]/2+0.5
             points2, normals2 = discretizeFace(parent.entitiesObject[pos(self.selectedFixFaceSeqNumber[0])], parent.entitiesObject, 5, 10, True)
             u = points2[0]
             v = points2[8]
@@ -232,26 +237,11 @@ class turningDefectsMenu(QWidget):
             A, B, C = n
             D = A*u[0]+B*u[1]+C*u[2]
 
-            # Distance between a point and a plane
-            # d = abs(A*x0 + B*y0 + C*z0 + D)/((A**2 + B**2 + C**2)**.5)
-
-            # p = []
-            # p.append(u)
-            # p.append(v)
-            # p.append(w)
-            #
-            # parent.cloudPointsList.append(p)
-            # try:
-            #     buildCloud(parent)
-            # except IndexError:
-            #     print("indexError\n")
-            #     pass
-
             # Acquiring imputed data
             toolCond = self.toolCondBox.currentIndex()
             depth = self.depth.value()
             feed = self.feed.value()
-            sprindle = self.sprindle.value()
+            spindle = self.spindle.value()
             LDratio = length/diam
 
             # Importing the range from training data, to be used in normalization process of data imputed
@@ -260,11 +250,10 @@ class turningDefectsMenu(QWidget):
             # Normalizating imputed data to be inserted on the NN model
             depth = self.interval_mapping(depth, normVec[1][0], normVec[1][1], 0, 1)
             feed = self.interval_mapping(feed, normVec[2][0], normVec[2][1], 0, 1)
-            sprindle = self.interval_mapping(sprindle, normVec[3][0], normVec[3][1], 0, 1)
+            spindle = self.interval_mapping(spindle, normVec[3][0], normVec[3][1], 0, 1)
             LDratio = self.interval_mapping(LDratio, normVec[4][0], normVec[4][1], 0, 1)
 
-            aux = [toolCond, depth, feed, sprindle, LDratio]
-            #print(aux)
+            aux = [toolCond, depth, feed, spindle, LDratio]
 
             # Loading the Trained Neural Network, according to some geometrical specifications
             NN = nl.load("..\\neural networks\\trainedNN_3.net")
@@ -282,16 +271,15 @@ class turningDefectsMenu(QWidget):
                     # Creating LiLratio parameter, and normalizing it
                     LiLratio = dist/length
                     LiLratio = self.interval_mapping(LiLratio, normVec[5][0], normVec[5][1], 0, 1)
-                    print('LiLratio Norm: '+str(LiLratio))
+
                     # Creating the vector with every parameter (normalized) needed to compose the input of the NN model
-                    normInput = [[toolCond, depth, feed, sprindle, LDratio, LiLratio]]
+                    normInput = [[toolCond, depth, feed, spindle, LDratio, LiLratio]]
 
                     # Obtaining the output (normalized) from the NN model
                     nnOutput = NN.sim(normInput)
-                    print('NNout Norm: '+str(nnOutput))
+
                     # Desnormalizing the output
                     nnOutput = self.interval_mapping(nnOutput, 0, 1, normVec[6][0], normVec[6][1])
-                    print('NNout: '+str(nnOutput)+'\n')
 
                     offset = nnOutput[0][0]
 
@@ -302,16 +290,18 @@ class turningDefectsMenu(QWidget):
                 parent.cloudPointsList[index] = newPointsList
             # Non-discretized surface error handling
             except IndexError:
-                QMessageBox.information(parent, "Invalid selected surface",
-                                        "Invalid selected surface. Please, select a discretized one to apply a deviation.", QMessageBox.Ok, QMessageBox.Ok)
+                QMessageBox.information(parent, MyStrings.popupInvalidSurf, MyStrings.popupInvalidSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
-        #
-        # # Building the logbook tupple
-        # logText = '> [Deviation] Flexion:\n\tEntity List: '+str(selectedEntityList)+'\n\tLong. axis: '+long_axis+'\n\tNorm. axis: '+perp_axis+'\n\tMax. deflection: '+str(max_def)+' mm\n\n'
-        # parent.logbookList.append(logText)
-        #
+
+        # Building the logbook tupple
+        logText = '> [Deviation] Spindle:\n\tEntity List: '+str(selectedEntityList)+'\n\tTool condition: '+self.toolCondBox.currentText()+'\n\tDepth of cut: '+str(self.depth.value())+'\n\tFeed rate: '+str(self.feed.value())+'\n\tSpindle speed: '+str(self.spindle.value())+'\n\tFixture entity: '+str(seqFixNumber)+'\n\n'
+        parent.logbookList.append(logText)
+
         # Rebuilding the point cloud object in the local context:
         rebuildCloud(parent)
+
+        # Closes the loading window:
+        parent.loadingWindow.close()
 
     def selectSolids(self, parent):
         """
@@ -350,8 +340,6 @@ class turningDefectsMenu(QWidget):
                 if(shape.IsPartner(parent.shapeList[i])):
                     break
                 i += 1
-            #print("i: "+str(i))
-            #print(shape.ShapeType())
             self.selectedFixFace.append(parent.shapeList[i])
             self.selectedFixFaceSeqNumber.append(2*i+1)
             selectedObjectText += str(i+1) + ' '
@@ -380,8 +368,6 @@ class turningDefectsMenu(QWidget):
                 if(shape.IsPartner(parent.shapeList[i])):
                     break
                 i += 1
-            #print("i: "+str(i))
-            #print(shape.ShapeType())
             parent.selectedShape.append(parent.shapeList[i])
             parent.selectedSequenceNumber.append(2*i+1)
             selectedObjectText += str(i+1) + ' '

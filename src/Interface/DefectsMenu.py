@@ -71,21 +71,21 @@ class defectsMenu(QWidget):
         grid.addWidget(btn4, 4, 0)
 
         btn4 = QToolButton()
-        btn4.setText("Wave Pattern Deflection")
-        btn4.clicked.connect(lambda: self.waveDefectsMenuProcedure(parent))
+        btn4.setText(MyStrings.defectsOptionPeriodic)
+        btn4.clicked.connect(lambda: self.periodicDefectsMenuProcedure(parent))
         btn4.setMinimumHeight(50)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 5, 0)
 
         btn5 = QToolButton()
-        btn5.setText("Ovalization of a round surface")
+        btn5.setText(MyStrings.defectsOptionOval)
         btn5.clicked.connect(lambda: self.ovalDefectsMenuProcedure(parent))
         btn5.setMinimumHeight(50)
         btn5.setMinimumWidth(266)
         grid.addWidget(btn5, 6, 0)
 
         btn6 = QToolButton()
-        btn6.setText("Twisting a surface")
+        btn6.setText(MyStrings.defectsOptionTorsion)
         btn6.clicked.connect(lambda: self.torsionDefectsMenuProcedure(parent))
         btn6.setMinimumHeight(50)
         btn6.setMinimumWidth(266)
@@ -99,8 +99,8 @@ class defectsMenu(QWidget):
         # grid.addWidget(spacer, 8, 0)
 
         btn7 = QToolButton()
-        btn7.setText("Spindle deviation")
-        btn7.clicked.connect(lambda: self.turningDefectsMenuProcedure(parent))
+        btn7.setText(MyStrings.defectsOptionSpindle)
+        btn7.clicked.connect(lambda: self.spindleDefectsMenuProcedure(parent))
         btn7.setMinimumHeight(50)
         btn7.setMinimumWidth(266)
         grid.addWidget(btn7, 8, 0)
@@ -139,26 +139,51 @@ class defectsMenu(QWidget):
         random.randomDefectsActionProcedure(parent)
 
     def flexionDefectsMenuProcedure(self, parent):
-
+        """
+        # Method: flexionDefectsMenuProcedure.
+        # Description: This method calls the flexionDefectsActionProcedure from the
+        Actions package for displaying the Flexion Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         flexion = flexionDefectsAction(parent)
         flexion.flexionDefectsActionProcedure(parent)
 
-    def waveDefectsMenuProcedure(self, parent):
-
-        wave = waveDefectsAction(parent)
-        wave.waveDefectsActionProcedure(parent)
+    def periodicDefectsMenuProcedure(self, parent):
+        """
+        # Method: periodicDefectsMenuProcedure.
+        # Description: This method calls the periodicDefectsActionProcedure from the
+        Actions package for displaying the Periodic Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        periodic = periodicDefectsAction(parent)
+        periodic.periodicDefectsActionProcedure(parent)
 
     def ovalDefectsMenuProcedure(self, parent):
-
+        """
+        # Method: ovalDefectsMenuProcedure.
+        # Description: This method calls the ovalDefectsActionProcedure from the
+        Actions package for displaying the Oval Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         oval = ovalDefectsAction(parent)
         oval.ovalDefectsActionProcedure(parent)
 
     def torsionDefectsMenuProcedure(self, parent):
-
+        """
+        # Method: torsionDefectsMenuProcedure.
+        # Description: This method calls the torsionDefectsActionProcedure from the
+        Actions package for displaying the Torsion Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
         torsion = torsionDefectsAction(parent)
         torsion.torsionDefectsActionProcedure(parent)
 
-    def turningDefectsMenuProcedure(self, parent):
-
-        turning = turningDefectsAction(parent)
-        turning.turningDefectsActionProcedure(parent)
+    def spindleDefectsMenuProcedure(self, parent):
+        """
+        # Method: spindleDefectsMenuProcedure.
+        # Description: This method calls the spindleDefectsActionProcedure from the
+        Actions package for displaying the Spindle Defects Menu side widget.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        spindle = spindleDefectsAction(parent)
+        spindle.spindleDefectsActionProcedure(parent)

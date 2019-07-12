@@ -1,7 +1,8 @@
 """
-# Module: WelcomeMenu.py
-# Description: This module contains the Welcome Menu DockWidget.
-# Author: Willian Hideak Arita da Silva.
+# Module: logMenu.py
+# Description: This module contains the log book side widget menu UI to
+               visualize and import actions of/for the current session's model
+# Author: Rodrigo de Oliveira Neto.
 """
 
 # PyQt5 Imports:
@@ -12,8 +13,8 @@ from Resources.Strings import MyStrings
 
 class logMenu(QWidget):
     """
-    # Class: welcomeMenu.
-    # Description: This class provides welcome information, tips and the changelog.
+    # Class: logMenu.
+    # Description: This class implements functions associated with the logbook panel
     """
 
     def __init__(self, parent):
@@ -28,30 +29,28 @@ class logMenu(QWidget):
     def initUI(self, parent):
         """
         # Method: initUI.
-        # Description: This method initializes the User Interface Elements of the Welcome
-        Menu side widget.
+        # Description: This method initializes the User Interface Elements of the Log Menu side widget.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
 
         grid = QGridLayout()
         self.setLayout(grid)
 
-        label1 = QLabel("All actions, including discretization\nand deviation, showed here.", self)
+        label1 = QLabel(MyStrings.logDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
         btn1 = QToolButton()
-        btn1.setText("Save Log")
+        btn1.setText(MyStrings.logSave)
         grid.addWidget(btn1, 1, 0)
         btn1.setMinimumHeight(30)
         btn1.setMinimumWidth(70)
         btn1.clicked.connect(lambda: self.saveLog(parent))
 
         btn2 = QToolButton()
-        btn2.setText("Load Log")
+        btn2.setText(MyStrings.logLoad)
         grid.addWidget(btn2, 1, 1)
         btn2.setMinimumHeight(30)
         btn2.setMinimumWidth(70)
-        #btn2.setEnabled(False)
         btn2.clicked.connect(lambda: self.loadLog(parent))
 
         log = QTextEdit()
@@ -63,7 +62,6 @@ class logMenu(QWidget):
         grid.setColumnStretch(1, 1)
         #grid.setRowStretch(3, 1)
 
-        # Prints logbookList, tupple in which all the actions were recorded in string form
         logText = ''
         for i in parent.logbookList:
             logText += i
@@ -71,15 +69,28 @@ class logMenu(QWidget):
         log.setReadOnly(True)
 
     def saveLog(self, parent):
+        """
+        # Method: saveLog.
+        # Description: This method saves information about the current session's actions.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+
         defaultName = (parent.lastPath).split('.')[0:-1]
         defaultName = '.'.join(defaultName)
         defaultName = defaultName + '.txt'
-        fileName = QFileDialog.getSaveFileName(parent, "Save log in .txt format", defaultName, MyStrings.exportTxtFormat)[0]
+        fileName = QFileDialog.getSaveFileName(parent, MyStrings.logSaveMsg, defaultName, MyStrings.exportTxtFormat)[0]
         if not fileName:
             return
         self.generateLogTxt(parent.logbookList, fileName)
 
     def generateLogTxt(self, logList, filePath):
+        """
+        # Method: generateLogTxt.
+        # Description: This complementary method writes the log information in a .txt file.
+        # Parameters: * String logList = A text containing the log informations.
+                      * String filePath = A reference for the selectec file path.
+        """
+
         logText = ''
         for i in logList:
             logText += i
@@ -88,6 +99,12 @@ class logMenu(QWidget):
         fileName.close()
 
     def loadLog(self, parent):
+        """
+        # Method: loadLog.
+        # Description: This method loads actions information from a external .txt file
+                       and apply then into the current session's model.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
 
         if not parent.activeCADFile:
             QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
@@ -95,18 +112,19 @@ class logMenu(QWidget):
                                     QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        # Invoking a file dialog for loading the current state of the point cloud:
-        fileName = QFileDialog.getOpenFileName(parent, 'Load and apply actions from a saved log file', parent.lastPath,
+        # Invoking a file dialog for loading the current state of the point cloud
+        fileName = QFileDialog.getOpenFileName(parent, MyStrings.logLoadMsg, parent.lastPath,
                                                'Text file (*.txt)')[0]
 
-        # Checking if the provided filename is valid:
+        # Checking if the provided filename is valid
         if not fileName:
             return
 
-        # Opening a file to save the current project:
+        # Opening the file that contains the log to be loaded
         file = open(fileName, 'r')
 
         line = file.readline()
+        # Iterative process that reads each line of the file and internally calls the associated functions
         while line:
             if line == '> [Discretization] Automatic:\n':
                 mode = file.readline()[7:-1]
@@ -194,7 +212,7 @@ class logMenu(QWidget):
                 from Interface.FlexionDefectsMenu import flexionDefectsMenu
                 flexionDefectsCall = flexionDefectsMenu(parent)
                 flexionDefectsCall.flexionPoints(parent, True, paramList)
-            elif line == '> [Deviation] Wave Pattern:\n':
+            elif line == '> [Deviation] Periodic Pattern:\n':
                 entList = file.readline()[15:-2]
                 entList = entList.split(',')
                 entList = [float(element) for element in entList]
@@ -206,18 +224,16 @@ class logMenu(QWidget):
                 from Interface.WaveDefectsMenu import waveDefectsMenu
                 waveDefectsCall = waveDefectsMenu(parent)
                 waveDefectsCall.wavePoints(parent, True, paramList)
-            # elif line == '> [Deviation] Ovalization:\n':
-            #     entList = file.readline()[15:-2]
-            #     entList = entList.split(',')
-            #     entList = [float(element) for element in entList]
-            #     longAxis = file.readline()[13:-1]
-            #     perpAxis = file.readline()[13:-1]
-            #     maxDef = float(file.readline()[18:-4])
-            #     paramList = [entList, longAxis, perpAxis, maxDef]
-            #
-            #     from Interface.FlexionDefectsMenu import flexionDefectsMenu
-            #     flexionDefectsCall = flexionDefectsMenu(parent)
-            #     flexionDefectsCall.flexionPoints(parent, True, paramList)
+            elif line == '> [Deviation] Ovalization:\n':
+                entList = file.readline()[15:-2]
+                entList = entList.split(',')
+                entList = [float(element) for element in entList]
+                maxDef = float(file.readline()[14:-4])
+                paramList = [entList, maxDef]
+
+                from Interface.OvalDefectsMenu import ovalDefectsMenu
+                ovalDefectsCall = ovalDefectsMenu(parent)
+                ovalDefectsCall.ovalPoints(parent, True, paramList)
             elif line == '> [Deviation] Torsion:\n':
                 entList = file.readline()[15:-2]
                 entList = entList.split(',')
@@ -233,4 +249,10 @@ class logMenu(QWidget):
             line = file.readline()
 
     def str2bool(self, v):
+        """
+        # Method: str2bool.
+        # Description: This method converts a string variable to a bool.
+        # Parameters: * String v = The variable to be converted.
+        """
+
         return v.lower() in ('True', 'true')
