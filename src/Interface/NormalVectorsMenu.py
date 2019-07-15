@@ -9,7 +9,7 @@
 import numpy
 
 # PyQt5 Imports:
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox, QSpacerItem
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit, QMessageBox, QSpacerItem, QMessageBox
 
 # OpenCASCADE imports:
 from OCC.Geom import Geom_Point
@@ -179,46 +179,34 @@ class normalVectorsMenu(QWidget):
         # Initializing the auxiliar tupples used to create the 3d face-normal arrows
         vecList = []
         pntList = []
-
-        # Performs the autoDiscretization using the Discretization package:
-        sequence, normals, points = discretizeModel(parent, parent.entitiesObject, 2, 10,
-                                                    2, 4, True, True)
-
-        indexDiscSurf = []
         pnts = []
         nmls = []
-        for k in range(len(sequence)):
-            index = 0
-            while index < len(parent.faceSequenceNumbers):
-                if (sequence[k] == parent.faceSequenceNumbers[index]):
-                    indexDiscSurf.append(k)
-                index +=1
 
-        # print(indexDiscSurf)
-        # print(parent.faceSequenceNumbers)
-        # print(parent.faceNormalVectors)
+        # (Auxiliary) discretizating every face of the model with points only in the center regions.
+        # These points will be the reference for creation of the 3D Vectors.
+        sequence, normals, points = discretizeModel(parent, parent.entitiesObject, 2, 10, 2, 4, True, True, True)
+
+        # Attributing points and vectors references to tupples that will be used to create the 3D Vectors.
         for i in range (len(points)):
             index = 0
             inverseVector = False
             for j in range (len(points[i])):
                 pnts.append(points[i][j])
-                while index < len(indexDiscSurf):
-                    if(i == indexDiscSurf[index]):
+                while index < len(parent.faceSequenceNumbers):
+                    if(sequence[i] == parent.faceSequenceNumbers[index]):
+                        # Checking in a auxiliary tupple if the normal vector of the correspondent surface has been reversed yet.
                         if(not parent.normVectorsToggle[index]):
                             inverseVector = True
                     index += 1
+                # If it wasn't reversed, the reference considered for normal vector will be product of the latest auxiliary discretization
                 if(not inverseVector):
                     nmls.append(normals[i][j])
+                # If it was reversed, the reference considered for normal vector will be product of the latest auxiliary discretization, but negative
                 else:
                     newNormalVec = [numpy.negative(x) for x in normals[i][j]]
-                    # newNormalVec = [p for p in [(l[0], l[1], l[2]) for l in aux]]
                     nmls.append(newNormalVec)
 
-        #print(sequence)
-        # print(normals)
-        # print(points)
-        # print(len(points))
-
+        # Calling the methods to create 3D Vectors in the workspace
         for i in range (len(pnts)):
             p1 = gp_Pnt(pnts[i][0], pnts[i][1], pnts[i][2])
             pntList.append(p1)
@@ -226,35 +214,19 @@ class normalVectorsMenu(QWidget):
             vec = gp_Vec(dir)
             vecList.append(vec)
             ax1 = gp_Ax2(p1, dir)
+            # Creating cone models with dimensions about 3% of the order of magnitude of the work model
             cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
             AIScone = AIS_Shape(cone)
             AIScone.SetColor(colBlue)
             parent.normalArrowsShapeList.append(AIScone)
         self.show3DNormalVectors(parent)
 
-        # for index in range(len(parent.faceSequenceNumbers)):
-        #     totPoints = len(parent.cloudPointsList[index])
-        #     if(totPoints > 0):
-        #         if(totPoints <5):
-        #             div = 4
-        #         else:
-        #             div = 4
-        #         for i in range(div+1):
-        #             xyz = parent.cloudPointsList[index][int((i/4)*(totPoints-1))]
-        #             normal = parent.faceNormalVectors[index][int((i/4)*(totPoints-1))]
-        #             p1 = gp_Pnt(xyz[0], xyz[1], xyz[2])
-        #             pntList.append(p1)
-        #             dir = gp_Dir(normal[0], normal[1], normal[2])
-        #             vec = gp_Vec(dir)
-        #             vecList.append(vec)
-        #             ax1 = gp_Ax2(p1, dir)
-        #             cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
-        #             AIScone = AIS_Shape(cone)
-        #             AIScone.SetColor(colBlue)
-        #             parent.normalArrowsShapeList.append(AIScone)
-        # self.show3DNormalVectors(parent)
-
     def toggle(self, a):
+        """
+        # Method: toggle.
+        # Description: This method makes a toggle operation over a bool variable.
+        # Parameters: * Bool a = Generic bool variable to be toggled.
+        """
         return not a
 
     def reverse3DNormalVectors(self, parent):
@@ -263,21 +235,28 @@ class normalVectorsMenu(QWidget):
         # Description: This method reverses the 3D normal vectors of model's surfaces.
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
-        for i in range(len(parent.selectedSequenceNumber)):
-            index = 0
-            seqNumber = None
-            while index < len(parent.faceSequenceNumbers):
-                seqNumber = parent.faceSequenceNumbers[index]
-                if(seqNumber == parent.selectedSequenceNumber[i]):
-                    break
-                index += 1
-
-            aux = [numpy.negative(x) for x in parent.faceNormalVectors[index]]
-            newNormalVec = [p for p in [(l[0], l[1], l[2]) for l in aux]]
-            parent.faceNormalVectors[index] = newNormalVec
-            parent.normVectorsToggle[index] = self.toggle(parent.normVectorsToggle[index])
-        self.delete3DNormalVectors(parent)
-        self.create3DNormalVectors(parent)
+        try:
+            for i in range(len(parent.selectedSequenceNumber)):
+                index = 0
+                seqNumber = None
+                while index < len(parent.faceSequenceNumbers):
+                    seqNumber = parent.faceSequenceNumbers[index]
+                    if(seqNumber == parent.selectedSequenceNumber[i]):
+                        break
+                    index += 1
+                # Getting the negative values of the selected discretized surface that will have its normal vectors reversed
+                aux = [numpy.negative(x) for x in parent.faceNormalVectors[index]]
+                newNormalVec = [p for p in [(l[0], l[1], l[2]) for l in aux]]
+                # Reversing its normal vectors
+                parent.faceNormalVectors[index] = newNormalVec
+                # Applying the toggle operation over the appropriate index of normVectorsToggle, to save the occurrence of reversing operation
+                parent.normVectorsToggle[index] = self.toggle(parent.normVectorsToggle[index])
+            self.delete3DNormalVectors(parent)
+            self.create3DNormalVectors(parent)
+        # Handling the error of trying to reverse non-discretized surfaces
+        except IndexError:
+            QMessageBox.information(parent, MyStrings.popupReverseNonDiscNormSurf, MyStrings.popupReverseNonDiscNormSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
+            return
 
 
     def selectSurfaces(self, parent):

@@ -169,7 +169,7 @@ def orthonormalizeBasis(basisVector):
             scalarVec((1/normVec(newJ)), newJ),
             scalarVec((1/normVec(k)), k)]
 
-def discretizeModel(parent, objectList, density, precision, Uparam, Vparam, useParametric, gridDiscretization):
+def discretizeModel(parent, objectList, density, precision, Uparam, Vparam, useParametric, gridDiscretization, auxiliarDiscretization):
     """
     # Function: discretizeModel.
     # Description: This function receives an objectList
@@ -209,16 +209,18 @@ def discretizeModel(parent, objectList, density, precision, Uparam, Vparam, useP
         faceSequenceNumbers.append(i)
         faceNormalVectors.append(normals)
         cloudPointsList.append(points)
-        parent.UVproperty.append([None, None])
-        parent.normVectorsToggle.append(1)
+        if(not auxiliarDiscretization):
+            parent.UVproperty.append([None, None])
+            parent.normVectorsToggle.append(True)
     # Discretize each non-planar face:
     for i in nonPlanarFacePointers:
         points, normals = discretizeSurface(objectList[pos(i)], objectList, Uparam, Vparam)
         faceSequenceNumbers.append(i)
         faceNormalVectors.append(normals)
         cloudPointsList.append(points)
-        parent.UVproperty.append([Uparam, Vparam])
-        parent.normVectorsToggle.append(1)
+        if(not auxiliarDiscretization):
+            parent.UVproperty.append([Uparam, Vparam])
+            parent.normVectorsToggle.append(True)
     return faceSequenceNumbers, faceNormalVectors, cloudPointsList
 
 def discretizeFace(face, objectList, density, precision, gridDiscretization):

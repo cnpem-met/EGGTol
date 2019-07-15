@@ -184,7 +184,7 @@ class autoDiscretizeMenu(QWidget):
         try:
             # Performs the autoDiscretization using the Discretization package:
             sequence, normals, points = discretizeModel(parent, parent.entitiesObject, density, precision,
-                                                        Uparam, Vparam, useParametric, gridDiscretization)
+                                                        Uparam, Vparam, useParametric, gridDiscretization, False)
         # Handling the error case in which the user inputs a value for U or V less than 2
         except ValueError:
             QMessageBox.information(parent, MyStrings.popupInvalidUVTitle,

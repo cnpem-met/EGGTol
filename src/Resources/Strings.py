@@ -254,6 +254,9 @@ class MyStrings():
     popupInvalidFreq = 'Invalid frequency value'
     popupInvalidFreqDescription = 'Invalid frequency value. Please, input a value different from 0.'
 
+    popupReverseNonDiscNormSurf = 'Invalid vector reversing operation'
+    popupReverseNonDiscNormSurfDescription = "Error: the selected surface isn't discretized. Please, reverse normal vectors only from discretized surfaces"
+
     # File Dialog Windows Strings:
     exportPcdTitle = 'Export .pcd file'
     exportPcdFormat = 'Point Cloud Data (*.pcd)'
