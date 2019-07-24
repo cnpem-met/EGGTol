@@ -256,7 +256,7 @@ class spindleDefectsMenu(QWidget):
             aux = [toolCond, depth, feed, spindle, LDratio]
 
             # Loading the Trained Neural Network, according to some geometrical specifications
-            NN = nl.load("..\\neural networks\\trainedNN_3.net")
+            NN = nl.load("..\\neural networks\\trainedANN_SpindleDefects_v0.net")
 
             try:
                 newPointsList = []
