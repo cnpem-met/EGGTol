@@ -13,7 +13,7 @@ class MyStrings():
 
     # Window Title Strings:
     applicationTitle = 'EGGTol: Error Generator for Geometric Tolerancing'
-    applicationVersion = 'v1.0.0'
+    applicationVersion = 'v2.0.0'
 
     # MenuBar Strings:
     menuBarFile = 'File'
@@ -272,17 +272,20 @@ class MyStrings():
                                  'faces with specified parameters.')
     autoDiscretizeApply = 'Apply auto discretization'
 
-    defectsDescription = ('Select the desired transformation.<br><br>' +
-                          'The translation and rotation operations can be applied<br>' +
-                          'to a flat or curved surface.<br>')
-    defectsOptionTranslation = 'Translation deviation'
-    defectsOptionRotation = 'Rotation deviation'
-    defectsOptionRandom = 'Randomic deviation'
-    defectsOptionFlexion = 'Bending deviation'
-    defectsOptionPeriodic = 'Periodic deviation'
-    defectsOptionOval = 'Oval deviation'
-    defectsOptionTorsion = 'Torsion deviation'
-    defectsOptionSpindle = 'Spindle simulated deviation'
+    defectsDescription = 'Select the desired transformation.'
+    defectsGeneric = "----------------------------- Generic Deviations -----------------------------"
+    defectsProcess = "------------------- Simulated Manufacturing Deviations -------------------"
+    defectsOptionTranslation = 'Translation'
+    defectsOptionRotation = 'Rotation'
+    defectsOptionRandom = 'Randomic'
+    defectsOptionFlexion = 'Bending'
+    defectsOptionPeriodic = 'Periodic'
+    defectsOptionOval = 'Oval'
+    defectsOptionTorsion = 'Torsion'
+    defectsOptionSpindle = 'Spindle (Turning)'
+    defectsOptionMilling = 'Milling'
+    defectsOptionAdditive = "Additive\nManufacturing"
+    defectsOptionRectify = 'Rectify'
 
     discretizeDescription = ('Select a discretization option.<br><br>' +
                              'The auto discretization will work on all flat surfaces<br>' +
@@ -363,7 +366,7 @@ class MyStrings():
     normalVectorsDescription = 'Show and manipulate the normal vectors of\n the 3D model.\n'
     normalVectorsShow = 'Show 3D vectors'
     normalVectorsHide = 'Hide 3D vectors'
-    normalVectorsReverse = 'Reverse Normal Vectors'
+    normalVectorsReverse = 'Reverse Normal Vectors from the\nselected entity'
     normalVectorsEntitySel = 'Select an entity to manipulate its normal vectors:'
 
     logDescription = 'All actions, including discretization\nand deviation, showed here.'

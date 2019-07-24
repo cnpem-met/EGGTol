@@ -491,6 +491,11 @@ class normalVectorsAction(QAction):
         # Parameters: * MainWindow parent = A reference for the main window object.
         """
         from Interface.NormalVectorsMenu import normalVectorsMenu
+        if not parent.activeCADFile:
+            QMessageBox.information(parent, MyStrings.popupNoIgesFileTitle,
+                                    MyStrings.popupNoIgesFileDescription,
+                                    QMessageBox.Ok, QMessageBox.Ok)
+            return
         widget = normalVectorsMenu(parent)
         switchLeftPanels(widget, MyStrings.actionNormalVectorsName, MyStrings.actionNormalVectorsPrettyName,
                          parent, False)

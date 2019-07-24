@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QToolButton, QLineEdit
 
 # OpenCASCADE imports:
 from OCC.Geom import Geom_Point
-from OCC.gp import gp_Ax2, gp_Pnt, gp_Vec, gp_Dir, gp_Pnt2d
+from OCC.gp import gp_Ax2, gp_Pnt, gp_Vec, gp_Dir, gp_Pnt2d, gp_Trsf
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeCone, BRepPrimAPI_MakeOneAxis, BRepPrimAPI_MakeCylinder
 from OCC.Bnd import Bnd_Box
 from OCC.BRepBndLib import brepbndlib_Add
@@ -53,58 +53,69 @@ class normalVectorsMenu(QWidget):
         label1 = QLabel(MyStrings.normalVectorsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
+        verticalSpacer = QSpacerItem(20,15)
+        grid.addItem(verticalSpacer, 1, 0)
+
         btn1 = QToolButton()
         btn1.setText(MyStrings.normalVectorsShow)
-        grid.addWidget(btn1, 1, 0, 1, 2)
+        grid.addWidget(btn1, 2, 0, 1, 2)
         btn1.setMinimumHeight(30)
-        btn1.setMinimumWidth(100)
+        btn1.setMinimumWidth(120)
         btn1.clicked.connect(lambda: self.create3DNormalVectors(parent))
 
         btn2 = QToolButton()
         btn2.setText(MyStrings.normalVectorsHide)
-        grid.addWidget(btn2, 1, 1, 1, 2)
+        grid.addWidget(btn2, 2, 1, 1, 2)
         btn2.setMinimumHeight(30)
-        btn2.setMinimumWidth(100)
+        btn2.setMinimumWidth(120)
         btn2.clicked.connect(lambda: self.hide3DNormalVectors(parent))
 
         verticalSpacer = QSpacerItem(20,30)
-        grid.addItem(verticalSpacer, 2, 0)
+        grid.addItem(verticalSpacer, 3, 0)
+
+        btn1 = QToolButton()
+        btn1.setText(MyStrings.selectionModeSolids)
+        btn1.clicked.connect(lambda: self.selectSolids(parent))
+        btn1.setMinimumHeight(50)
+        btn1.setMinimumWidth(130)
+        btn1.setEnabled(False)
+        grid.addWidget(btn1, 4, 0)
+
+        btn2 = QToolButton()
+        btn2.setText(MyStrings.selectionModeSurfaces)
+        btn2.clicked.connect(lambda: self.selectSurfaces(parent))
+        btn2.setMinimumHeight(50)
+        btn2.setMinimumWidth(130)
+        grid.addWidget(btn2, 4, 1)
 
         label4 = QLabel(MyStrings.normalVectorsEntitySel, self)
-        grid.addWidget(label4, 3, 0, 1, 2)
+        grid.addWidget(label4, 5, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
         self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
-        grid.addWidget(self.selectedObject, 4, 0, 1, 2)
-
-        btn3 = QToolButton()
-        btn3.setText(MyStrings.selectionModeSurfaces)
-        btn3.clicked.connect(lambda: self.selectSurfaces(parent))
-        btn3.setMinimumHeight(50)
-        btn3.setMinimumWidth(115)
-        grid.addWidget(btn3, 5, 0, 1, 2)
+        grid.addWidget(self.selectedObject, 6, 0, 1, 2)
 
         btn5 = QToolButton()
         btn5.setText(MyStrings.addEntityOption)
         btn5.clicked.connect(lambda: self.addSelection(parent))
-        btn5.setMinimumHeight(50)
-        btn5.setMinimumWidth(115)
-        grid.addWidget(btn5, 5, 1, 1, 2)
+        btn5.setMinimumHeight(30)
+        btn5.setMinimumWidth(266)
+        grid.addWidget(btn5, 7, 0, 1, 2)
 
         verticalSpacer = QSpacerItem(20,30)
-        grid.addItem(verticalSpacer, 6, 0)
+        grid.addItem(verticalSpacer, 8, 0)
 
         btn6 = QToolButton()
         btn6.setText(MyStrings.normalVectorsReverse)
         btn6.clicked.connect(lambda: self.reverse3DNormalVectors(parent))
-        btn6.setMinimumHeight(30)
+        btn6.setMinimumHeight(50)
         btn6.setMinimumWidth(266)
-        grid.addWidget(btn6, 7, 0, 1, 2)
+        grid.addWidget(btn6, 9, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(8, 1)
+        grid.setRowStretch(10, 1)
 
     def show3DNormalVectors(self, parent):
         """
@@ -156,8 +167,8 @@ class normalVectorsMenu(QWidget):
             self.delete3DNormalVectors(parent)
 
         # Defining color properties of the 3D structures
-        blue = Quantity_Color_Name(0, 1, 0)
-        colBlue = Quantity_Color(blue)
+        green = Quantity_Color_Name(0, 1, 0)
+        colGreen = Quantity_Color(green)
 
         # Creating a boundary box with the whole 3D structure to get the order of magnitude of the workpiece
         boundaryBox = Bnd_Box()
@@ -214,10 +225,19 @@ class normalVectorsMenu(QWidget):
             vec = gp_Vec(dir)
             vecList.append(vec)
             ax1 = gp_Ax2(p1, dir)
-            # Creating cone models with dimensions about 3% of the order of magnitude of the work model
+            # Creating the cylindrical base for the 3D normal vector
+            cyl = BRepPrimAPI_MakeCylinder(ax1, ref*0.015, vec.Magnitude()).Shape()
+
+            tnsf = gp_Trsf()
+            tnsf.SetTranslation(vec)
+            ax1.Transform(tnsf)
+            # Creating the conical head of the 3D normal vector
             cone = BRepPrimAPI_MakeCone(ax1, ref*0.03, 0, 4*ref*0.03).Shape()
+            AISCyl = AIS_Shape(cyl)
             AIScone = AIS_Shape(cone)
-            AIScone.SetColor(colBlue)
+            AISCyl.SetColor(colGreen)
+            AIScone.SetColor(colGreen)
+            parent.normalArrowsShapeList.append(AISCyl)
             parent.normalArrowsShapeList.append(AIScone)
         self.show3DNormalVectors(parent)
 
@@ -257,7 +277,9 @@ class normalVectorsMenu(QWidget):
         except IndexError:
             QMessageBox.information(parent, MyStrings.popupReverseNonDiscNormSurf, MyStrings.popupReverseNonDiscNormSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
             return
-
+        except TypeError:
+            QMessageBox.information(parent, MyStrings.popupReverseNonDiscNormSurf, MyStrings.popupReverseNonDiscNormSurfDescription, QMessageBox.Ok, QMessageBox.Ok)
+            return
 
     def selectSurfaces(self, parent):
         """
