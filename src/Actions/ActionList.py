@@ -1412,7 +1412,7 @@ class emailAction(QAction):
         super().__init__(QIcon('..\\icons\\mail.svg'), MyStrings.actionEmailPrettyName, parent)
         self.setStatusTip(MyStrings.actionEmailStatusTip)
         self.setIconText(MyStrings.actionEmailIconText)
-        self.triggered.connect(lambda: webbrowser.open('mailto:whideak@hotmail.com'))
+        self.triggered.connect(lambda: webbrowser.open('mailto:whideak@hotmail.com;rodrigo.neto@lnls.br'))
 
 class deletePointAction(QAction):
     """

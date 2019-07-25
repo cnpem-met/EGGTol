@@ -6,8 +6,10 @@
 # Author: Rodrigo de Oliveira Neto.
 """
 
+# Artificial Neural Network Library Import:
 import neurolab as nl
 
+# Numpy and Math Imports:
 import numpy
 import math
 
@@ -55,11 +57,18 @@ class spindleDefectsMenu(QWidget):
         label1 = QLabel(MyStrings.spindleDefectsDescription, self)
         grid.addWidget(label1, 0, 0, 1, 2)
 
+        btn6 = QToolButton()
+        btn6.setText(MyStrings.spindleInfoButton)
+        btn6.clicked.connect(lambda: self.learnSpindleImplementation(parent))
+        btn6.setMinimumHeight(30)
+        btn6.setMinimumWidth(350)
+        grid.addWidget(btn6, 1, 0, 1, 2)
+
         label2 = QLabel(MyStrings.selectionModeHeader, self)
-        grid.addWidget(label2, 1, 0, 1, 2)
+        grid.addWidget(label2, 2, 0, 1, 2)
 
         label3 = QLabel(MyStrings.askingForSelectionMethod, self)
-        grid.addWidget(label3, 2, 0, 1, 2)
+        grid.addWidget(label3, 3, 0, 1, 2)
 
         btn1 = QToolButton()
         btn1.setText(MyStrings.selectionModeSolids)
@@ -67,38 +76,38 @@ class spindleDefectsMenu(QWidget):
         btn1.setMinimumHeight(50)
         btn1.setMinimumWidth(130)
         btn1.setEnabled(False)
-        grid.addWidget(btn1, 3, 0)
+        grid.addWidget(btn1, 4, 0)
 
         btn2 = QToolButton()
         btn2.setText(MyStrings.selectionModeSurfaces)
         btn2.clicked.connect(lambda: self.selectSurfaces(parent))
         btn2.setMinimumHeight(50)
         btn2.setMinimumWidth(130)
-        grid.addWidget(btn2, 3, 1)
+        grid.addWidget(btn2, 4, 1)
 
         label4 = QLabel(MyStrings.askingForEntity, self)
-        grid.addWidget(label4, 4, 0, 1, 2)
+        grid.addWidget(label4, 5, 0, 1, 2)
 
         self.selectedObject = QLineEdit()
         self.selectedObject.setReadOnly(True)
         self.selectedObject.setPlaceholderText(MyStrings.entityPlaceholder)
-        grid.addWidget(self.selectedObject, 5, 0, 1, 2)
+        grid.addWidget(self.selectedObject, 6, 0, 1, 2)
 
         btn3 = QToolButton()
         btn3.setText(MyStrings.addEntityOption)
         btn3.clicked.connect(lambda: self.addSelection(parent))
         btn3.setMinimumHeight(30)
         btn3.setMinimumWidth(350)
-        grid.addWidget(btn3, 6, 0, 1, 2)
+        grid.addWidget(btn3, 7, 0, 1, 2)
 
         frame = QFrame()
-        grid.addWidget(frame, 7, 0)
+        grid.addWidget(frame, 8, 0)
 
         label5 = QLabel(MyStrings.askingForToolCond, self)
-        grid.addWidget(label5, 8, 0, 1, 1)
+        grid.addWidget(label5, 9, 0, 1, 1)
 
         self.toolCondBox = QComboBox()
-        grid.addWidget(self.toolCondBox, 8, 1, 1, 2)
+        grid.addWidget(self.toolCondBox, 9, 1, 1, 2)
 
         axis = ["New", "Worn"]
         for i in range(len(axis)):
@@ -107,60 +116,64 @@ class spindleDefectsMenu(QWidget):
         self.toolCondBox.setCurrentIndex(1)
 
         label6 = QLabel(MyStrings.askingForDepth, self)
-        grid.addWidget(label6, 9, 0, 1, 1)
+        grid.addWidget(label6, 10, 0, 1, 1)
 
         self.depth = QDoubleSpinBox()
-        grid.addWidget(self.depth, 9, 1, 1, 2)
+        grid.addWidget(self.depth, 10, 1, 1, 2)
         self.depth.setRange(0.5, 2)
         self.depth.setSingleStep(0.1)
         self.depth.setValue(1)
 
         label7 = QLabel(MyStrings.askingForFeed, self)
-        grid.addWidget(label7, 10, 0, 1, 1)
+        grid.addWidget(label7, 11, 0, 1, 1)
 
         self.feed = QDoubleSpinBox()
-        grid.addWidget(self.feed, 10, 1, 1, 2)
+        grid.addWidget(self.feed, 11, 1, 1, 2)
         self.feed.setRange(0.1, 0.2)
         self.feed.setSingleStep(0.01)
         self.feed.setValue(0.15)
 
         label8 = QLabel(MyStrings.askingForRPM, self)
-        grid.addWidget(label8, 11, 0, 1, 1)
+        grid.addWidget(label8, 12, 0, 1, 1)
 
         self.spindle = QDoubleSpinBox()
-        grid.addWidget(self.spindle, 11, 1, 1, 2)
+        grid.addWidget(self.spindle, 12, 1, 1, 2)
         self.spindle.setRange(800, 1400)
         self.spindle.setSingleStep(10)
         self.spindle.setValue(1000)
 
         label9 = QLabel(MyStrings.askingForFixtureName, self)
-        grid.addWidget(label9, 12, 0, 1, 2)
+        grid.addWidget(label9, 13, 0, 1, 2)
 
         self.fixFaceEdit = QLineEdit()
         self.fixFaceEdit.setReadOnly(True)
         self.fixFaceEdit.setPlaceholderText(MyStrings.askingForFixtureText)
-        grid.addWidget(self.fixFaceEdit, 13, 0, 1, 2)
+        grid.addWidget(self.fixFaceEdit, 14, 0, 1, 2)
 
         btn4 = QToolButton()
         btn4.setText(MyStrings.FixtureApplyText)
         btn4.clicked.connect(lambda: self.addSelectedFixFace(parent))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(350)
-        grid.addWidget(btn4, 14, 0, 1, 2)
+        grid.addWidget(btn4, 15, 0, 1, 2)
 
         verticalSpacer = QSpacerItem(20,30)
-        grid.addItem(verticalSpacer, 15, 0)
+        grid.addItem(verticalSpacer, 16, 0)
 
         btn5 = QToolButton()
         btn5.setText(MyStrings.spindleDefectsApply)
         btn5.clicked.connect(lambda: self.spindleDefects(parent))
         btn5.setMinimumHeight(30)
         btn5.setMinimumWidth(350)
-        grid.addWidget(btn5, 16, 0, 1, 2)
+        grid.addWidget(btn5, 17, 0, 1, 2)
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
-        grid.setRowStretch(17, 1)
+        grid.setRowStretch(18, 1)
+
+    def learnSpindleImplementation(self, parent):
+        QMessageBox.information(parent, MyStrings.spindleInfos, MyStrings.spindleInfosDescription, QMessageBox.Ok, QMessageBox.Ok)
+        return
 
     def interval_mapping(self, image, from_min, from_max, to_min, to_max):
         """

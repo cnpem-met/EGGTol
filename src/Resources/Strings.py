@@ -191,8 +191,8 @@ class MyStrings():
     actionDeveloperStatusTip = 'Shows the developer webpage, including in-progress projects'
     actionDeveloperIconText = 'Dev Page'
 
-    actionEmailPrettyName = 'Send E-mail to Developer'
-    actionEmailStatusTip = 'Opens a window to send an e-mail to the developer'
+    actionEmailPrettyName = 'Send E-mail to Developers'
+    actionEmailStatusTip = 'Opens a window to send an e-mail to the developers'
     actionEmailIconText = 'E-mail'
 
     # Pop-up Window Strings:
@@ -361,7 +361,10 @@ class MyStrings():
                                 '    3. If the normal vectors of the analyzed surface are\n'+
                                 '        pointing torwards inside the volume, reverse then\n'+
                                 '    4. You can hide the vectors and apply the deflection now')
+    spindleInfoButton = "Learn more about the implementation of this module"
     spindleDefectsApply = 'Apply spindle defects'
+    spindleInfos = "Informations about the Spindle Module"
+    spindleInfosDescription = "\tThis defects module was implemented using a spindle deviation model obtained with a trained Artificial Neural Network. The training dataset was acquired from a real experimental turning setup, varying cutting parameters (depth of cut, RPM, etc) and measuring the difference between the intended diameter and the real obtained after each cut. For more information about this process of moddeling, please take a look at the following works:\n [1] Bernardos et al., Prediction of Workpiece Elastic Deflections Under Cutting Forces in Turning.\n [2] Azouzi et al., On-line Prediction of Surface Finish and Dimensional Deviation in Turning Using Neural Network Based Sensor Fusion.\n\n\tTo maintain the model's accuracy, the range of the manipulated cutting parameters were limited. The same goes for the dimensions of the piece: the model will have a good prediction if the workpiece's turned surface's length and diameter are close to the values from the experimental workpiece. For now, the dimensions that will allow the good performance of the model are:\n - Length: <= 200 m\n - Diameter: 55-75 mm\n\n\tFor this reason, it is intended to collect spindle defects data from more pieces with different dimensions, to generate more models that would be automatically called to perform the deviation prediction according to the imported 3D model."
 
     normalVectorsDescription = 'Show and manipulate the normal vectors of\n the 3D model.\n'
     normalVectorsShow = 'Show 3D vectors'
