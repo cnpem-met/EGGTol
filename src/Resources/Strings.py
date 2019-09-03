@@ -375,6 +375,7 @@ class MyStrings():
     logDescription = 'All actions, including discretization\nand deviation, showed here.'
     logSave = 'Save Log'
     logLoad = 'Load Log'
+    logClean = 'Clean Log'
     logSaveMsg = 'Save log in .txt format'
     logLoadMsg = 'Load and apply actions from a saved log file'
 

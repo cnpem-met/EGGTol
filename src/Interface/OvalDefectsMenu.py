@@ -96,7 +96,7 @@ class ovalDefectsMenu(QWidget):
 
         btn4 = QToolButton()
         btn4.setText(MyStrings.ovalDefectsApply)
-        btn4.clicked.connect(lambda: self.ovalPoints(parent))
+        btn4.clicked.connect(lambda: self.ovalPoints(parent, False, None))
         btn4.setMinimumHeight(30)
         btn4.setMinimumWidth(266)
         grid.addWidget(btn4, 9, 0, 1, 2)
@@ -122,7 +122,7 @@ class ovalDefectsMenu(QWidget):
             except ValueError:
                 QMessageBox.information(parent, MyStrings.popupInvalidGenericInput, MyStrings.popupInvalidGenericInputDescription, QMessageBox.Ok, QMessageBox.Ok)
                 return
-
+            selectedFacesNumber = parent.selectedSequenceNumber
         # Declaring the list of index of deviated surface(s)
         selectedEntityList = []
 
@@ -149,7 +149,7 @@ class ovalDefectsMenu(QWidget):
                     y0 = parent.cloudPointsList[index][i][1]
                     z0 = parent.cloudPointsList[index][i][2]
 
-                    # applying the sine function to generate a offset to the points
+                    # applying the sine function to generate an offset to the points
                     offset = maxDev * math.sin(int(i/numPointsMainAxis)/freq*2*math.pi)
                     # shifting points
                     point = (x0 + parent.faceNormalVectors[index][i][0] * offset,

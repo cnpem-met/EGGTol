@@ -53,10 +53,17 @@ class logMenu(QWidget):
         btn2.setMinimumWidth(70)
         btn2.clicked.connect(lambda: self.loadLog(parent))
 
+        btn3 = QToolButton()
+        btn3.setText(MyStrings.logClean)
+        grid.addWidget(btn3, 1, 2)
+        btn3.setMinimumHeight(30)
+        btn3.setMinimumWidth(70)
+        btn3.clicked.connect(lambda: self.cleanLog(parent))
+
         log = QTextEdit()
         log.setMinimumHeight(50)
         log.setMinimumWidth(250)
-        grid.addWidget(log, 2, 0, 1, 2)
+        grid.addWidget(log, 2, 0, 1, 3  )
 
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
@@ -67,6 +74,14 @@ class logMenu(QWidget):
             logText += i
         log.setText(logText)
         log.setReadOnly(True)
+
+    def cleanLog(self, parent):
+        """
+        # Method: cleanLog.
+        # Description: This method acts to clear the information saved on the log of the current session.
+        # Parameters: * MainWindow parent = A reference for the main window object.
+        """
+        parent.logbookList = []
 
     def saveLog(self, parent):
         """
